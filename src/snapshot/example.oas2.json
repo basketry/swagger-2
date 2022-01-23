@@ -1,0 +1,410 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Example schema to exercise all parser functionality",
+    "version": "1.2.3-rc4",
+    "title": "Basketry Example"
+  },
+  "parameters": {
+    "search": {
+      "name": "search",
+      "in": "query",
+      "type": "string"
+    }
+  },
+  "responses": {
+    "gizmo": {
+      "description": "A single of gizmo",
+      "schema": { "$ref": "#/definitions/gizmo" }
+    },
+    "gizmos": {
+      "description": "A collection of gizmos",
+      "schema": {
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/gizmo" }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/gizmos": {
+      "get": {
+        "summary": "Only has a summary",
+        "operationId": "getGizmos",
+        "parameters": [{ "$ref": "#/parameters/search" }],
+        "responses": {
+          "default": { "$ref": "#/responses/gizmos" }
+        }
+      },
+      "post": {
+        "summary": "Has a summary in addition to a description",
+        "description": "Has a description in addition to a summary",
+        "operationId": "createGizmo",
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Anonymous enum",
+            "name": "size",
+            "type": "string",
+            "enum": ["small", "medium", "big", "XL"]
+          }
+        ],
+        "responses": {
+          "default": { "$ref": "#/responses/gizmo" }
+        }
+      },
+      "put": {
+        "operationId": "updateGizmo",
+        "parameters": [
+          {
+            "in": "query",
+            "description": "array of primitive",
+            "name": "factors",
+            "type": "array",
+            "collectionFormat": "csv",
+            "minItems": 2,
+            "maxItems": 6,
+            "items": {
+              "type": "string",
+              "pattern": "[0-9a-fA-F]+"
+            }
+          }
+        ],
+        "responses": {
+          "default": { "$ref": "#/responses/gizmo" }
+        }
+      }
+    },
+    "/widgets": {
+      "get": {
+        "operationId": "getWidgets",
+        "responses": {
+          "default": {
+            "description": "Response a defined object schema by reference",
+            "schema": { "$ref": "#/definitions/widget" }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createWidget",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The new widget",
+            "schema": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {
+                "name": { "type": "string" }
+              },
+              "additionalProperties": false
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Response a defined object schema by reference"
+          }
+        }
+      },
+      "put": {
+        "operationId": "putWidget",
+        "responses": {
+          "400": {
+            "description": "Error response only"
+          }
+        }
+      }
+    },
+    "/widgets/{id}/foo": {
+      "get": {
+        "operationId": "getWidgetFoo",
+        "responses": {
+          "default": {
+            "description": "Response a defined object schema by reference",
+            "schema": { "$ref": "#/definitions/widget" }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteWidgetFoo",
+        "responses": {
+          "default": {
+            "description": "Response without any schema"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "description": "The widget ID",
+          "in": "path",
+          "type": "string",
+          "required": true,
+          "maxLength": 30
+        }
+      ]
+    },
+    "/exhaustive/{path-string}/{path-enum}/{path-number}/{path-integer}/{path-boolean}/{path-string-array}/{path-enum-array}/{path-number-array}/{path-integer-array}/{path-boolean-array}": {
+      "get": {
+        "operationId": "exhaustiveParams",
+        "parameters": [
+          {
+            "name": "query-string",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "query-enum",
+            "in": "query",
+            "type": "string",
+            "enum": ["one", "two", "three"]
+          },
+          {
+            "name": "query-number",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "query-integer",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "query-boolean",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "query-string-array",
+            "in": "query",
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          {
+            "name": "query-enum-array",
+            "in": "query",
+            "type": "array",
+            "items": { "type": "string", "enum": ["one", "two", "three"] }
+          },
+          {
+            "name": "query-number-array",
+            "in": "query",
+            "type": "array",
+            "items": { "type": "number" }
+          },
+          {
+            "name": "query-integer-array",
+            "in": "query",
+            "type": "array",
+            "items": { "type": "integer" }
+          },
+          {
+            "name": "query-boolean-array",
+            "in": "query",
+            "type": "array",
+            "items": { "type": "boolean" }
+          },
+          {
+            "name": "path-string",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "path-enum",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "enum": ["one", "two", "three"]
+          },
+          {
+            "name": "path-number",
+            "in": "path",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "path-integer",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "path-boolean",
+            "in": "path",
+            "type": "boolean",
+            "required": true
+          },
+          {
+            "name": "path-string-array",
+            "in": "path",
+            "type": "array",
+            "items": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "path-enum-array",
+            "in": "path",
+            "type": "array",
+            "items": { "type": "string", "enum": ["one", "two", "three"] },
+            "required": true
+          },
+          {
+            "name": "path-number-array",
+            "in": "path",
+            "type": "array",
+            "items": { "type": "number" },
+            "required": true
+          },
+          {
+            "name": "path-integer-array",
+            "in": "path",
+            "type": "array",
+            "items": { "type": "integer" },
+            "required": true
+          },
+          {
+            "name": "path-boolean-array",
+            "in": "path",
+            "type": "array",
+            "items": { "type": "boolean" },
+            "required": true
+          },
+          {
+            "name": "header-string",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "header-enum",
+            "in": "header",
+            "type": "string",
+            "enum": ["one", "two", "three"]
+          },
+          {
+            "name": "header-number",
+            "in": "header",
+            "type": "number"
+          },
+          {
+            "name": "header-integer",
+            "in": "header",
+            "type": "integer"
+          },
+          {
+            "name": "header-boolean",
+            "in": "header",
+            "type": "boolean"
+          },
+          {
+            "name": "header-string-array",
+            "in": "header",
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          {
+            "name": "header-enum-array",
+            "in": "header",
+            "type": "array",
+            "items": { "type": "string", "enum": ["one", "two", "three"] }
+          },
+          {
+            "name": "header-number-array",
+            "in": "header",
+            "type": "array",
+            "items": { "type": "number" }
+          },
+          {
+            "name": "header-integer-array",
+            "in": "header",
+            "type": "array",
+            "items": { "type": "integer" }
+          },
+          {
+            "name": "header-boolean-array",
+            "in": "header",
+            "type": "array",
+            "items": { "type": "boolean" }
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "foo": { "type": "string" },
+                "bar": { "type": "string" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "operation with an exhaustive set of params"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "gizmo": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/definitions/id" },
+        "name": { "type": "string" },
+        "size": { "$ref": "#/definitions/productSize" }
+      }
+    },
+    "productSize": {
+      "type": "string",
+      "enum": ["small", "medium", "large"]
+    },
+    "widget": {
+      "type": "object",
+      "required": ["id"],
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": { "$ref": "#/definitions/id" }
+          }
+        },
+        { "$ref": "#/definitions/newWidget" }
+      ],
+      "additionalProperties": false
+    },
+    "newWidget": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 30,
+          "pattern": "[0-9a-fA-F]+"
+        },
+        "fiz": { "type": "number", "multipleOf": 3 },
+        "buzz": { "type": "number", "multipleOf": 5 },
+        "fizbuzz": { "type": "number", "multipleOf": 15 },
+        "foo": {
+          "type": "object",
+          "required": ["buzz"],
+          "properties": {
+            "fiz": { "type": "number" },
+            "buzz": { "type": "number" }
+          }
+        },
+        "size": { "$ref": "#/definitions/productSize" }
+      }
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 30
+    }
+  }
+}
