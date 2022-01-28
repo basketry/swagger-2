@@ -392,7 +392,7 @@ export class OAS2Parser implements ServiceFactory {
     const response = this.resolve(success);
     const name =
       isReference(success) && success.$ref.startsWith('#/responses/')
-        ? success.$ref.substr(11)
+        ? success.$ref.substring(12)
         : undefined;
 
     if (!response.schema) return;
