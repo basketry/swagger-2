@@ -33,6 +33,11 @@ export class OAS2Parser implements ServiceFactory {
     const interfaces = this.parseInterfaces();
     const types = this.parseDefinitions();
 
+    const typesByName = [...types, ...this.anonymousTypes].reduce(
+      (acc, item) => ({ ...acc, [item.name]: item }),
+      {},
+    );
+
     const enumsByName = this.enums.reduce(
       (acc, item) => ({ ...acc, [item.name]: item }),
       {},
@@ -42,7 +47,7 @@ export class OAS2Parser implements ServiceFactory {
       title: pascal(this.schema.info.title),
       majorVersion: major(this.schema.info.version),
       interfaces,
-      types: [...types, ...this.anonymousTypes],
+      types: Object.keys(typesByName).map((name) => typesByName[name]),
       enums: Object.keys(enumsByName).map((name) => enumsByName[name]),
     };
   }
