@@ -656,7 +656,10 @@
           "isUnknown": false,
           "isArray": false,
           "isLocal": false,
-          "rules": [{ "id": "number-multiple-of", "value": 3 }]
+          "rules": [
+            { "id": "required" },
+            { "id": "number-multiple-of", "value": 3 }
+          ]
         },
         {
           "name": "buzz",
@@ -715,7 +718,10 @@
           "isUnknown": false,
           "isArray": false,
           "isLocal": false,
-          "rules": [{ "id": "number-multiple-of", "value": 3 }]
+          "rules": [
+            { "id": "required" },
+            { "id": "number-multiple-of", "value": 3 }
+          ]
         },
         {
           "name": "buzz",

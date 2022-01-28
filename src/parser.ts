@@ -433,6 +433,10 @@ export class OAS2Parser implements ServiceFactory {
           this.parseProperties(
             {
               ...rest,
+              required: safeConcat(
+                rest.required,
+                this.resolve(subDef).required as any,
+              ),
               properties: this.resolve(subDef).properties as any,
             },
             parentName,
@@ -712,4 +716,19 @@ function isBodyParameter(obj: any): obj is OpenAPI.BodyParameter {
 
 function keysOf<T extends object>(obj: T): (keyof T)[] {
   return Object.keys(obj) as any;
+}
+
+function safeConcat(
+  a: any[] | undefined,
+  b: any[] | undefined,
+): any[] | undefined {
+  if (Array.isArray(a) && Array.isArray(b)) {
+    return a.concat(b);
+  } else if (Array.isArray(a)) {
+    return a;
+  } else if (Array.isArray(b)) {
+    return b;
+  } else {
+    return undefined;
+  }
 }

@@ -382,6 +382,7 @@
     },
     "newWidget": {
       "type": "object",
+      "required": ["fiz"],
       "properties": {
         "name": {
           "type": "string",
