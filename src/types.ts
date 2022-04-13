@@ -104,24 +104,30 @@ export namespace OpenAPI {
   };
 
   export type SecurityScheme =
-    | {
-        type: 'basic';
-        description?: string;
-      }
-    | {
-        type: 'apiKey';
-        description?: string;
-        name: string;
-        in: 'header' | 'query';
-      }
-    | {
-        type: 'oauth2';
-        description?: string;
-        name: string;
-        authorizationUrl: string;
-        tokenUrl: string;
-        scopes: Scopes;
-      };
+    | BasicSecurityScheme
+    | ApiKeySecurityScheme
+    | OAuth2SecurityScheme;
+
+  export type BasicSecurityScheme = {
+    type: 'basic';
+    description?: string;
+  };
+
+  export type ApiKeySecurityScheme = {
+    type: 'apiKey';
+    name: string;
+    description?: string;
+    in: 'header' | 'query';
+  };
+
+  export type OAuth2SecurityScheme = {
+    type: 'oauth2';
+    description?: string;
+    flow: 'implicit' | 'password' | 'application' | 'accessCode';
+    authorizationUrl: string;
+    tokenUrl: string;
+    scopes: Scopes;
+  };
 
   export type Scopes = {
     [name: string]: string;
