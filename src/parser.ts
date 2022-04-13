@@ -16,6 +16,8 @@ import {
   ReturnType,
   Service,
   ServiceFactory,
+  SecurityOption,
+  SecurityScheme,
   Type,
   ValidationRule,
 } from 'basketry';
@@ -168,6 +170,7 @@ export class OAS2Parser implements ServiceFactory {
         const operation: OpenAPI.Operation = this.schema.paths[path][verb];
         methods.push({
           name: operation.operationId || 'UNNAMED',
+          security: this.parseSecurity(operation),
           parameters: this.parseParameters(operation, commonParameters),
           description: this.parseDescription(
             operation.summary,
@@ -188,6 +191,114 @@ export class OAS2Parser implements ServiceFactory {
     if (summary) return summary;
     if (description) return description;
     return;
+  }
+
+  private parseSecurity(operation: OpenAPI.Operation): SecurityOption[] {
+    const { securityDefinitions = {}, security: defaultSecurity } = this.schema;
+    const { security: operationSecurity } = operation;
+    const security = operationSecurity || defaultSecurity || [];
+
+    const options: SecurityOption[] = security.map((requirements) =>
+      Object.keys(requirements)
+        .map((key): SecurityScheme | undefined => {
+          const requirement = requirements[key];
+          const definition = securityDefinitions[key];
+
+          if (!requirement || !definition) return;
+
+          switch (definition.type) {
+            case 'basic':
+              return {
+                type: 'basic',
+                name: key,
+              };
+            case 'apiKey':
+              return {
+                type: 'apiKey',
+                name: key,
+                description: definition.description,
+                parameter: definition.name,
+                in: definition.in,
+              };
+            case 'oauth2': {
+              switch (definition.flow) {
+                case 'implicit':
+                  return {
+                    type: 'oauth2',
+                    name: key,
+                    description: definition.description,
+                    flows: [
+                      {
+                        type: 'implicit',
+                        authorizationUrl: definition.authorizationUrl,
+                        scopes: requirement.map((name) => ({
+                          name,
+                          description: definition.scopes[name],
+                        })),
+                      },
+                    ],
+                  };
+                case 'password':
+                  return {
+                    type: 'oauth2',
+                    name: key,
+                    description: definition.description,
+                    flows: [
+                      {
+                        type: 'password',
+                        tokenUrl: definition.tokenUrl,
+                        scopes: Object.keys(definition.scopes).map((name) => ({
+                          name,
+                          description: definition.scopes[name],
+                        })),
+                      },
+                    ],
+                  };
+                case 'application':
+                  return {
+                    type: 'oauth2',
+                    name: key,
+                    description: definition.description,
+                    flows: [
+                      {
+                        type: 'clientCredentials',
+                        tokenUrl: definition.tokenUrl,
+                        scopes: Object.keys(definition.scopes).map((name) => ({
+                          name,
+                          description: definition.scopes[name],
+                        })),
+                      },
+                    ],
+                  };
+                case 'accessCode':
+                  return {
+                    type: 'oauth2',
+                    name: key,
+                    description: definition.description,
+                    flows: [
+                      {
+                        type: 'authorizationCode',
+                        authorizationUrl: definition.authorizationUrl,
+                        tokenUrl: definition.tokenUrl,
+                        scopes: Object.keys(definition.scopes).map((name) => ({
+                          name,
+                          description: definition.scopes[name],
+                        })),
+                      },
+                    ],
+                  };
+                default:
+                  return;
+              }
+            }
+            default:
+              return;
+          }
+        })
+        .filter((scheme): scheme is SecurityScheme => !!scheme),
+    );
+
+    return options;
   }
 
   private parseParameters(

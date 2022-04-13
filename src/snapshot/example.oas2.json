@@ -31,6 +31,31 @@
       }
     }
   },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic"
+    },
+    "apiKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "x-apikey"
+    },
+    "oauth2Auth": {
+      "type": "oauth2",
+      "flow": "implicit",
+      "authorizationUrl": "https://example.com/auth",
+      "scopes": {
+        "read:gizmos": "Access gizmo data",
+        "write:gizmos": "Write gizmo data",
+        "admin:gizmos": "Manage gizmos"
+      }
+    }
+  },
+  "security": [
+    {
+      "apiKeyAuth": []
+    }
+  ],
   "paths": {
     "/gizmos": {
       "get": {
@@ -39,7 +64,12 @@
         "parameters": [{ "$ref": "#/parameters/search" }],
         "responses": {
           "default": { "$ref": "#/responses/gizmos" }
-        }
+        },
+        "security": [
+          {
+            "oauth2Auth": ["read:gizmos"]
+          }
+        ]
       },
       "post": {
         "summary": "Has a summary in addition to a description",
@@ -56,7 +86,12 @@
         ],
         "responses": {
           "default": { "$ref": "#/responses/gizmo" }
-        }
+        },
+        "security": [
+          {
+            "oauth2Auth": ["write:gizmos"]
+          }
+        ]
       },
       "put": {
         "operationId": "updateGizmo",
@@ -77,7 +112,12 @@
         ],
         "responses": {
           "default": { "$ref": "#/responses/gizmo" }
-        }
+        },
+        "security": [
+          {
+            "oauth2Auth": ["write:gizmos", "admin:gizmos"]
+          }
+        ]
       }
     },
     "/widgets": {
@@ -349,7 +389,8 @@
           "default": {
             "description": "operation with an exhaustive set of params"
           }
-        }
+        },
+        "security": []
       }
     }
   },
