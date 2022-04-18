@@ -35,10 +35,18 @@
     "basicAuth": {
       "type": "basic"
     },
+    "alternate-basic-auth": {
+      "type": "basic"
+    },
     "apiKeyAuth": {
       "type": "apiKey",
       "in": "header",
       "name": "x-apikey"
+    },
+    "alternateApiKeyAuth": {
+      "type": "apiKey",
+      "in": "query",
+      "name": "apikey"
     },
     "oauth2Auth": {
       "type": "oauth2",
@@ -286,6 +294,7 @@
             "name": "path-string-array",
             "in": "path",
             "type": "array",
+            "collectionFormat": "csv",
             "items": { "type": "string" },
             "required": true
           },
@@ -293,6 +302,7 @@
             "name": "path-enum-array",
             "in": "path",
             "type": "array",
+            "collectionFormat": "pipes",
             "items": { "type": "string", "enum": ["one", "two", "three"] },
             "required": true
           },
@@ -300,6 +310,7 @@
             "name": "path-number-array",
             "in": "path",
             "type": "array",
+            "collectionFormat": "ssv",
             "items": { "type": "number" },
             "required": true
           },
@@ -307,6 +318,7 @@
             "name": "path-integer-array",
             "in": "path",
             "type": "array",
+            "collectionFormat": "tsv",
             "items": { "type": "integer" },
             "required": true
           },
@@ -353,24 +365,28 @@
             "name": "header-enum-array",
             "in": "header",
             "type": "array",
+            "collectionFormat": "csv",
             "items": { "type": "string", "enum": ["one", "two", "three"] }
           },
           {
             "name": "header-number-array",
             "in": "header",
             "type": "array",
+            "collectionFormat": "pipes",
             "items": { "type": "number" }
           },
           {
             "name": "header-integer-array",
             "in": "header",
             "type": "array",
+            "collectionFormat": "ssv",
             "items": { "type": "integer" }
           },
           {
             "name": "header-boolean-array",
             "in": "header",
             "type": "array",
+            "collectionFormat": "tsv",
             "items": { "type": "boolean" }
           },
           {
@@ -391,6 +407,35 @@
           }
         },
         "security": []
+      }
+    },
+    "/authPermutations": {
+      "get": {
+        "operationId": "all-auth-schemes",
+        "security": [
+          { "basicAuth": [] },
+          { "alternate-basic-auth": [] },
+          { "apiKeyAuth": [] },
+          { "oauth2Auth": ["admin:gizmos"] }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "put": {
+        "operationId": "combo-auth-schemes",
+        "security": [
+          { "basicAuth": [], "apiKeyAuth": [] },
+          { "basicAuth": [], "alternateApiKeyAuth": [] },
+          { "alternate-basic-auth": [], "oauth2Auth": ["admin:gizmos"] }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
       }
     }
   },
