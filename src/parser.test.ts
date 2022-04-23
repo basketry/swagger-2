@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import * as https from 'https';
 
 import { ReturnType, validate } from 'basketry';
 import { OAS2Parser } from './parser';
@@ -99,9 +100,42 @@ describe('parser', () => {
     // ACT
     const errors = validate(service);
 
-    console.log(errors);
+    // ASSERT
+    expect(errors).toEqual([]);
+  });
+
+  it('creates a valid service from the example Pet Store schema', async () => {
+    // ARRANGE
+    const schema = JSON.parse(
+      await getText('https://petstore.swagger.io/v2/swagger.json'),
+    );
+
+    const service = new OAS2Parser(schema).parse();
+
+    // ACT
+    const errors = validate(service);
 
     // ASSERT
     expect(errors).toEqual([]);
   });
 });
+
+function getText(url: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    https
+      .get(url, (res) => {
+        let data: string = '';
+
+        res.on('data', (d) => {
+          data += d.toString();
+        });
+
+        res.on('end', () => {
+          resolve(data);
+        });
+      })
+      .on('error', (e) => {
+        reject(e);
+      });
+  });
+}
