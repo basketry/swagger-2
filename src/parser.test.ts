@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import { ReturnType } from 'basketry';
+import { ReturnType, validate } from 'basketry';
 import { OAS2Parser } from './parser';
 
 describe('parser', () => {
@@ -86,5 +86,22 @@ describe('parser', () => {
     const typeNames = result.types.map((t) => t.name);
 
     expect(typeNames.length).toEqual(new Set(typeNames).size);
+  });
+
+  it('creates a valid service', () => {
+    // ARRANGE
+    const schema = JSON.parse(
+      readFileSync(join('src', 'snapshot', 'example.oas2.json')).toString(),
+    );
+
+    const service = new OAS2Parser(schema).parse();
+
+    // ACT
+    const errors = validate(service);
+
+    console.log(errors);
+
+    // ASSERT
+    expect(errors).toEqual([]);
   });
 });
