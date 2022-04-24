@@ -34,6 +34,7 @@
   "homepage": "https://github.com/basketry/swagger-2#readme",
   "devDependencies": {
     "@types/jest": "^27.4.0",
+    "@types/json-to-ast": "^2.1.2",
     "@types/node": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
@@ -51,6 +52,7 @@
   "dependencies": {
     "basketry": "^0.0.8",
     "case": "^1.6.3",
+    "json-to-ast": "^2.1.0",
     "pluralize": "^8.0.0",
     "semver": "^7.3.5"
   }
