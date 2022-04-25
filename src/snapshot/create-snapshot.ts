@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { format } from 'prettier';
-import { OAS2Parser } from '../parser';
+import parser from '..';
 
 const schema = readFileSync(
   join(process.cwd(), 'src', 'snapshot', 'example.oas2.json'),
@@ -11,9 +11,7 @@ const prettierOptions = JSON.parse(
   readFileSync(join(process.cwd(), '.prettierrc')).toString('utf8'),
 );
 
-const parser = new OAS2Parser(JSON.parse(schema));
-
-const service = parser.parse();
+const service = parser(schema);
 
 const snapshot = format(JSON.stringify(service), {
   ...prettierOptions,
