@@ -3,7 +3,7 @@ import { join } from 'path';
 import * as https from 'https';
 
 import { ReturnType, validate } from 'basketry';
-import { OAS2Parser } from './parser';
+import parser from '.';
 
 describe('parser', () => {
   it('recreates a valid snapshot', () => {
@@ -11,12 +11,12 @@ describe('parser', () => {
     const snapshot = JSON.parse(
       readFileSync(join('src', 'snapshot', 'snapshot.json')).toString(),
     );
-    const schema = JSON.parse(
-      readFileSync(join('src', 'snapshot', 'example.oas2.json')).toString(),
-    );
+    const schema = readFileSync(
+      join('src', 'snapshot', 'example.oas2.json'),
+    ).toString();
 
     // ACT
-    const result = JSON.parse(JSON.stringify(new OAS2Parser(schema).parse()));
+    const result = JSON.parse(JSON.stringify(parser(schema)));
 
     // ASSERT
     expect(result).toStrictEqual(snapshot);
@@ -24,12 +24,12 @@ describe('parser', () => {
 
   it('creates a type for every local typeName', () => {
     // ARRANGE
-    const schema = JSON.parse(
-      readFileSync(join('src', 'snapshot', 'example.oas2.json')).toString(),
-    );
+    const schema = readFileSync(
+      join('src', 'snapshot', 'example.oas2.json'),
+    ).toString();
 
     // ACT
-    const result = new OAS2Parser(schema).parse();
+    const result = parser(schema);
 
     // ASSERT
     const fromMethodParameters = new Set(
@@ -76,12 +76,12 @@ describe('parser', () => {
 
   it('creates types with unique names', () => {
     // ARRANGE
-    const schema = JSON.parse(
-      readFileSync(join('src', 'snapshot', 'example.oas2.json')).toString(),
-    );
+    const schema = readFileSync(
+      join('src', 'snapshot', 'example.oas2.json'),
+    ).toString();
 
     // ACT
-    const result = new OAS2Parser(schema).parse();
+    const result = parser(schema);
 
     // ASSERT
     const typeNames = result.types.map((t) => t.name);
@@ -91,11 +91,11 @@ describe('parser', () => {
 
   it('creates a valid service', () => {
     // ARRANGE
-    const schema = JSON.parse(
-      readFileSync(join('src', 'snapshot', 'example.oas2.json')).toString(),
-    );
+    const schema = readFileSync(
+      join('src', 'snapshot', 'example.oas2.json'),
+    ).toString();
 
-    const service = new OAS2Parser(schema).parse();
+    const service = parser(schema);
 
     // ACT
     const errors = validate(service);
@@ -106,11 +106,9 @@ describe('parser', () => {
 
   it('creates a valid service from the example Pet Store schema', async () => {
     // ARRANGE
-    const schema = JSON.parse(
-      await getText('https://petstore.swagger.io/v2/swagger.json'),
-    );
+    const schema = await getText('https://petstore.swagger.io/v2/swagger.json');
 
-    const service = new OAS2Parser(schema).parse();
+    const service = parser(schema);
 
     // ACT
     const errors = validate(service);
