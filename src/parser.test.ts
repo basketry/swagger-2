@@ -6,13 +6,29 @@ import { ReturnType, validate } from 'basketry';
 import parser from '.';
 
 describe('parser', () => {
-  it('recreates a valid snapshot', () => {
+  it('recreates a valid exhaustive snapshot', () => {
     // ARRANGE
     const snapshot = JSON.parse(
       readFileSync(join('src', 'snapshot', 'snapshot.json')).toString(),
     );
     const schema = readFileSync(
       join('src', 'snapshot', 'example.oas2.json'),
+    ).toString();
+
+    // ACT
+    const result = JSON.parse(JSON.stringify(parser(schema)));
+
+    // ASSERT
+    expect(result).toStrictEqual(snapshot);
+  });
+
+  it('recreates a valid petstore snapshot', () => {
+    // ARRANGE
+    const snapshot = JSON.parse(
+      readFileSync(join('src', 'snapshot', 'petstore.json')).toString(),
+    );
+    const schema = readFileSync(
+      join('src', 'snapshot', 'petstore.oas2.json'),
     ).toString();
 
     // ACT
@@ -39,7 +55,7 @@ describe('parser', () => {
         .map((i) => i.parameters)
         .reduce((a, b) => a.concat(b), [])
         .filter((p) => p.isLocal)
-        .map((p) => p.typeName),
+        .map((p) => p.typeName.value),
     );
 
     const fromMethodReturnTypes = new Set(
@@ -49,7 +65,7 @@ describe('parser', () => {
         .map((i) => i.returnType)
         .filter((t): t is ReturnType => !!t)
         .filter((p) => p.isLocal)
-        .map((p) => p.typeName),
+        .map((p) => p.typeName.value),
     );
 
     const fromTypes = new Set(
@@ -57,12 +73,12 @@ describe('parser', () => {
         .map((t) => t.properties)
         .reduce((a, b) => a.concat(b), [])
         .filter((p) => p.isLocal)
-        .map((p) => p.typeName),
+        .map((p) => p.typeName.value),
     );
 
     const typeNames = new Set([
-      ...result.types.map((t) => t.name),
-      ...result.enums.map((e) => e.name),
+      ...result.types.map((t) => t.name.value),
+      ...result.enums.map((e) => e.name.value),
     ]);
 
     for (const localTypeName of [
