@@ -1,0 +1,1920 @@
+{
+  "basketry": "1",
+  "title": { "value": "SwaggerPetstore", "loc": "6;14;32;364;382" },
+  "majorVersion": { "value": 1, "loc": "5;16;23;342;349" },
+  "interfaces": [
+    {
+      "name": "pet",
+      "methods": [
+        {
+          "name": { "value": "getPetById", "loc": "42;24;36;1352;1364" },
+          "security": [
+            [
+              {
+                "type": { "value": "apiKey", "loc": "573;26;34;18279;18287" },
+                "name": { "value": "api_key", "loc": "573;5;14;18258;18267" },
+                "parameter": {
+                  "value": "api_key",
+                  "loc": "573;44;53;18297;18306"
+                },
+                "in": { "value": "header", "loc": "573;61;69;18314;18322" },
+                "loc": "573;5;71;18258;18324"
+              }
+            ]
+          ],
+          "parameters": [
+            {
+              "name": { "value": "petId", "loc": "46;21;28;1483;1490" },
+              "description": {
+                "value": "ID of pet to return",
+                "loc": "48;28;49;1545;1566"
+              },
+              "typeName": { "value": "integer", "loc": "50;21;30;1618;1627" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "45;11;52;12;1461;1670"
+            }
+          ],
+          "description": [
+            { "value": "Find pet by ID", "loc": "40;20;36;1264;1280" },
+            { "value": "Returns a single pet", "loc": "41;24;46;1305;1327" }
+          ],
+          "returnType": {
+            "typeName": { "value": "Pet", "loc": "593;5;10;18832;18837" },
+            "isUnknown": false,
+            "isLocal": true,
+            "isArray": false,
+            "rules": [],
+            "loc": "593;12;617;6;18839;19648"
+          },
+          "loc": "38;7;63;8;1211;2011"
+        },
+        {
+          "name": { "value": "updatePetWithForm", "loc": "68;24;43;2168;2187" },
+          "security": [
+            [
+              {
+                "type": { "value": "oauth2", "loc": "575;15;23;18363;18371" },
+                "name": {
+                  "value": "petstore_auth",
+                  "loc": "574;5;20;18330;18345"
+                },
+                "flows": [
+                  {
+                    "type": {
+                      "value": "implicit",
+                      "loc": "577;15;25;18460;18470"
+                    },
+                    "authorizationUrl": {
+                      "value": "https://petstore.swagger.io/oauth/authorize",
+                      "loc": "576;27;72;18399;18444"
+                    },
+                    "scopes": [
+                      {
+                        "name": {
+                          "value": "write:pets",
+                          "loc": "96;42;54;3086;3098"
+                        },
+                        "description": {
+                          "value": "modify pets in your account",
+                          "loc": "580;23;52;18551;18580"
+                        },
+                        "loc": "580;9;52;18537;18580"
+                      },
+                      {
+                        "name": {
+                          "value": "read:pets",
+                          "loc": "96;56;67;3100;3111"
+                        },
+                        "description": {
+                          "value": "read your pets",
+                          "loc": "579;22;38;18511;18527"
+                        },
+                        "loc": "579;9;38;18498;18527"
+                      }
+                    ],
+                    "loc": "574;5;582;6;18330;18594"
+                  }
+                ],
+                "loc": "574;5;582;6;18330;18594"
+              }
+            ]
+          ],
+          "parameters": [
+            {
+              "name": { "value": "petId", "loc": "73;21;28;2365;2372" },
+              "description": {
+                "value": "ID of pet that needs to be updated",
+                "loc": "75;28;64;2427;2463"
+              },
+              "typeName": { "value": "integer", "loc": "77;21;30;2515;2524" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "72;11;79;12;2343;2567"
+            },
+            {
+              "name": { "value": "name", "loc": "81;21;27;2601;2607" },
+              "description": {
+                "value": "Updated name of the pet",
+                "loc": "83;28;53;2666;2691"
+              },
+              "typeName": { "value": "string", "loc": "85;21;29;2744;2752" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [],
+              "loc": "80;11;86;12;2579;2764"
+            },
+            {
+              "name": { "value": "status", "loc": "88;21;29;2798;2806" },
+              "description": {
+                "value": "Updated status of the pet",
+                "loc": "90;28;55;2865;2892"
+              },
+              "typeName": { "value": "string", "loc": "92;21;29;2945;2953" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [],
+              "loc": "87;11;93;12;2776;2965"
+            }
+          ],
+          "description": [
+            {
+              "value": "Updates a pet in the store with form data",
+              "loc": "66;20;63;2073;2116"
+            },
+            { "value": "", "loc": "67;24;26;2141;2143" }
+          ],
+          "loc": "64;7;97;8;2019;3123"
+        },
+        {
+          "name": { "value": "deletePet", "loc": "102;24;35;3254;3265" },
+          "security": [
+            [
+              {
+                "type": { "value": "oauth2", "loc": "575;15;23;18363;18371" },
+                "name": {
+                  "value": "petstore_auth",
+                  "loc": "574;5;20;18330;18345"
+                },
+                "flows": [
+                  {
+                    "type": {
+                      "value": "implicit",
+                      "loc": "577;15;25;18460;18470"
+                    },
+                    "authorizationUrl": {
+                      "value": "https://petstore.swagger.io/oauth/authorize",
+                      "loc": "576;27;72;18399;18444"
+                    },
+                    "scopes": [
+                      {
+                        "name": {
+                          "value": "write:pets",
+                          "loc": "124;42;54;3910;3922"
+                        },
+                        "description": {
+                          "value": "modify pets in your account",
+                          "loc": "580;23;52;18551;18580"
+                        },
+                        "loc": "580;9;52;18537;18580"
+                      },
+                      {
+                        "name": {
+                          "value": "read:pets",
+                          "loc": "124;56;67;3924;3935"
+                        },
+                        "description": {
+                          "value": "read your pets",
+                          "loc": "579;22;38;18511;18527"
+                        },
+                        "loc": "579;9;38;18498;18527"
+                      }
+                    ],
+                    "loc": "574;5;582;6;18330;18594"
+                  }
+                ],
+                "loc": "574;5;582;6;18330;18594"
+              }
+            ]
+          ],
+          "parameters": [
+            {
+              "name": { "value": "api_key", "loc": "106;21;30;3384;3393" },
+              "typeName": { "value": "string", "loc": "109;21;29;3474;3482" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [],
+              "loc": "105;11;110;12;3362;3494"
+            },
+            {
+              "name": { "value": "petId", "loc": "112;21;28;3528;3535" },
+              "description": {
+                "value": "Pet id to delete",
+                "loc": "114;28;46;3590;3608"
+              },
+              "typeName": { "value": "integer", "loc": "116;21;30;3660;3669" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "111;11;118;12;3506;3712"
+            }
+          ],
+          "description": [
+            { "value": "Deletes a pet", "loc": "100;20;35;3187;3202" },
+            { "value": "", "loc": "101;24;26;3227;3229" }
+          ],
+          "loc": "98;7;125;8;3131;3947"
+        },
+        {
+          "name": { "value": "uploadFile", "loc": "132;24;36;4119;4131" },
+          "security": [
+            [
+              {
+                "type": { "value": "oauth2", "loc": "575;15;23;18363;18371" },
+                "name": {
+                  "value": "petstore_auth",
+                  "loc": "574;5;20;18330;18345"
+                },
+                "flows": [
+                  {
+                    "type": {
+                      "value": "implicit",
+                      "loc": "577;15;25;18460;18470"
+                    },
+                    "authorizationUrl": {
+                      "value": "https://petstore.swagger.io/oauth/authorize",
+                      "loc": "576;27;72;18399;18444"
+                    },
+                    "scopes": [
+                      {
+                        "name": {
+                          "value": "write:pets",
+                          "loc": "165;42;54;5101;5113"
+                        },
+                        "description": {
+                          "value": "modify pets in your account",
+                          "loc": "580;23;52;18551;18580"
+                        },
+                        "loc": "580;9;52;18537;18580"
+                      },
+                      {
+                        "name": {
+                          "value": "read:pets",
+                          "loc": "165;56;67;5115;5126"
+                        },
+                        "description": {
+                          "value": "read your pets",
+                          "loc": "579;22;38;18511;18527"
+                        },
+                        "loc": "579;9;38;18498;18527"
+                      }
+                    ],
+                    "loc": "574;5;582;6;18330;18594"
+                  }
+                ],
+                "loc": "574;5;582;6;18330;18594"
+              }
+            ]
+          ],
+          "parameters": [
+            {
+              "name": { "value": "petId", "loc": "137;21;28;4276;4283" },
+              "description": {
+                "value": "ID of pet to update",
+                "loc": "139;28;49;4338;4359"
+              },
+              "typeName": { "value": "integer", "loc": "141;21;30;4411;4420" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "136;11;143;12;4254;4463"
+            },
+            {
+              "name": {
+                "value": "additionalMetadata",
+                "loc": "145;21;41;4497;4517"
+              },
+              "description": {
+                "value": "Additional data to pass to server",
+                "loc": "147;28;63;4576;4611"
+              },
+              "typeName": { "value": "string", "loc": "149;21;29;4664;4672" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [],
+              "loc": "144;11;150;12;4475;4684"
+            }
+          ],
+          "description": [
+            { "value": "uploads an image", "loc": "130;20;38;4049;4067" },
+            { "value": "", "loc": "131;24;26;4092;4094" }
+          ],
+          "returnType": {
+            "typeName": {
+              "value": "ApiResponse",
+              "loc": "626;5;18;19853;19866"
+            },
+            "isUnknown": false,
+            "isLocal": true,
+            "isArray": false,
+            "rules": [],
+            "loc": "626;20;633;6;19868;20065"
+          },
+          "loc": "128;7;166;8;3995;5138"
+        },
+        {
+          "name": { "value": "addPet", "loc": "173;24;32;5300;5308" },
+          "security": [
+            [
+              {
+                "type": { "value": "oauth2", "loc": "575;15;23;18363;18371" },
+                "name": {
+                  "value": "petstore_auth",
+                  "loc": "574;5;20;18330;18345"
+                },
+                "flows": [
+                  {
+                    "type": {
+                      "value": "implicit",
+                      "loc": "577;15;25;18460;18470"
+                    },
+                    "authorizationUrl": {
+                      "value": "https://petstore.swagger.io/oauth/authorize",
+                      "loc": "576;27;72;18399;18444"
+                    },
+                    "scopes": [
+                      {
+                        "name": {
+                          "value": "write:pets",
+                          "loc": "186;42;54;5815;5827"
+                        },
+                        "description": {
+                          "value": "modify pets in your account",
+                          "loc": "580;23;52;18551;18580"
+                        },
+                        "loc": "580;9;52;18537;18580"
+                      },
+                      {
+                        "name": {
+                          "value": "read:pets",
+                          "loc": "186;56;67;5829;5840"
+                        },
+                        "description": {
+                          "value": "read your pets",
+                          "loc": "579;22;38;18511;18527"
+                        },
+                        "loc": "579;9;38;18498;18527"
+                      }
+                    ],
+                    "loc": "574;5;582;6;18330;18594"
+                  }
+                ],
+                "loc": "574;5;582;6;18330;18594"
+              }
+            ]
+          ],
+          "parameters": [
+            {
+              "name": { "value": "body", "loc": "179;21;27;5514;5520" },
+              "description": {
+                "value": "Pet object that needs to be added to the store",
+                "loc": "180;28;76;5549;5597"
+              },
+              "typeName": { "value": "Pet", "loc": "593;5;10;18832;18837" },
+              "isUnknown": false,
+              "isLocal": true,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "177;11;183;12;5466;5694"
+            }
+          ],
+          "description": [
+            {
+              "value": "Add a new pet to the store",
+              "loc": "171;20;48;5220;5248"
+            },
+            { "value": "", "loc": "172;24;26;5273;5275" }
+          ],
+          "loc": "169;7;187;8;5166;5852"
+        },
+        {
+          "name": { "value": "updatePet", "loc": "192;24;35;5989;6000" },
+          "security": [
+            [
+              {
+                "type": { "value": "oauth2", "loc": "575;15;23;18363;18371" },
+                "name": {
+                  "value": "petstore_auth",
+                  "loc": "574;5;20;18330;18345"
+                },
+                "flows": [
+                  {
+                    "type": {
+                      "value": "implicit",
+                      "loc": "577;15;25;18460;18470"
+                    },
+                    "authorizationUrl": {
+                      "value": "https://petstore.swagger.io/oauth/authorize",
+                      "loc": "576;27;72;18399;18444"
+                    },
+                    "scopes": [
+                      {
+                        "name": {
+                          "value": "write:pets",
+                          "loc": "209;42;54;6644;6656"
+                        },
+                        "description": {
+                          "value": "modify pets in your account",
+                          "loc": "580;23;52;18551;18580"
+                        },
+                        "loc": "580;9;52;18537;18580"
+                      },
+                      {
+                        "name": {
+                          "value": "read:pets",
+                          "loc": "209;56;67;6658;6669"
+                        },
+                        "description": {
+                          "value": "read your pets",
+                          "loc": "579;22;38;18511;18527"
+                        },
+                        "loc": "579;9;38;18498;18527"
+                      }
+                    ],
+                    "loc": "574;5;582;6;18330;18594"
+                  }
+                ],
+                "loc": "574;5;582;6;18330;18594"
+              }
+            ]
+          ],
+          "parameters": [
+            {
+              "name": { "value": "body", "loc": "198;21;27;6206;6212" },
+              "description": {
+                "value": "Pet object that needs to be added to the store",
+                "loc": "199;28;76;6241;6289"
+              },
+              "typeName": { "value": "Pet", "loc": "593;5;10;18832;18837" },
+              "isUnknown": false,
+              "isLocal": true,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "196;11;202;12;6158;6386"
+            }
+          ],
+          "description": [
+            { "value": "Update an existing pet", "loc": "190;20;44;5913;5937" },
+            { "value": "", "loc": "191;24;26;5962;5964" }
+          ],
+          "loc": "188;7;210;8;5860;6681"
+        },
+        {
+          "name": { "value": "findPetsByStatus", "loc": "217;24;42;6916;6934" },
+          "security": [
+            [
+              {
+                "type": { "value": "oauth2", "loc": "575;15;23;18363;18371" },
+                "name": {
+                  "value": "petstore_auth",
+                  "loc": "574;5;20;18330;18345"
+                },
+                "flows": [
+                  {
+                    "type": {
+                      "value": "implicit",
+                      "loc": "577;15;25;18460;18470"
+                    },
+                    "authorizationUrl": {
+                      "value": "https://petstore.swagger.io/oauth/authorize",
+                      "loc": "576;27;72;18399;18444"
+                    },
+                    "scopes": [
+                      {
+                        "name": {
+                          "value": "write:pets",
+                          "loc": "244;42;54;7798;7810"
+                        },
+                        "description": {
+                          "value": "modify pets in your account",
+                          "loc": "580;23;52;18551;18580"
+                        },
+                        "loc": "580;9;52;18537;18580"
+                      },
+                      {
+                        "name": {
+                          "value": "read:pets",
+                          "loc": "244;56;67;7812;7823"
+                        },
+                        "description": {
+                          "value": "read your pets",
+                          "loc": "579;22;38;18511;18527"
+                        },
+                        "loc": "579;9;38;18498;18527"
+                      }
+                    ],
+                    "loc": "574;5;582;6;18330;18594"
+                  }
+                ],
+                "loc": "574;5;582;6;18330;18594"
+              }
+            ]
+          ],
+          "parameters": [
+            {
+              "name": { "value": "status", "loc": "221;21;29;7053;7061" },
+              "description": {
+                "value": "Status values that need to be considered for filter",
+                "loc": "223;28;81;7117;7170"
+              },
+              "typeName": { "value": "findPetsByStatusStatus" },
+              "isUnknown": false,
+              "isLocal": true,
+              "isArray": true,
+              "rules": [
+                { "id": "required" },
+                {
+                  "id": "string-enum",
+                  "values": [
+                    { "value": "available", "loc": "228;24;35;7309;7320" },
+                    { "value": "pending", "loc": "228;37;46;7322;7331" },
+                    { "value": "sold", "loc": "228;48;54;7333;7339" }
+                  ],
+                  "loc": "228;15;55;7300;7340"
+                }
+              ],
+              "loc": "220;11;232;12;7031;7445"
+            }
+          ],
+          "description": [
+            { "value": "Finds Pets by status", "loc": "215;20;42;6775;6797" },
+            {
+              "value": "Multiple status values can be provided with comma separated strings",
+              "loc": "216;24;93;6822;6891"
+            }
+          ],
+          "returnType": {
+            "typeName": { "value": "Pet", "loc": "593;5;10;18832;18837" },
+            "isUnknown": false,
+            "isLocal": true,
+            "isArray": true,
+            "rules": [],
+            "loc": "237;23;240;14;7572;7673"
+          },
+          "loc": "213;7;245;8;6722;7835"
+        },
+        {
+          "name": { "value": "findPetsByTags", "loc": "252;24;40;8092;8108" },
+          "security": [
+            [
+              {
+                "type": { "value": "oauth2", "loc": "575;15;23;18363;18371" },
+                "name": {
+                  "value": "petstore_auth",
+                  "loc": "574;5;20;18330;18345"
+                },
+                "flows": [
+                  {
+                    "type": {
+                      "value": "implicit",
+                      "loc": "577;15;25;18460;18470"
+                    },
+                    "authorizationUrl": {
+                      "value": "https://petstore.swagger.io/oauth/authorize",
+                      "loc": "576;27;72;18399;18444"
+                    },
+                    "scopes": [
+                      {
+                        "name": {
+                          "value": "write:pets",
+                          "loc": "275;42;54;8813;8825"
+                        },
+                        "description": {
+                          "value": "modify pets in your account",
+                          "loc": "580;23;52;18551;18580"
+                        },
+                        "loc": "580;9;52;18537;18580"
+                      },
+                      {
+                        "name": {
+                          "value": "read:pets",
+                          "loc": "275;56;67;8827;8838"
+                        },
+                        "description": {
+                          "value": "read your pets",
+                          "loc": "579;22;38;18511;18527"
+                        },
+                        "loc": "579;9;38;18498;18527"
+                      }
+                    ],
+                    "loc": "574;5;582;6;18330;18594"
+                  }
+                ],
+                "loc": "574;5;582;6;18330;18594"
+              }
+            ]
+          ],
+          "parameters": [
+            {
+              "name": { "value": "tags", "loc": "256;21;27;8227;8233" },
+              "description": {
+                "value": "Tags to filter by",
+                "loc": "258;28;47;8289;8308"
+              },
+              "typeName": { "value": "string", "loc": "261;32;40;8400;8408" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": true,
+              "rules": [{ "id": "required" }],
+              "loc": "255;11;263;12;8205;8463"
+            }
+          ],
+          "description": [
+            { "value": "Finds Pets by tags", "loc": "250;20;40;7927;7947" },
+            {
+              "value": "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+              "loc": "251;24;119;7972;8067"
+            }
+          ],
+          "returnType": {
+            "typeName": { "value": "Pet", "loc": "593;5;10;18832;18837" },
+            "isUnknown": false,
+            "isLocal": true,
+            "isArray": true,
+            "rules": [],
+            "loc": "268;23;271;14;8590;8691"
+          },
+          "loc": "248;7;277;8;7874;8878"
+        }
+      ],
+      "protocols": {
+        "http": [
+          {
+            "path": { "value": "/pet/{petId}", "loc": "37;5;19;1187;1201" },
+            "methods": [
+              {
+                "name": { "value": "getPetById", "loc": "42;24;36;1352;1364" },
+                "verb": { "value": "get", "loc": "38;7;12;1211;1216" },
+                "parameters": [
+                  {
+                    "name": { "value": "petId", "loc": "46;21;28;1483;1490" },
+                    "in": { "value": "path", "loc": "47;19;25;1510;1516" },
+                    "loc": "45;11;52;12;1461;1670"
+                  }
+                ],
+                "successCode": { "value": 200, "loc": "55;11;16;1715;1720" },
+                "loc": "38;7;63;8;1211;2011"
+              },
+              {
+                "name": {
+                  "value": "updatePetWithForm",
+                  "loc": "68;24;43;2168;2187"
+                },
+                "verb": { "value": "post", "loc": "64;7;13;2019;2025" },
+                "parameters": [
+                  {
+                    "name": { "value": "petId", "loc": "73;21;28;2365;2372" },
+                    "in": { "value": "path", "loc": "74;19;25;2392;2398" },
+                    "loc": "72;11;79;12;2343;2567"
+                  },
+                  {
+                    "name": { "value": "name", "loc": "81;21;27;2601;2607" },
+                    "in": { "value": "formData", "loc": "82;19;29;2627;2637" },
+                    "loc": "80;11;86;12;2579;2764"
+                  },
+                  {
+                    "name": { "value": "status", "loc": "88;21;29;2798;2806" },
+                    "in": { "value": "formData", "loc": "89;19;29;2826;2836" },
+                    "loc": "87;11;93;12;2776;2965"
+                  }
+                ],
+                "successCode": { "value": 200 },
+                "loc": "64;7;97;8;2019;3123"
+              },
+              {
+                "name": { "value": "deletePet", "loc": "102;24;35;3254;3265" },
+                "verb": { "value": "delete", "loc": "98;7;15;3131;3139" },
+                "parameters": [
+                  {
+                    "name": {
+                      "value": "api_key",
+                      "loc": "106;21;30;3384;3393"
+                    },
+                    "in": { "value": "header", "loc": "107;19;27;3413;3421" },
+                    "loc": "105;11;110;12;3362;3494"
+                  },
+                  {
+                    "name": { "value": "petId", "loc": "112;21;28;3528;3535" },
+                    "in": { "value": "path", "loc": "113;19;25;3555;3561" },
+                    "loc": "111;11;118;12;3506;3712"
+                  }
+                ],
+                "successCode": { "value": 200 },
+                "loc": "98;7;125;8;3131;3947"
+              }
+            ],
+            "loc": "37;5;126;6;1187;3953"
+          },
+          {
+            "path": {
+              "value": "/pet/{petId}/uploadImage",
+              "loc": "127;5;31;3959;3985"
+            },
+            "methods": [
+              {
+                "name": { "value": "uploadFile", "loc": "132;24;36;4119;4131" },
+                "verb": { "value": "post", "loc": "128;7;13;3995;4001" },
+                "parameters": [
+                  {
+                    "name": { "value": "petId", "loc": "137;21;28;4276;4283" },
+                    "in": { "value": "path", "loc": "138;19;25;4303;4309" },
+                    "loc": "136;11;143;12;4254;4463"
+                  },
+                  {
+                    "name": {
+                      "value": "additionalMetadata",
+                      "loc": "145;21;41;4497;4517"
+                    },
+                    "in": { "value": "formData", "loc": "146;19;29;4537;4547" },
+                    "loc": "144;11;150;12;4475;4684"
+                  }
+                ],
+                "successCode": { "value": 200, "loc": "160;11;16;4915;4920" },
+                "loc": "128;7;166;8;3995;5138"
+              }
+            ],
+            "loc": "127;5;167;6;3959;5144"
+          },
+          {
+            "path": { "value": "/pet", "loc": "168;5;11;5150;5156" },
+            "methods": [
+              {
+                "name": { "value": "addPet", "loc": "173;24;32;5300;5308" },
+                "verb": { "value": "post", "loc": "169;7;13;5166;5172" },
+                "parameters": [
+                  {
+                    "name": { "value": "body", "loc": "179;21;27;5514;5520" },
+                    "in": { "value": "body", "loc": "178;19;25;5486;5492" },
+                    "loc": "177;11;183;12;5466;5694"
+                  }
+                ],
+                "successCode": { "value": 200 },
+                "loc": "169;7;187;8;5166;5852"
+              },
+              {
+                "name": { "value": "updatePet", "loc": "192;24;35;5989;6000" },
+                "verb": { "value": "put", "loc": "188;7;12;5860;5865" },
+                "parameters": [
+                  {
+                    "name": { "value": "body", "loc": "198;21;27;6206;6212" },
+                    "in": { "value": "body", "loc": "197;19;25;6178;6184" },
+                    "loc": "196;11;202;12;6158;6386"
+                  }
+                ],
+                "successCode": { "value": 200 },
+                "loc": "188;7;210;8;5860;6681"
+              }
+            ],
+            "loc": "168;5;211;6;5150;6687"
+          },
+          {
+            "path": {
+              "value": "/pet/findByStatus",
+              "loc": "212;5;24;6693;6712"
+            },
+            "methods": [
+              {
+                "name": {
+                  "value": "findPetsByStatus",
+                  "loc": "217;24;42;6916;6934"
+                },
+                "verb": { "value": "get", "loc": "213;7;12;6722;6727" },
+                "parameters": [
+                  {
+                    "name": { "value": "status", "loc": "221;21;29;7053;7061" },
+                    "in": { "value": "query", "loc": "222;19;26;7081;7088" },
+                    "array": { "value": "multi", "loc": "231;33;40;7426;7433" },
+                    "loc": "220;11;232;12;7031;7445"
+                  }
+                ],
+                "successCode": { "value": 200, "loc": "235;11;16;7490;7495" },
+                "loc": "213;7;245;8;6722;7835"
+              }
+            ],
+            "loc": "212;5;246;6;6693;7841"
+          },
+          {
+            "path": { "value": "/pet/findByTags", "loc": "247;5;22;7847;7864" },
+            "methods": [
+              {
+                "name": {
+                  "value": "findPetsByTags",
+                  "loc": "252;24;40;8092;8108"
+                },
+                "verb": { "value": "get", "loc": "248;7;12;7874;7879" },
+                "parameters": [
+                  {
+                    "name": { "value": "tags", "loc": "256;21;27;8227;8233" },
+                    "in": { "value": "query", "loc": "257;19;26;8253;8260" },
+                    "array": { "value": "multi", "loc": "262;33;40;8444;8451" },
+                    "loc": "255;11;263;12;8205;8463"
+                  }
+                ],
+                "successCode": { "value": 200, "loc": "266;11;16;8508;8513" },
+                "loc": "248;7;277;8;7874;8878"
+              }
+            ],
+            "loc": "247;5;278;6;7847;8884"
+          }
+        ]
+      }
+    },
+    {
+      "name": "store",
+      "methods": [
+        {
+          "name": { "value": "getInventory", "loc": "284;24;38;9103;9117" },
+          "security": [
+            [
+              {
+                "type": { "value": "apiKey", "loc": "573;26;34;18279;18287" },
+                "name": { "value": "api_key", "loc": "573;5;14;18258;18267" },
+                "parameter": {
+                  "value": "api_key",
+                  "loc": "573;44;53;18297;18306"
+                },
+                "in": { "value": "header", "loc": "573;61;69;18314;18322" },
+                "loc": "573;5;71;18258;18324"
+              }
+            ]
+          ],
+          "parameters": [],
+          "description": [
+            {
+              "value": "Returns pet inventories by status",
+              "loc": "282;20;55;8973;9008"
+            },
+            {
+              "value": "Returns a map of status codes to quantities",
+              "loc": "283;24;69;9033;9078"
+            }
+          ],
+          "returnType": {
+            "typeName": { "value": "getInventoryResponse" },
+            "isUnknown": false,
+            "isLocal": true,
+            "isArray": false,
+            "rules": [],
+            "loc": "290;23;293;14;9302;9428"
+          },
+          "loc": "280;7;297;8;8918;9499"
+        },
+        {
+          "name": { "value": "getOrderById", "loc": "304;24;38;9779;9793" },
+          "security": [],
+          "parameters": [
+            {
+              "name": { "value": "orderId", "loc": "308;21;30;9912;9921" },
+              "description": {
+                "value": "ID of pet that needs to be fetched",
+                "loc": "310;28;64;9976;10012"
+              },
+              "typeName": {
+                "value": "integer",
+                "loc": "312;21;30;10064;10073"
+              },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [
+                { "id": "required" },
+                {
+                  "id": "number-gte",
+                  "value": { "value": 1, "loc": "314;24;25;10125;10126" },
+                  "loc": "314;13;25;10114;10126"
+                },
+                {
+                  "id": "number-lte",
+                  "value": { "value": 10, "loc": "313;24;26;10098;10100" },
+                  "loc": "313;13;26;10087;10100"
+                }
+              ],
+              "loc": "307;11;316;12;9890;10169"
+            }
+          ],
+          "description": [
+            {
+              "value": "Find purchase order by ID",
+              "loc": "302;20;47;9600;9627"
+            },
+            {
+              "value": "For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
+              "loc": "303;24;126;9652;9754"
+            }
+          ],
+          "returnType": {
+            "typeName": { "value": "Order", "loc": "634;5;12;20071;20078" },
+            "isUnknown": false,
+            "isLocal": true,
+            "isArray": false,
+            "rules": [],
+            "loc": "634;14;649;6;20080;20613"
+          },
+          "loc": "300;7;326;8;9545;10473"
+        },
+        {
+          "name": { "value": "deleteOrder", "loc": "331;24;37;10739;10752" },
+          "security": [],
+          "parameters": [
+            {
+              "name": { "value": "orderId", "loc": "335;21;30;10871;10880" },
+              "description": {
+                "value": "ID of the order that needs to be deleted",
+                "loc": "337;28;70;10935;10977"
+              },
+              "typeName": {
+                "value": "integer",
+                "loc": "339;21;30;11029;11038"
+              },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [
+                { "id": "required" },
+                {
+                  "id": "number-gte",
+                  "value": { "value": 1, "loc": "340;24;25;11063;11064" },
+                  "loc": "340;13;25;11052;11064"
+                }
+              ],
+              "loc": "334;11;342;12;10849;11107"
+            }
+          ],
+          "description": [
+            {
+              "value": "Delete purchase order by ID",
+              "loc": "329;20;49;10539;10568"
+            },
+            {
+              "value": "For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors",
+              "loc": "330;24;145;10593;10714"
+            }
+          ],
+          "loc": "327;7;348;8;10481;11272"
+        },
+        {
+          "name": { "value": "placeOrder", "loc": "355;24;36;11442;11454" },
+          "security": [],
+          "parameters": [
+            {
+              "name": { "value": "body", "loc": "361;21;27;11641;11647" },
+              "description": {
+                "value": "order placed for purchasing the pet",
+                "loc": "362;28;65;11676;11713"
+              },
+              "typeName": { "value": "Order", "loc": "634;5;12;20071;20078" },
+              "isUnknown": false,
+              "isLocal": true,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "359;11;365;12;11593;11812"
+            }
+          ],
+          "description": [
+            {
+              "value": "Place an order for a pet",
+              "loc": "353;20;46;11364;11390"
+            },
+            { "value": "", "loc": "354;24;26;11415;11417" }
+          ],
+          "returnType": {
+            "typeName": { "value": "Order", "loc": "634;5;12;20071;20078" },
+            "isUnknown": false,
+            "isLocal": true,
+            "isArray": false,
+            "rules": [],
+            "loc": "634;14;649;6;20080;20613"
+          },
+          "loc": "351;7;374;8;11308;12055"
+        }
+      ],
+      "protocols": {
+        "http": [
+          {
+            "path": {
+              "value": "/store/inventory",
+              "loc": "279;5;23;8890;8908"
+            },
+            "methods": [
+              {
+                "name": {
+                  "value": "getInventory",
+                  "loc": "284;24;38;9103;9117"
+                },
+                "verb": { "value": "get", "loc": "280;7;12;8918;8923" },
+                "parameters": [],
+                "successCode": { "value": 200, "loc": "288;11;16;9220;9225" },
+                "loc": "280;7;297;8;8918;9499"
+              }
+            ],
+            "loc": "279;5;298;6;8890;9505"
+          },
+          {
+            "path": {
+              "value": "/store/order/{orderId}",
+              "loc": "299;5;29;9511;9535"
+            },
+            "methods": [
+              {
+                "name": {
+                  "value": "getOrderById",
+                  "loc": "304;24;38;9779;9793"
+                },
+                "verb": { "value": "get", "loc": "300;7;12;9545;9550" },
+                "parameters": [
+                  {
+                    "name": {
+                      "value": "orderId",
+                      "loc": "308;21;30;9912;9921"
+                    },
+                    "in": { "value": "path", "loc": "309;19;25;9941;9947" },
+                    "loc": "307;11;316;12;9890;10169"
+                  }
+                ],
+                "successCode": { "value": 200, "loc": "319;11;16;10214;10219" },
+                "loc": "300;7;326;8;9545;10473"
+              },
+              {
+                "name": {
+                  "value": "deleteOrder",
+                  "loc": "331;24;37;10739;10752"
+                },
+                "verb": { "value": "delete", "loc": "327;7;15;10481;10489" },
+                "parameters": [
+                  {
+                    "name": {
+                      "value": "orderId",
+                      "loc": "335;21;30;10871;10880"
+                    },
+                    "in": { "value": "path", "loc": "336;19;25;10900;10906" },
+                    "loc": "334;11;342;12;10849;11107"
+                  }
+                ],
+                "successCode": { "value": 200 },
+                "loc": "327;7;348;8;10481;11272"
+              }
+            ],
+            "loc": "299;5;349;6;9511;11278"
+          },
+          {
+            "path": { "value": "/store/order", "loc": "350;5;19;11284;11298" },
+            "methods": [
+              {
+                "name": {
+                  "value": "placeOrder",
+                  "loc": "355;24;36;11442;11454"
+                },
+                "verb": { "value": "post", "loc": "351;7;13;11308;11314" },
+                "parameters": [
+                  {
+                    "name": { "value": "body", "loc": "361;21;27;11641;11647" },
+                    "in": { "value": "body", "loc": "360;19;25;11613;11619" },
+                    "loc": "359;11;365;12;11593;11812"
+                  }
+                ],
+                "successCode": { "value": 200, "loc": "368;11;16;11857;11862" },
+                "loc": "351;7;374;8;11308;12055"
+              }
+            ],
+            "loc": "350;5;375;6;11284;12061"
+          }
+        ]
+      }
+    },
+    {
+      "name": "user",
+      "methods": [
+        {
+          "name": { "value": "getUserByName", "loc": "381;24;39;12224;12239" },
+          "security": [],
+          "parameters": [
+            {
+              "name": { "value": "username", "loc": "385;21;31;12358;12368" },
+              "description": {
+                "value": "The name that needs to be fetched. Use user1 for testing. ",
+                "loc": "387;28;88;12423;12483"
+              },
+              "typeName": { "value": "string", "loc": "389;21;29;12535;12543" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "384;11;390;12;12336;12555"
+            }
+          ],
+          "description": [
+            {
+              "value": "Get user by user name",
+              "loc": "379;20;43;12149;12172"
+            },
+            { "value": "", "loc": "380;24;26;12197;12199" }
+          ],
+          "returnType": {
+            "typeName": { "value": "User", "loc": "650;5;11;20619;20625" },
+            "isUnknown": false,
+            "isLocal": true,
+            "isArray": false,
+            "rules": [],
+            "loc": "650;13;667;6;20627;21155"
+          },
+          "loc": "377;7;400;8;12095;12863"
+        },
+        {
+          "name": { "value": "updateUser", "loc": "405;24;36;13035;13047" },
+          "security": [],
+          "parameters": [
+            {
+              "name": { "value": "username", "loc": "410;21;31;13208;13218" },
+              "description": {
+                "value": "name that need to be updated",
+                "loc": "412;28;58;13273;13303"
+              },
+              "typeName": { "value": "string", "loc": "414;21;29;13355;13363" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "409;11;415;12;13186;13375"
+            },
+            {
+              "name": { "value": "body", "loc": "418;21;27;13435;13441" },
+              "description": {
+                "value": "Updated user object",
+                "loc": "419;28;49;13470;13491"
+              },
+              "typeName": { "value": "User", "loc": "650;5;11;20619;20625" },
+              "isUnknown": false,
+              "isLocal": true,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "416;11;422;12;13387;13589"
+            }
+          ],
+          "description": [
+            { "value": "Updated user", "loc": "403;20;34;12925;12939" },
+            {
+              "value": "This can only be done by the logged in user.",
+              "loc": "404;24;70;12964;13010"
+            }
+          ],
+          "loc": "401;7;428;8;12871;13755"
+        },
+        {
+          "name": { "value": "deleteUser", "loc": "433;24;36;13929;13941" },
+          "security": [],
+          "parameters": [
+            {
+              "name": { "value": "username", "loc": "437;21;31;14060;14070" },
+              "description": {
+                "value": "The name that needs to be deleted",
+                "loc": "439;28;63;14125;14160"
+              },
+              "typeName": { "value": "string", "loc": "441;21;29;14212;14220" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "436;11;442;12;14038;14232"
+            }
+          ],
+          "description": [
+            { "value": "Delete user", "loc": "431;20;33;13820;13833" },
+            {
+              "value": "This can only be done by the logged in user.",
+              "loc": "432;24;70;13858;13904"
+            }
+          ],
+          "loc": "429;7;448;8;13763;14402"
+        },
+        {
+          "name": { "value": "createUser", "loc": "455;24;36;14595;14607" },
+          "security": [],
+          "parameters": [
+            {
+              "name": { "value": "body", "loc": "461;21;27;14794;14800" },
+              "description": {
+                "value": "Created user object",
+                "loc": "462;28;49;14829;14850"
+              },
+              "typeName": { "value": "User", "loc": "650;5;11;20619;20625" },
+              "isUnknown": false,
+              "isLocal": true,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "459;11;465;12;14746;14948"
+            }
+          ],
+          "description": [
+            { "value": "Create user", "loc": "453;20;33;14486;14499" },
+            {
+              "value": "This can only be done by the logged in user.",
+              "loc": "454;24;70;14524;14570"
+            }
+          ],
+          "loc": "451;7;468;8;14431;15045"
+        },
+        {
+          "name": {
+            "value": "createUsersWithListInput",
+            "loc": "475;24;50;15242;15268"
+          },
+          "security": [],
+          "parameters": [
+            {
+              "name": { "value": "body", "loc": "481;21;27;15455;15461" },
+              "description": {
+                "value": "List of user object",
+                "loc": "482;28;49;15490;15511"
+              },
+              "typeName": { "value": "User", "loc": "650;5;11;20619;20625" },
+              "isUnknown": false,
+              "isLocal": true,
+              "isArray": true,
+              "rules": [{ "id": "required" }],
+              "loc": "479;11;488;12;15407;15679"
+            }
+          ],
+          "description": [
+            {
+              "value": "Creates list of users with given input array",
+              "loc": "473;20;66;15144;15190"
+            },
+            { "value": "", "loc": "474;24;26;15215;15217" }
+          ],
+          "loc": "471;7;491;8;15089;15776"
+        },
+        {
+          "name": { "value": "loginUser", "loc": "498;24;35;15944;15955" },
+          "security": [],
+          "parameters": [
+            {
+              "name": { "value": "username", "loc": "502;21;31;16074;16084" },
+              "description": {
+                "value": "The user name for login",
+                "loc": "504;28;53;16140;16165"
+              },
+              "typeName": { "value": "string", "loc": "506;21;29;16217;16225" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "501;11;507;12;16052;16237"
+            },
+            {
+              "name": { "value": "password", "loc": "509;21;31;16271;16281" },
+              "description": {
+                "value": "The password for login in clear text",
+                "loc": "511;28;66;16337;16375"
+              },
+              "typeName": { "value": "string", "loc": "513;21;29;16427;16435" },
+              "isUnknown": false,
+              "isLocal": false,
+              "isArray": false,
+              "rules": [{ "id": "required" }],
+              "loc": "508;11;514;12;16249;16447"
+            }
+          ],
+          "description": [
+            {
+              "value": "Logs user into the system",
+              "loc": "496;20;47;15865;15892"
+            },
+            { "value": "", "loc": "497;24;26;15917;15919" }
+          ],
+          "returnType": {
+            "typeName": { "value": "string", "loc": "531;33;41;16999;17007" },
+            "isUnknown": false,
+            "isLocal": false,
+            "isArray": false,
+            "rules": [],
+            "loc": "531;23;43;16989;17009"
+          },
+          "loc": "494;7;535;8;15811;17113"
+        },
+        {
+          "name": { "value": "logoutUser", "loc": "542;24;36;17296;17308" },
+          "security": [],
+          "parameters": [],
+          "description": [
+            {
+              "value": "Logs out current logged in user session",
+              "loc": "540;20;61;17203;17244"
+            },
+            { "value": "", "loc": "541;24;26;17269;17271" }
+          ],
+          "loc": "538;7;546;8;17149;17482"
+        },
+        {
+          "name": {
+            "value": "createUsersWithArrayInput",
+            "loc": "553;24;51;17680;17707"
+          },
+          "security": [],
+          "parameters": [
+            {
+              "name": { "value": "body", "loc": "559;21;27;17894;17900" },
+              "description": {
+                "value": "List of user object",
+                "loc": "560;28;49;17929;17950"
+              },
+              "typeName": { "value": "User", "loc": "650;5;11;20619;20625" },
+              "isUnknown": false,
+              "isLocal": true,
+              "isArray": true,
+              "rules": [{ "id": "required" }],
+              "loc": "557;11;566;12;17846;18118"
+            }
+          ],
+          "description": [
+            {
+              "value": "Creates list of users with given input array",
+              "loc": "551;20;66;17582;17628"
+            },
+            { "value": "", "loc": "552;24;26;17653;17655" }
+          ],
+          "loc": "549;7;569;8;17527;18215"
+        }
+      ],
+      "protocols": {
+        "http": [
+          {
+            "path": {
+              "value": "/user/{username}",
+              "loc": "376;5;23;12067;12085"
+            },
+            "methods": [
+              {
+                "name": {
+                  "value": "getUserByName",
+                  "loc": "381;24;39;12224;12239"
+                },
+                "verb": { "value": "get", "loc": "377;7;12;12095;12100" },
+                "parameters": [
+                  {
+                    "name": {
+                      "value": "username",
+                      "loc": "385;21;31;12358;12368"
+                    },
+                    "in": { "value": "path", "loc": "386;19;25;12388;12394" },
+                    "loc": "384;11;390;12;12336;12555"
+                  }
+                ],
+                "successCode": { "value": 200, "loc": "393;11;16;12600;12605" },
+                "loc": "377;7;400;8;12095;12863"
+              },
+              {
+                "name": {
+                  "value": "updateUser",
+                  "loc": "405;24;36;13035;13047"
+                },
+                "verb": { "value": "put", "loc": "401;7;12;12871;12876" },
+                "parameters": [
+                  {
+                    "name": {
+                      "value": "username",
+                      "loc": "410;21;31;13208;13218"
+                    },
+                    "in": { "value": "path", "loc": "411;19;25;13238;13244" },
+                    "loc": "409;11;415;12;13186;13375"
+                  },
+                  {
+                    "name": { "value": "body", "loc": "418;21;27;13435;13441" },
+                    "in": { "value": "body", "loc": "417;19;25;13407;13413" },
+                    "loc": "416;11;422;12;13387;13589"
+                  }
+                ],
+                "successCode": { "value": 200 },
+                "loc": "401;7;428;8;12871;13755"
+              },
+              {
+                "name": {
+                  "value": "deleteUser",
+                  "loc": "433;24;36;13929;13941"
+                },
+                "verb": { "value": "delete", "loc": "429;7;15;13763;13771" },
+                "parameters": [
+                  {
+                    "name": {
+                      "value": "username",
+                      "loc": "437;21;31;14060;14070"
+                    },
+                    "in": { "value": "path", "loc": "438;19;25;14090;14096" },
+                    "loc": "436;11;442;12;14038;14232"
+                  }
+                ],
+                "successCode": { "value": 200 },
+                "loc": "429;7;448;8;13763;14402"
+              }
+            ],
+            "loc": "376;5;449;6;12067;14408"
+          },
+          {
+            "path": { "value": "/user", "loc": "450;5;12;14414;14421" },
+            "methods": [
+              {
+                "name": {
+                  "value": "createUser",
+                  "loc": "455;24;36;14595;14607"
+                },
+                "verb": { "value": "post", "loc": "451;7;13;14431;14437" },
+                "parameters": [
+                  {
+                    "name": { "value": "body", "loc": "461;21;27;14794;14800" },
+                    "in": { "value": "body", "loc": "460;19;25;14766;14772" },
+                    "loc": "459;11;465;12;14746;14948"
+                  }
+                ],
+                "successCode": { "value": 204, "loc": "467;24;33;14983;14992" },
+                "loc": "451;7;468;8;14431;15045"
+              }
+            ],
+            "loc": "450;5;469;6;14414;15051"
+          },
+          {
+            "path": {
+              "value": "/user/createWithList",
+              "loc": "470;5;27;15057;15079"
+            },
+            "methods": [
+              {
+                "name": {
+                  "value": "createUsersWithListInput",
+                  "loc": "475;24;50;15242;15268"
+                },
+                "verb": { "value": "post", "loc": "471;7;13;15089;15095" },
+                "parameters": [
+                  {
+                    "name": { "value": "body", "loc": "481;21;27;15455;15461" },
+                    "in": { "value": "body", "loc": "480;19;25;15427;15433" },
+                    "loc": "479;11;488;12;15407;15679"
+                  }
+                ],
+                "successCode": { "value": 204, "loc": "490;24;33;15714;15723" },
+                "loc": "471;7;491;8;15089;15776"
+              }
+            ],
+            "loc": "470;5;492;6;15057;15782"
+          },
+          {
+            "path": { "value": "/user/login", "loc": "493;5;18;15788;15801" },
+            "methods": [
+              {
+                "name": {
+                  "value": "loginUser",
+                  "loc": "498;24;35;15944;15955"
+                },
+                "verb": { "value": "get", "loc": "494;7;12;15811;15816" },
+                "parameters": [
+                  {
+                    "name": {
+                      "value": "username",
+                      "loc": "502;21;31;16074;16084"
+                    },
+                    "in": { "value": "query", "loc": "503;19;26;16104;16111" },
+                    "loc": "501;11;507;12;16052;16237"
+                  },
+                  {
+                    "name": {
+                      "value": "password",
+                      "loc": "509;21;31;16271;16281"
+                    },
+                    "in": { "value": "query", "loc": "510;19;26;16301;16308" },
+                    "loc": "508;11;514;12;16249;16447"
+                  }
+                ],
+                "successCode": { "value": 200, "loc": "517;11;16;16492;16497" },
+                "loc": "494;7;535;8;15811;17113"
+              }
+            ],
+            "loc": "493;5;536;6;15788;17119"
+          },
+          {
+            "path": { "value": "/user/logout", "loc": "537;5;19;17125;17139" },
+            "methods": [
+              {
+                "name": {
+                  "value": "logoutUser",
+                  "loc": "542;24;36;17296;17308"
+                },
+                "verb": { "value": "get", "loc": "538;7;12;17149;17154" },
+                "parameters": [],
+                "successCode": { "value": 204, "loc": "545;24;33;17420;17429" },
+                "loc": "538;7;546;8;17149;17482"
+              }
+            ],
+            "loc": "537;5;547;6;17125;17488"
+          },
+          {
+            "path": {
+              "value": "/user/createWithArray",
+              "loc": "548;5;28;17494;17517"
+            },
+            "methods": [
+              {
+                "name": {
+                  "value": "createUsersWithArrayInput",
+                  "loc": "553;24;51;17680;17707"
+                },
+                "verb": { "value": "post", "loc": "549;7;13;17527;17533" },
+                "parameters": [
+                  {
+                    "name": { "value": "body", "loc": "559;21;27;17894;17900" },
+                    "in": { "value": "body", "loc": "558;19;25;17866;17872" },
+                    "loc": "557;11;566;12;17846;18118"
+                  }
+                ],
+                "successCode": { "value": 204, "loc": "568;24;33;18153;18162" },
+                "loc": "549;7;569;8;17527;18215"
+              }
+            ],
+            "loc": "548;5;570;6;17494;18221"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": { "value": "Category", "loc": "585;5;15;18623;18633" },
+      "properties": [
+        {
+          "name": { "value": "id", "loc": "588;9;13;18691;18695" },
+          "typeName": { "value": "integer", "loc": "588;25;34;18707;18716" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "588;15;55;18697;18737"
+        },
+        {
+          "name": { "value": "name", "loc": "589;9;15;18747;18753" },
+          "typeName": { "value": "string", "loc": "589;27;35;18765;18773" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "589;17;37;18755;18775"
+        }
+      ],
+      "rules": [],
+      "loc": "585;5;592;6;18623;18826"
+    },
+    {
+      "name": { "value": "Pet", "loc": "593;5;10;18832;18837" },
+      "properties": [
+        {
+          "name": { "value": "id", "loc": "597;9;13;18936;18940" },
+          "typeName": { "value": "integer", "loc": "597;25;34;18952;18961" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "597;15;55;18942;18982"
+        },
+        {
+          "name": { "value": "category", "loc": "598;9;19;18992;19002" },
+          "typeName": { "value": "Category", "loc": "585;5;15;18623;18633" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": true,
+          "rules": [],
+          "loc": "585;17;592;6;18635;18826"
+        },
+        {
+          "name": { "value": "name", "loc": "599;9;15;19050;19056" },
+          "typeName": { "value": "string", "loc": "599;27;35;19068;19076" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [{ "id": "required" }],
+          "loc": "599;17;58;19058;19099"
+        },
+        {
+          "name": { "value": "photoUrls", "loc": "600;9;20;19109;19120" },
+          "typeName": { "value": "string", "loc": "603;30;38;19218;19226" },
+          "isUnknown": false,
+          "isArray": true,
+          "isLocal": false,
+          "rules": [{ "id": "required" }],
+          "loc": "600;22;604;10;19122;19269"
+        },
+        {
+          "name": { "value": "tags", "loc": "605;9;15;19279;19285" },
+          "typeName": { "value": "Tag", "loc": "618;5;10;19654;19659" },
+          "isUnknown": false,
+          "isArray": true,
+          "isLocal": true,
+          "rules": [],
+          "loc": "605;17;609;10;19287;19440"
+        },
+        {
+          "name": { "value": "status", "loc": "610;9;17;19450;19458" },
+          "description": {
+            "value": "pet status in the store",
+            "loc": "612;26;51;19515;19540"
+          },
+          "typeName": { "value": "petStatus" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": true,
+          "rules": [
+            {
+              "id": "string-enum",
+              "values": [
+                { "value": "available", "loc": "613;20;31;19561;19572" },
+                { "value": "pending", "loc": "613;33;42;19574;19583" },
+                { "value": "sold", "loc": "613;44;50;19585;19591" }
+              ],
+              "loc": "613;11;51;19552;19592"
+            }
+          ],
+          "loc": "610;19;614;10;19460;19602"
+        }
+      ],
+      "rules": [],
+      "loc": "593;5;617;6;18832;19648"
+    },
+    {
+      "name": { "value": "Tag", "loc": "618;5;10;19654;19659" },
+      "properties": [
+        {
+          "name": { "value": "id", "loc": "621;9;13;19717;19721" },
+          "typeName": { "value": "integer", "loc": "621;25;34;19733;19742" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "621;15;55;19723;19763"
+        },
+        {
+          "name": { "value": "name", "loc": "622;9;15;19773;19779" },
+          "typeName": { "value": "string", "loc": "622;27;35;19791;19799" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "622;17;37;19781;19801"
+        }
+      ],
+      "rules": [],
+      "loc": "618;5;625;6;19654;19847"
+    },
+    {
+      "name": { "value": "ApiResponse", "loc": "626;5;18;19853;19866" },
+      "properties": [
+        {
+          "name": { "value": "code", "loc": "629;9;15;19924;19930" },
+          "typeName": { "value": "integer", "loc": "629;27;36;19942;19951" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "629;17;57;19932;19972"
+        },
+        {
+          "name": { "value": "type", "loc": "630;9;15;19982;19988" },
+          "typeName": { "value": "string", "loc": "630;27;35;20000;20008" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "630;17;37;19990;20010"
+        },
+        {
+          "name": { "value": "message", "loc": "631;9;18;20020;20029" },
+          "typeName": { "value": "string", "loc": "631;30;38;20041;20049" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "631;20;40;20031;20051"
+        }
+      ],
+      "rules": [],
+      "loc": "626;5;633;6;19853;20065"
+    },
+    {
+      "name": { "value": "Order", "loc": "634;5;12;20071;20078" },
+      "properties": [
+        {
+          "name": { "value": "id", "loc": "637;9;13;20136;20140" },
+          "typeName": { "value": "integer", "loc": "637;25;34;20152;20161" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "637;15;55;20142;20182"
+        },
+        {
+          "name": { "value": "petId", "loc": "638;9;16;20192;20199" },
+          "typeName": { "value": "integer", "loc": "638;28;37;20211;20220" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "638;18;58;20201;20241"
+        },
+        {
+          "name": { "value": "quantity", "loc": "639;9;19;20251;20261" },
+          "typeName": { "value": "integer", "loc": "639;31;40;20273;20282" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "639;21;61;20263;20303"
+        },
+        {
+          "name": { "value": "shipDate", "loc": "640;9;19;20313;20323" },
+          "typeName": { "value": "string", "loc": "640;31;39;20335;20343" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [
+            {
+              "id": "string-format",
+              "format": {
+                "value": "date-time",
+                "loc": "640;51;62;20355;20366"
+              },
+              "loc": "640;41;62;20345;20366"
+            }
+          ],
+          "loc": "640;21;64;20325;20368"
+        },
+        {
+          "name": { "value": "status", "loc": "641;9;17;20378;20386" },
+          "description": {
+            "value": "Order Status",
+            "loc": "643;26;40;20443;20457"
+          },
+          "typeName": { "value": "orderStatus" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": true,
+          "rules": [
+            {
+              "id": "string-enum",
+              "values": [
+                { "value": "placed", "loc": "644;20;28;20478;20486" },
+                { "value": "approved", "loc": "644;30;40;20488;20498" },
+                { "value": "delivered", "loc": "644;42;53;20500;20511" }
+              ],
+              "loc": "644;11;54;20469;20512"
+            }
+          ],
+          "loc": "641;19;645;10;20388;20522"
+        },
+        {
+          "name": { "value": "complete", "loc": "646;9;19;20532;20542" },
+          "typeName": { "value": "boolean", "loc": "646;31;40;20554;20563" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "646;21;42;20544;20565"
+        }
+      ],
+      "rules": [],
+      "loc": "634;5;649;6;20071;20613"
+    },
+    {
+      "name": { "value": "User", "loc": "650;5;11;20619;20625" },
+      "properties": [
+        {
+          "name": { "value": "id", "loc": "653;9;13;20683;20687" },
+          "typeName": { "value": "integer", "loc": "653;25;34;20699;20708" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "653;15;55;20689;20729"
+        },
+        {
+          "name": { "value": "username", "loc": "654;9;19;20739;20749" },
+          "typeName": { "value": "string", "loc": "654;31;39;20761;20769" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "654;21;41;20751;20771"
+        },
+        {
+          "name": { "value": "firstName", "loc": "655;9;20;20781;20792" },
+          "typeName": { "value": "string", "loc": "655;32;40;20804;20812" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "655;22;42;20794;20814"
+        },
+        {
+          "name": { "value": "lastName", "loc": "656;9;19;20824;20834" },
+          "typeName": { "value": "string", "loc": "656;31;39;20846;20854" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "656;21;41;20836;20856"
+        },
+        {
+          "name": { "value": "email", "loc": "657;9;16;20866;20873" },
+          "typeName": { "value": "string", "loc": "657;28;36;20885;20893" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "657;18;38;20875;20895"
+        },
+        {
+          "name": { "value": "password", "loc": "658;9;19;20905;20915" },
+          "typeName": { "value": "string", "loc": "658;31;39;20927;20935" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "658;21;41;20917;20937"
+        },
+        {
+          "name": { "value": "phone", "loc": "659;9;16;20947;20954" },
+          "typeName": { "value": "string", "loc": "659;28;36;20966;20974" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "659;18;38;20956;20976"
+        },
+        {
+          "name": { "value": "userStatus", "loc": "660;9;21;20986;20998" },
+          "description": {
+            "value": "User Status",
+            "loc": "663;26;39;21085;21098"
+          },
+          "typeName": { "value": "integer", "loc": "661;19;28;21020;21029" },
+          "isUnknown": false,
+          "isArray": false,
+          "isLocal": false,
+          "rules": [],
+          "loc": "660;23;664;10;21000;21108"
+        }
+      ],
+      "rules": [],
+      "loc": "650;5;667;6;20619;21155"
+    },
+    {
+      "name": { "value": "getInventoryResponse" },
+      "properties": [],
+      "rules": [],
+      "loc": "290;23;293;14;9302;9428"
+    }
+  ],
+  "enums": [
+    {
+      "name": { "value": "findPetsByStatusStatus" },
+      "values": [
+        { "value": "available", "loc": "228;24;35;7309;7320" },
+        { "value": "pending", "loc": "228;37;46;7322;7331" },
+        { "value": "sold", "loc": "228;48;54;7333;7339" }
+      ],
+      "loc": "228;15;55;7300;7340"
+    },
+    {
+      "name": { "value": "petStatus" },
+      "values": [
+        { "value": "available", "loc": "613;20;31;19561;19572" },
+        { "value": "pending", "loc": "613;33;42;19574;19583" },
+        { "value": "sold", "loc": "613;44;50;19585;19591" }
+      ],
+      "loc": "613;11;51;19552;19592"
+    },
+    {
+      "name": { "value": "orderStatus" },
+      "values": [
+        { "value": "placed", "loc": "644;20;28;20478;20486" },
+        { "value": "approved", "loc": "644;30;40;20488;20498" },
+        { "value": "delivered", "loc": "644;42;53;20500;20511" }
+      ],
+      "loc": "644;11;54;20469;20512"
+    }
+  ],
+  "loc": "1;1;673;2;0;21267"
+}
