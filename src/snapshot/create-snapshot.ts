@@ -3,20 +3,23 @@ import { join } from 'path';
 import { format } from 'prettier';
 import parser from '..';
 
-const exampleSchema = readFileSync(
-  join(process.cwd(), 'src', 'snapshot', 'example.oas2.json'),
-).toString('utf8');
+const examplePath = join(process.cwd(), 'src', 'snapshot', 'example.oas2.json');
+const exampleSchema = readFileSync(examplePath).toString('utf8');
 
-const petstoreSchema = readFileSync(
-  join(process.cwd(), 'src', 'snapshot', 'petstore.oas2.json'),
-).toString('utf8');
+const petstorePath = join(
+  process.cwd(),
+  'src',
+  'snapshot',
+  'petstore.oas2.json',
+);
+const petstoreSchema = readFileSync(petstorePath).toString('utf8');
 
 const prettierOptions = JSON.parse(
   readFileSync(join(process.cwd(), '.prettierrc')).toString('utf8'),
 );
 
-const example = parser(exampleSchema);
-const petstore = parser(petstoreSchema);
+const example = parser(exampleSchema, examplePath).service;
+const petstore = parser(petstoreSchema, petstorePath).service;
 
 const exampleSnapshot = format(JSON.stringify(example), {
   ...prettierOptions,
