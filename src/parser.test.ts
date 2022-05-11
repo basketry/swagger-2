@@ -11,12 +11,14 @@ describe('parser', () => {
     const snapshot = JSON.parse(
       readFileSync(join('src', 'snapshot', 'snapshot.json')).toString(),
     );
-    const schema = readFileSync(
-      join('src', 'snapshot', 'example.oas2.json'),
-    ).toString();
+
+    const sourcePath: string = join('src', 'snapshot', 'example.oas2.json');
+    const sourceContent = readFileSync(sourcePath).toString();
 
     // ACT
-    const result = JSON.parse(JSON.stringify(parser(schema)));
+    const result = JSON.parse(
+      JSON.stringify(parser(sourceContent, sourcePath).service),
+    );
 
     // ASSERT
     expect(result).toStrictEqual(snapshot);
@@ -27,12 +29,14 @@ describe('parser', () => {
     const snapshot = JSON.parse(
       readFileSync(join('src', 'snapshot', 'petstore.json')).toString(),
     );
-    const schema = readFileSync(
-      join('src', 'snapshot', 'petstore.oas2.json'),
-    ).toString();
+
+    const sourcePath = join('src', 'snapshot', 'petstore.oas2.json');
+    const sourceContent = readFileSync(sourcePath).toString();
 
     // ACT
-    const result = JSON.parse(JSON.stringify(parser(schema)));
+    const result = JSON.parse(
+      JSON.stringify(parser(sourceContent, sourcePath).service),
+    );
 
     // ASSERT
     expect(result).toStrictEqual(snapshot);
@@ -40,12 +44,12 @@ describe('parser', () => {
 
   it('creates a type for every local typeName', () => {
     // ARRANGE
-    const schema = readFileSync(
-      join('src', 'snapshot', 'example.oas2.json'),
-    ).toString();
+
+    const sourcePath = join('src', 'snapshot', 'example.oas2.json');
+    const sourceContent = readFileSync(sourcePath).toString();
 
     // ACT
-    const result = parser(schema);
+    const result = parser(sourceContent, sourcePath).service;
 
     // ASSERT
     const fromMethodParameters = new Set(
@@ -92,12 +96,12 @@ describe('parser', () => {
 
   it('creates types with unique names', () => {
     // ARRANGE
-    const schema = readFileSync(
-      join('src', 'snapshot', 'example.oas2.json'),
-    ).toString();
+
+    const sourcePath = join('src', 'snapshot', 'example.oas2.json');
+    const sourceContent = readFileSync(sourcePath).toString();
 
     // ACT
-    const result = parser(schema);
+    const result = parser(sourceContent, sourcePath).service;
 
     // ASSERT
     const typeNames = result.types.map((t) => t.name);
@@ -107,14 +111,13 @@ describe('parser', () => {
 
   it('creates a valid service', () => {
     // ARRANGE
-    const schema = readFileSync(
-      join('src', 'snapshot', 'example.oas2.json'),
-    ).toString();
+    const sourcePath = join('src', 'snapshot', 'example.oas2.json');
+    const sourceContent = readFileSync(sourcePath).toString();
 
-    const service = parser(schema);
+    const service = parser(sourceContent, sourcePath).service;
 
     // ACT
-    const errors = validate(service);
+    const errors = validate(service).errors;
 
     // ASSERT
     expect(errors).toEqual([]);
@@ -122,12 +125,14 @@ describe('parser', () => {
 
   it('creates a valid service from the example Pet Store schema', async () => {
     // ARRANGE
-    const schema = await getText('https://petstore.swagger.io/v2/swagger.json');
 
-    const service = parser(schema);
+    const sourcePath = 'https://petstore.swagger.io/v2/swagger.json';
+    const sourceContent = await getText(sourcePath);
+
+    const service = parser(sourceContent, sourcePath).service;
 
     // ACT
-    const errors = validate(service);
+    const errors = validate(service).errors;
 
     // ASSERT
     expect(errors).toEqual([]);
