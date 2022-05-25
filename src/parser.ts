@@ -71,16 +71,13 @@ export class OAS2Parser implements ServiceFactory {
   }
 
   private parseInterfaces(): Interface[] {
-    return this.schema.paths.keys
-      .map((path) => path.split('/')[1])
-      .filter((v, i, a) => a.indexOf(v) === i)
-      .map((name) => ({
-        name: singular(name),
-        methods: this.parseMethods(name),
-        protocols: {
-          http: this.parseHttpProtocol(name),
-        },
-      }));
+    return this.parserInterfaceNames().map((name) => ({
+      name: singular(name),
+      methods: this.parseMethods(name),
+      protocols: {
+        http: this.parseHttpProtocol(name),
+      },
+    }));
   }
 
   private parseResponseCode(
@@ -113,9 +110,7 @@ export class OAS2Parser implements ServiceFactory {
   }
 
   private parseHttpProtocol(interfaceName: string): PathSpec[] {
-    const paths = this.schema.paths.keys.filter(
-      (path) => path.split('/')[1] === interfaceName,
-    );
+    const paths = this.schema.paths.keys;
 
     const pathSpecs: PathSpec[] = [];
 
@@ -136,11 +131,13 @@ export class OAS2Parser implements ServiceFactory {
 
       for (const verb of pathItem.keys) {
         if (verb === 'parameters') continue;
+        const operation = pathItem[verb]! as AST.OperationNode;
+        if (this.parseInterfaceName(path, operation) !== interfaceName) {
+          continue;
+        }
 
         const verbLoc = pathItem.keyRange(verb);
         const methodLoc = pathItem.propRange(verb)!;
-
-        const operation = pathItem[verb]! as AST.OperationNode;
 
         const methodSpec: MethodSpec = {
           name: {
@@ -195,43 +192,72 @@ export class OAS2Parser implements ServiceFactory {
         pathSpec.methods.push(methodSpec);
       }
 
-      pathSpecs.push(pathSpec);
+      if (pathSpec.methods.length) pathSpecs.push(pathSpec);
     }
     return pathSpecs;
   }
 
-  private parseMethods(interfaceName: string): Method[] {
-    const paths = this.schema.paths.keys.filter(
-      (path) => path.split('/')[1] === interfaceName,
-    );
-
-    const methods: Method[] = [];
-
-    for (const path of paths) {
-      const commonParameters = this.schema.paths.read(path)!.parameters || [];
+  private *allOperations(): Iterable<{
+    path: string;
+    verb: string;
+    operation: AST.OperationNode;
+  }> {
+    for (const path of this.schema.paths.keys) {
       for (const verb of this.schema.paths.read(path)!.keys) {
         if (verb === 'parameters') continue;
 
         const operation: AST.OperationNode =
           this.schema.paths.read(path)![verb];
-        const nameLoc = operation.operationId
-          ? AST.range(operation.operationId)
-          : undefined;
-        methods.push({
-          name: {
-            value: operation.operationId?.value || 'UNNAMED',
-            loc: nameLoc,
-          },
-          security: this.parseSecurity(operation),
-          parameters: this.parseParameters(operation, commonParameters),
-          description: this.parseDescription(
-            operation.summary,
-            operation.description,
-          ),
-          returnType: this.parseReturnType(operation),
-          loc: this.schema.paths.read(path)!.propRange(verb)!,
-        });
+
+        yield { path, verb, operation };
       }
+    }
+  }
+
+  private parserInterfaceNames(): string[] {
+    const interfaceNames = new Set<string>();
+    for (const { path, operation } of this.allOperations()) {
+      interfaceNames.add(this.parseInterfaceName(path, operation));
+    }
+    return Array.from(interfaceNames);
+  }
+
+  private parseInterfaceName(
+    path: string,
+    operation: AST.OperationNode,
+  ): string {
+    return operation.tags?.[0].value || path.split('/')[1];
+  }
+
+  private parseMethods(interfaceName: string): Method[] {
+    const paths = this.schema.paths.keys;
+
+    const methods: Method[] = [];
+
+    for (const { path, verb, operation } of this.allOperations()) {
+      const commonParameters = this.schema.paths.read(path)!.parameters || [];
+
+      if (this.parseInterfaceName(path, operation) !== interfaceName) {
+        continue;
+      }
+
+      const nameLoc = operation.operationId
+        ? AST.range(operation.operationId)
+        : undefined;
+      methods.push({
+        name: {
+          value: operation.operationId?.value || 'UNNAMED',
+          loc: nameLoc,
+        },
+        security: this.parseSecurity(operation),
+        parameters: this.parseParameters(operation, commonParameters),
+        description: this.parseDescription(
+          operation.summary,
+          operation.description,
+        ),
+        returnType: this.parseReturnType(operation),
+        loc: this.schema.paths.read(path)!.propRange(verb)!,
+      });
     }
     return methods;
   }

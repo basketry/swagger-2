@@ -589,7 +589,7 @@ export class OperationNode extends JsonNode {
   }
 
   get tags() {
-    throw new Error('Method not implemented');
+    return this.getArray<LiteralNode<string>>('tags', LiteralNode);
   }
 
   get summary() {
