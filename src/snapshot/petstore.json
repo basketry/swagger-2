@@ -29,7 +29,7 @@
                 "value": "ID of pet to return",
                 "loc": "48;28;49;1545;1566"
               },
-              "typeName": { "value": "integer", "loc": "50;21;30;1618;1627" },
+              "typeName": { "value": "long", "loc": "45;11;52;12;1461;1670" },
               "isUnknown": false,
               "isLocal": false,
               "isArray": false,
@@ -109,7 +109,7 @@
                 "value": "ID of pet that needs to be updated",
                 "loc": "75;28;64;2427;2463"
               },
-              "typeName": { "value": "integer", "loc": "77;21;30;2515;2524" },
+              "typeName": { "value": "long", "loc": "72;11;79;12;2343;2567" },
               "isUnknown": false,
               "isLocal": false,
               "isArray": false,
@@ -219,7 +219,7 @@
                 "value": "Pet id to delete",
                 "loc": "114;28;46;3590;3608"
               },
-              "typeName": { "value": "integer", "loc": "116;21;30;3660;3669" },
+              "typeName": { "value": "long", "loc": "111;11;118;12;3506;3712" },
               "isUnknown": false,
               "isLocal": false,
               "isArray": false,
@@ -291,7 +291,7 @@
                 "value": "ID of pet to update",
                 "loc": "139;28;49;4338;4359"
               },
-              "typeName": { "value": "integer", "loc": "141;21;30;4411;4420" },
+              "typeName": { "value": "long", "loc": "136;11;143;12;4254;4463" },
               "isUnknown": false,
               "isLocal": false,
               "isArray": false,
@@ -890,8 +890,8 @@
                 "loc": "310;28;64;9976;10012"
               },
               "typeName": {
-                "value": "integer",
-                "loc": "312;21;30;10064;10073"
+                "value": "long",
+                "loc": "307;11;316;12;9890;10169"
               },
               "isUnknown": false,
               "isLocal": false,
@@ -943,8 +943,8 @@
                 "loc": "337;28;70;10935;10977"
               },
               "typeName": {
-                "value": "integer",
-                "loc": "339;21;30;11029;11038"
+                "value": "long",
+                "loc": "334;11;342;12;10849;11107"
               },
               "isUnknown": false,
               "isLocal": false,
@@ -1559,7 +1559,7 @@
       "properties": [
         {
           "name": { "value": "id", "loc": "588;9;13;18691;18695" },
-          "typeName": { "value": "integer", "loc": "588;25;34;18707;18716" },
+          "typeName": { "value": "long", "loc": "588;15;55;18697;18737" },
           "isUnknown": false,
           "isArray": false,
           "isLocal": false,
@@ -1584,7 +1584,7 @@
       "properties": [
         {
           "name": { "value": "id", "loc": "597;9;13;18936;18940" },
-          "typeName": { "value": "integer", "loc": "597;25;34;18952;18961" },
+          "typeName": { "value": "long", "loc": "597;15;55;18942;18982" },
           "isUnknown": false,
           "isArray": false,
           "isLocal": false,
@@ -1659,7 +1659,7 @@
       "properties": [
         {
           "name": { "value": "id", "loc": "621;9;13;19717;19721" },
-          "typeName": { "value": "integer", "loc": "621;25;34;19733;19742" },
+          "typeName": { "value": "long", "loc": "621;15;55;19723;19763" },
           "isUnknown": false,
           "isArray": false,
           "isLocal": false,
@@ -1684,7 +1684,7 @@
       "properties": [
         {
           "name": { "value": "code", "loc": "629;9;15;19924;19930" },
-          "typeName": { "value": "integer", "loc": "629;27;36;19942;19951" },
+          "typeName": { "value": "integer", "loc": "629;17;57;19932;19972" },
           "isUnknown": false,
           "isArray": false,
           "isLocal": false,
@@ -1718,7 +1718,7 @@
       "properties": [
         {
           "name": { "value": "id", "loc": "637;9;13;20136;20140" },
-          "typeName": { "value": "integer", "loc": "637;25;34;20152;20161" },
+          "typeName": { "value": "long", "loc": "637;15;55;20142;20182" },
           "isUnknown": false,
           "isArray": false,
           "isLocal": false,
@@ -1727,7 +1727,7 @@
         },
         {
           "name": { "value": "petId", "loc": "638;9;16;20192;20199" },
-          "typeName": { "value": "integer", "loc": "638;28;37;20211;20220" },
+          "typeName": { "value": "long", "loc": "638;18;58;20201;20241" },
           "isUnknown": false,
           "isArray": false,
           "isLocal": false,
@@ -1736,7 +1736,7 @@
         },
         {
           "name": { "value": "quantity", "loc": "639;9;19;20251;20261" },
-          "typeName": { "value": "integer", "loc": "639;31;40;20273;20282" },
+          "typeName": { "value": "integer", "loc": "639;21;61;20263;20303" },
           "isUnknown": false,
           "isArray": false,
           "isLocal": false,
@@ -1745,7 +1745,7 @@
         },
         {
           "name": { "value": "shipDate", "loc": "640;9;19;20313;20323" },
-          "typeName": { "value": "string", "loc": "640;31;39;20335;20343" },
+          "typeName": { "value": "date-time", "loc": "640;21;64;20325;20368" },
           "isUnknown": false,
           "isArray": false,
           "isLocal": false,
@@ -1802,7 +1802,7 @@
       "properties": [
         {
           "name": { "value": "id", "loc": "653;9;13;20683;20687" },
-          "typeName": { "value": "integer", "loc": "653;25;34;20699;20708" },
+          "typeName": { "value": "long", "loc": "653;15;55;20689;20729" },
           "isUnknown": false,
           "isArray": false,
           "isLocal": false,
@@ -1869,7 +1869,10 @@
             "value": "User Status",
             "loc": "663;26;39;21085;21098"
           },
-          "typeName": { "value": "integer", "loc": "661;19;28;21020;21029" },
+          "typeName": {
+            "value": "integer",
+            "loc": "660;23;664;10;21000;21108"
+          },
           "isUnknown": false,
           "isArray": false,
           "isLocal": false,

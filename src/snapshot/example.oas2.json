@@ -199,6 +199,70 @@
         }
       ]
     },
+    "/exhaustive": {
+      "get": {
+        "operationId": "exhaustiveFormats",
+        "parameters": [
+          {
+            "name": "string-no-format",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "string-date",
+            "in": "query",
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "string-date-time",
+            "in": "query",
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "integer-no-format",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "integer-int32",
+            "in": "query",
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "integer-int64",
+            "in": "query",
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "number-no-format",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "number-float",
+            "in": "query",
+            "type": "number",
+            "format": "float"
+          },
+          {
+            "name": "number-double",
+            "in": "query",
+            "type": "number",
+            "format": "double"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "operation with an exhaustive set of string and number formats"
+          }
+        },
+        "security": []
+      }
+    },
     "/exhaustive/{path-string}/{path-enum}/{path-number}/{path-integer}/{path-boolean}/{path-string-array}/{path-enum-array}/{path-number-array}/{path-integer-array}/{path-boolean-array}": {
       "get": {
         "operationId": "exhaustiveParams",

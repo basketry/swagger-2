@@ -601,10 +601,7 @@ export class OAS2Parser implements ServiceFactory {
           };
         } else {
           return {
-            typeName: {
-              value: def.type.value,
-              loc: AST.range(def.type),
-            },
+            typeName: this.parseStringName(def),
             isUnknown: false,
             isLocal: false,
             isArray: false,
@@ -614,6 +611,14 @@ export class OAS2Parser implements ServiceFactory {
         }
       case 'NumberParameter':
       case 'NumberSchema':
+        return {
+          typeName: this.parseNumberName(def),
+          isUnknown: false,
+          isLocal: false,
+          isArray: false,
+          rules,
+          loc: AST.range(def),
+        };
       case 'BooleanParameter':
       case 'BooleanSchema':
       case 'NullSchema':
@@ -677,6 +682,66 @@ export class OAS2Parser implements ServiceFactory {
           loc: AST.range(def),
         };
     }
+  }
+
+  private parseStringName(
+    def: AST.StringParameterNode | AST.StringSchemaNode,
+  ): Literal<string> {
+    const { type, format } = def;
+
+    if (format?.value === 'date') {
+      return {
+        value: 'date',
+        loc: AST.range(def),
+      };
+    } else if (format?.value === 'date-time') {
+      return {
+        value: 'date-time',
+        loc: AST.range(def),
+      };
+    } else {
+      return {
+        value: type.value,
+        loc: AST.range(type),
+      };
+    }
+  }
+
+  private parseNumberName(
+    def: AST.NumberParameterNode | AST.NumberSchemaNode,
+  ): Literal<string> {
+    const { type, format } = def;
+
+    if (type.value === 'integer') {
+      if (format?.value === 'int32') {
+        return {
+          value: 'integer',
+          loc: AST.range(def),
+        };
+      } else if (format?.value === 'int64') {
+        return {
+          value: 'long',
+          loc: AST.range(def),
+        };
+      }
+    } else if (type.value === 'number') {
+      if (format?.value === 'float') {
+        return {
+          value: 'float',
+          loc: AST.range(def),
+        };
+      } else if (format?.value === 'double') {
+        return {
+          value: 'double',
+          loc: AST.range(def),
+        };
+      }
+    }
+
+    return {
+      value: type.value,
+      loc: AST.range(type),
+    };
   }
 
   private parsePrimaryResponseKey(

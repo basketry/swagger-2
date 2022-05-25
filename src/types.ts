@@ -994,6 +994,10 @@ export class NumberParameterNode extends NonBodyParameterNode {
   get exclusiveMaximum() {
     return this.getLiteral<boolean>('exclusiveMaximum');
   }
+
+  get format() {
+    return this.getLiteral<string>('format');
+  }
 }
 
 export class NumberSchemaNode extends JsonNode {
@@ -1028,6 +1032,10 @@ export class NumberSchemaNode extends JsonNode {
 
   get exclusiveMaximum() {
     return this.getLiteral<boolean>('exclusiveMaximum');
+  }
+
+  get format() {
+    return this.getLiteral<string>('format');
   }
 }
 
