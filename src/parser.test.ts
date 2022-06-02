@@ -42,7 +42,7 @@ describe('parser', () => {
     expect(result).toStrictEqual(snapshot);
   });
 
-  it('creates a type for every local typeName', () => {
+  it('creates a type for every custom typeName', () => {
     // ARRANGE
 
     const sourcePath = join('src', 'snapshot', 'example.oas2.json');
@@ -58,7 +58,7 @@ describe('parser', () => {
         .reduce((a, b) => a.concat(b), [])
         .map((i) => i.parameters)
         .reduce((a, b) => a.concat(b), [])
-        .filter((p) => p.isLocal)
+        .filter((p) => !p.isPrimitive)
         .map((p) => p.typeName.value),
     );
 
@@ -68,7 +68,7 @@ describe('parser', () => {
         .reduce((a, b) => a.concat(b), [])
         .map((i) => i.returnType)
         .filter((t): t is ReturnType => !!t)
-        .filter((p) => p.isLocal)
+        .filter((p) => !p.isPrimitive)
         .map((p) => p.typeName.value),
     );
 
@@ -76,7 +76,7 @@ describe('parser', () => {
       result.types
         .map((t) => t.properties)
         .reduce((a, b) => a.concat(b), [])
-        .filter((p) => p.isLocal)
+        .filter((p) => !p.isPrimitive)
         .map((p) => p.typeName.value),
     );
 

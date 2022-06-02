@@ -22,6 +22,8 @@ import {
   Type,
   ValidationRule,
   Literal,
+  TypedValue,
+  PrimitiveValue,
 } from 'basketry';
 
 export class OAS2Parser implements ServiceFactory {
@@ -482,21 +484,29 @@ export class OAS2Parser implements ServiceFactory {
       throw new Error('Unexpected body parameter');
     }
 
-    const { typeName, isUnknown, isLocal, isArray } = this.parseType(
-      unresolved,
-      param.name.value,
-      methodName,
-    );
-    return {
-      name: { value: param.name.value, loc: AST.range(param.name) },
-      description: this.parseDescription(undefined, param.description),
-      typeName,
-      isUnknown,
-      isLocal,
-      isArray,
-      rules: this.parseRules(resolved, param.required?.value),
-      loc: AST.range(param),
-    };
+    const x = this.parseType(unresolved, param.name.value, methodName);
+
+    if (x.isPrimitive) {
+      return {
+        name: { value: param.name.value, loc: AST.range(param.name) },
+        description: this.parseDescription(undefined, param.description),
+        typeName: x.typeName,
+        isPrimitive: x.isPrimitive,
+        isArray: x.isArray,
+        rules: this.parseRules(resolved, param.required?.value),
+        loc: AST.range(param),
+      };
+    } else {
+      return {
+        name: { value: param.name.value, loc: AST.range(param.name) },
+        description: this.parseDescription(undefined, param.description),
+        typeName: x.typeName,
+        isPrimitive: x.isPrimitive,
+        isArray: x.isArray,
+        rules: this.parseRules(resolved, param.required?.value),
+        loc: AST.range(param),
+      };
+    }
   }
 
   private parseParameterLocation(
@@ -525,14 +535,10 @@ export class OAS2Parser implements ServiceFactory {
     localName: string,
     parentName: string,
   ): {
-    typeName: Literal<string>;
-    isUnknown: boolean;
     enumValues?: Literal<string>[];
-    isLocal: boolean;
-    isArray: boolean;
     rules: ValidationRule[];
     loc: string;
-  } {
+  } & TypedValue {
     if (AST.isRefNode(def)) {
       const res = AST.resolveParamOrSchema(this.schema.node, def);
       if (!res) throw new Error('Cannot resolve reference');
@@ -540,6 +546,7 @@ export class OAS2Parser implements ServiceFactory {
         throw new Error('Unexpected body parameter');
       }
 
+      // TODO: do a better job of detecting a definitions ref
       if (def.$ref.value.startsWith('#/definitions/')) {
         if (AST.isObject(res)) {
           return {
@@ -547,8 +554,7 @@ export class OAS2Parser implements ServiceFactory {
               value: def.$ref.value.substring(14),
               loc: AST.refRange(this.schema.node, def.$ref.value),
             },
-            isUnknown: false,
-            isLocal: true,
+            isPrimitive: false,
             isArray: false,
             rules: this.parseRules(res),
             loc: AST.range(res),
@@ -569,24 +575,13 @@ export class OAS2Parser implements ServiceFactory {
           });
           return {
             typeName: name,
-            isUnknown: false,
-            isLocal: true,
+            isPrimitive: false,
             isArray: false,
             rules: this.parseRules(res),
             loc: AST.range(res),
           };
         } else {
-          return {
-            typeName: {
-              value: res.type.value,
-              loc: AST.range(res.type),
-            },
-            isUnknown: false,
-            isLocal: false,
-            isArray: false,
-            rules: this.parseRules(res),
-            loc: AST.range(res),
-          };
+          return this.parseType(res, localName, parentName);
         }
       } else {
         return {
@@ -594,8 +589,7 @@ export class OAS2Parser implements ServiceFactory {
             value: def.$ref.value,
             loc: AST.refRange(this.schema.node, def.$ref.value),
           },
-          isUnknown: true,
-          isLocal: true,
+          isPrimitive: false,
           isArray: false,
           rules: this.parseRules(res),
           loc: AST.range(res),
@@ -619,17 +613,14 @@ export class OAS2Parser implements ServiceFactory {
           });
           return {
             typeName: { value: enumName },
-            isUnknown: false,
-            isLocal: true,
+            isPrimitive: false,
             isArray: false,
             rules,
             loc: AST.range(def),
           };
         } else {
           return {
-            typeName: this.parseStringName(def),
-            isUnknown: false,
-            isLocal: false,
+            ...this.parseStringName(def),
             isArray: false,
             rules,
             loc: AST.range(def),
@@ -638,9 +629,7 @@ export class OAS2Parser implements ServiceFactory {
       case 'NumberParameter':
       case 'NumberSchema':
         return {
-          typeName: this.parseNumberName(def),
-          isUnknown: false,
-          isLocal: false,
+          ...this.parseNumberName(def),
           isArray: false,
           rules,
           loc: AST.range(def),
@@ -653,8 +642,7 @@ export class OAS2Parser implements ServiceFactory {
             value: def.type.value,
             loc: AST.range(def.type),
           },
-          isUnknown: false,
-          isLocal: false,
+          isPrimitive: true,
           isArray: false,
           rules,
           loc: AST.range(def),
@@ -662,14 +650,25 @@ export class OAS2Parser implements ServiceFactory {
       case 'ArrayParameter':
       case 'ArraySchema':
         const items = this.parseType(def.items, localName, parentName);
-        return {
-          typeName: items.typeName,
-          isUnknown: false,
-          isLocal: items.isLocal,
-          isArray: true,
-          rules,
-          loc: AST.range(def),
-        };
+
+        if (items.isPrimitive) {
+          return {
+            typeName: items.typeName,
+            isPrimitive: items.isPrimitive,
+            isArray: true,
+            rules,
+            loc: AST.range(def),
+          };
+        } else {
+          return {
+            typeName: items.typeName,
+            isPrimitive: items.isPrimitive,
+            isArray: true,
+            rules,
+            loc: AST.range(def),
+          };
+        }
+
       case 'ObjectSchema':
         const typeName = { value: camel(`${parentName}_${localName}`) };
         this.anonymousTypes.push({
@@ -692,17 +691,15 @@ export class OAS2Parser implements ServiceFactory {
 
         return {
           typeName,
-          isUnknown: false,
-          isLocal: true,
+          isPrimitive: false,
           isArray: false,
           rules,
           loc: AST.range(def),
         };
       default:
         return {
-          typeName: { value: 'unknown' },
-          isUnknown: true,
-          isLocal: false,
+          typeName: { value: 'untyped' },
+          isPrimitive: true,
           isArray: false,
           rules,
           loc: AST.range(def),
@@ -712,61 +709,85 @@ export class OAS2Parser implements ServiceFactory {
 
   private parseStringName(
     def: AST.StringParameterNode | AST.StringSchemaNode,
-  ): Literal<string> {
+  ): Omit<PrimitiveValue, 'isArray'> {
     const { type, format } = def;
 
     if (format?.value === 'date') {
       return {
-        value: 'date',
-        loc: AST.range(def),
+        typeName: {
+          value: 'date',
+          loc: AST.range(def),
+        },
+        isPrimitive: true,
       };
     } else if (format?.value === 'date-time') {
       return {
-        value: 'date-time',
-        loc: AST.range(def),
+        typeName: {
+          value: 'date-time',
+          loc: AST.range(def),
+        },
+        isPrimitive: true,
       };
     } else {
       return {
-        value: type.value,
-        loc: AST.range(type),
+        typeName: {
+          value: type.value,
+          loc: AST.range(type),
+        },
+        isPrimitive: true,
       };
     }
   }
 
   private parseNumberName(
     def: AST.NumberParameterNode | AST.NumberSchemaNode,
-  ): Literal<string> {
+  ): Omit<PrimitiveValue, 'isArray'> {
     const { type, format } = def;
 
     if (type.value === 'integer') {
       if (format?.value === 'int32') {
         return {
-          value: 'integer',
-          loc: AST.range(def),
+          typeName: {
+            value: 'integer',
+            loc: AST.range(def),
+          },
+          isPrimitive: true,
         };
       } else if (format?.value === 'int64') {
         return {
-          value: 'long',
-          loc: AST.range(def),
+          typeName: {
+            value: 'long',
+            loc: AST.range(def),
+          },
+          isPrimitive: true,
         };
       }
     } else if (type.value === 'number') {
       if (format?.value === 'float') {
         return {
-          value: 'float',
-          loc: AST.range(def),
+          typeName: {
+            value: 'float',
+            loc: AST.range(def),
+          },
+          isPrimitive: true,
         };
       } else if (format?.value === 'double') {
         return {
-          value: 'double',
-          loc: AST.range(def),
+          typeName: {
+            value: 'double',
+            loc: AST.range(def),
+          },
+          isPrimitive: true,
         };
       }
     }
 
     return {
-      value: type.value,
-      loc: AST.range(type),
+      typeName: {
+        value: type.value,
+        loc: AST.range(type),
+      },
+      isPrimitive: true,
     };
   }
 
@@ -873,21 +894,28 @@ export class OAS2Parser implements ServiceFactory {
         const resolvedProp = AST.resolveSchema(this.schema.node, prop);
         if (!resolvedProp) throw new Error('Cannot resolve reference');
 
-        const { typeName, isUnknown, isArray, isLocal } = this.parseType(
-          prop,
-          name,
-          parentName || '',
-        );
-        props.push({
-          name: { value: name, loc: properties?.keyRange(name) },
-          description: this.parseDescriptionOnly(resolvedProp.description),
-          typeName,
-          isUnknown,
-          isArray,
-          isLocal,
-          rules: this.parseRules(resolvedProp, requiredSet.has(name)),
-          loc: AST.range(resolvedProp),
-        });
+        const x = this.parseType(prop, name, parentName || '');
+        if (x.isPrimitive) {
+          props.push({
+            name: { value: name, loc: properties?.keyRange(name) },
+            description: this.parseDescriptionOnly(resolvedProp.description),
+            typeName: x.typeName,
+            isPrimitive: x.isPrimitive,
+            isArray: x.isArray,
+            rules: this.parseRules(resolvedProp, requiredSet.has(name)),
+            loc: AST.range(resolvedProp),
+          });
+        } else {
+          props.push({
+            name: { value: name, loc: properties?.keyRange(name) },
+            description: this.parseDescriptionOnly(resolvedProp.description),
+            typeName: x.typeName,
+            isPrimitive: x.isPrimitive,
+            isArray: x.isArray,
+            rules: this.parseRules(resolvedProp, requiredSet.has(name)),
+            loc: AST.range(resolvedProp),
+          });
+        }
       }
       return props;
     }
