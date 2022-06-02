@@ -47,8 +47,7 @@
             {
               "name": { "value": "search", "loc": "10;15;23;221;229" },
               "typeName": { "value": "string", "loc": "12;15;23;266;274" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "9;15;13;6;205;280"
@@ -60,8 +59,7 @@
           },
           "returnType": {
             "typeName": { "value": "gizmosResponse" },
-            "isUnknown": false,
-            "isLocal": true,
+            "isPrimitive": false,
             "isArray": false,
             "rules": [],
             "loc": "22;17;31;8;496;711"
@@ -113,8 +111,7 @@
                 "loc": "89;28;44;2058;2074"
               },
               "typeName": { "value": "createGizmoSize" },
-              "isUnknown": false,
-              "isLocal": true,
+              "isPrimitive": false,
               "isArray": false,
               "rules": [
                 {
@@ -143,8 +140,7 @@
           ],
           "returnType": {
             "typeName": { "value": "gizmo", "loc": "507;5;12;13061;13068" },
-            "isUnknown": false,
-            "isLocal": true,
+            "isPrimitive": false,
             "isArray": false,
             "rules": [],
             "loc": "507;14;514;6;13070;13271"
@@ -207,8 +203,7 @@
                 "loc": "109;28;48;2548;2568"
               },
               "typeName": { "value": "string", "loc": "116;23;31;2768;2776" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [
                 {
@@ -235,8 +230,7 @@
           ],
           "returnType": {
             "typeName": { "value": "gizmo", "loc": "507;5;12;13061;13068" },
-            "isUnknown": false,
-            "isLocal": true,
+            "isPrimitive": false,
             "isArray": false,
             "rules": [],
             "loc": "507;14;514;6;13070;13271"
@@ -320,8 +314,7 @@
           "parameters": [],
           "returnType": {
             "typeName": { "value": "widget", "loc": "519;5;13;13372;13380" },
-            "isUnknown": false,
-            "isLocal": true,
+            "isPrimitive": false,
             "isArray": false,
             "rules": [],
             "loc": "519;15;532;6;13382;13683"
@@ -349,8 +342,7 @@
                 "loc": "147;28;44;3524;3540"
               },
               "typeName": { "value": "createWidgetBody" },
-              "isUnknown": false,
-              "isLocal": true,
+              "isPrimitive": false,
               "isArray": false,
               "rules": [],
               "loc": "144;11;156;12;3441;3795"
@@ -395,8 +387,7 @@
                 "loc": "194;26;41;4704;4719"
               },
               "typeName": { "value": "string", "loc": "196;19;27;4763;4771" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [
                 { "id": "required" },
@@ -411,8 +402,7 @@
           ],
           "returnType": {
             "typeName": { "value": "widget", "loc": "519;5;13;13372;13380" },
-            "isUnknown": false,
-            "isLocal": true,
+            "isPrimitive": false,
             "isArray": false,
             "rules": [],
             "loc": "519;15;532;6;13382;13683"
@@ -440,8 +430,7 @@
                 "loc": "194;26;41;4704;4719"
               },
               "typeName": { "value": "string", "loc": "196;19;27;4763;4771" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [
                 { "id": "required" },
@@ -555,8 +544,7 @@
                 "loc": "207;21;39;4988;5006"
               },
               "typeName": { "value": "string", "loc": "209;21;29;5055;5063" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "206;11;210;12;4966;5075"
@@ -564,8 +552,7 @@
             {
               "name": { "value": "string-date", "loc": "212;21;34;5109;5122" },
               "typeName": { "value": "date", "loc": "211;11;216;12;5087;5221" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [
                 {
@@ -585,8 +572,7 @@
                 "value": "date-time",
                 "loc": "217;11;222;12;5233;5377"
               },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [
                 {
@@ -606,8 +592,7 @@
                 "loc": "224;21;40;5411;5430"
               },
               "typeName": { "value": "integer", "loc": "226;21;30;5479;5488" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "223;11;227;12;5389;5500"
@@ -621,8 +606,7 @@
                 "value": "integer",
                 "loc": "228;11;233;12;5512;5650"
               },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "228;11;233;12;5512;5650"
@@ -633,8 +617,7 @@
                 "loc": "235;21;36;5684;5699"
               },
               "typeName": { "value": "long", "loc": "234;11;239;12;5662;5800" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "234;11;239;12;5662;5800"
@@ -645,8 +628,7 @@
                 "loc": "241;21;39;5834;5852"
               },
               "typeName": { "value": "number", "loc": "243;21;29;5901;5909" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "240;11;244;12;5812;5921"
@@ -657,8 +639,7 @@
                 "value": "float",
                 "loc": "245;11;250;12;5933;6069"
               },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "245;11;250;12;5933;6069"
@@ -672,8 +653,7 @@
                 "value": "double",
                 "loc": "251;11;256;12;6081;6219"
               },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "251;11;256;12;6081;6219"
@@ -688,8 +668,7 @@
             {
               "name": { "value": "query-string", "loc": "271;21;35;6734;6748" },
               "typeName": { "value": "string", "loc": "273;21;29;6797;6805" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "270;11;274;12;6712;6817"
@@ -697,8 +676,7 @@
             {
               "name": { "value": "query-enum", "loc": "276;21;33;6851;6863" },
               "typeName": { "value": "exhaustiveParamsQueryEnum" },
-              "isUnknown": false,
-              "isLocal": true,
+              "isPrimitive": false,
               "isArray": false,
               "rules": [
                 {
@@ -716,8 +694,7 @@
             {
               "name": { "value": "query-number", "loc": "282;21;35;7011;7025" },
               "typeName": { "value": "number", "loc": "284;21;29;7074;7082" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "281;11;285;12;6989;7094"
@@ -728,8 +705,7 @@
                 "loc": "287;21;36;7128;7143"
               },
               "typeName": { "value": "integer", "loc": "289;21;30;7192;7201" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "286;11;290;12;7106;7213"
@@ -740,8 +716,7 @@
                 "loc": "292;21;36;7247;7262"
               },
               "typeName": { "value": "boolean", "loc": "294;21;30;7311;7320" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "291;11;295;12;7225;7332"
@@ -752,8 +727,7 @@
                 "loc": "297;21;41;7366;7386"
               },
               "typeName": { "value": "string", "loc": "300;32;40;7475;7483" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [],
               "loc": "296;11;301;12;7344;7497"
@@ -764,8 +738,7 @@
                 "loc": "303;21;39;7531;7549"
               },
               "typeName": { "value": "exhaustiveParamsQueryEnumArray" },
-              "isUnknown": false,
-              "isLocal": true,
+              "isPrimitive": false,
               "isArray": true,
               "rules": [
                 {
@@ -786,8 +759,7 @@
                 "loc": "309;21;41;7727;7747"
               },
               "typeName": { "value": "number", "loc": "312;32;40;7836;7844" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [],
               "loc": "308;11;313;12;7705;7858"
@@ -798,8 +770,7 @@
                 "loc": "315;21;42;7892;7913"
               },
               "typeName": { "value": "integer", "loc": "318;32;41;8002;8011" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [],
               "loc": "314;11;319;12;7870;8025"
@@ -810,8 +781,7 @@
                 "loc": "321;21;42;8059;8080"
               },
               "typeName": { "value": "boolean", "loc": "324;32;41;8169;8178" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [],
               "loc": "320;11;325;12;8037;8192"
@@ -819,8 +789,7 @@
             {
               "name": { "value": "path-string", "loc": "327;21;34;8226;8239" },
               "typeName": { "value": "string", "loc": "329;21;29;8287;8295" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [{ "id": "required" }],
               "loc": "326;11;331;12;8204;8337"
@@ -828,8 +797,7 @@
             {
               "name": { "value": "path-enum", "loc": "333;21;32;8371;8382" },
               "typeName": { "value": "exhaustiveParamsPathEnum" },
-              "isUnknown": false,
-              "isLocal": true,
+              "isPrimitive": false,
               "isArray": false,
               "rules": [
                 { "id": "required" },
@@ -848,8 +816,7 @@
             {
               "name": { "value": "path-number", "loc": "340;21;34;8559;8572" },
               "typeName": { "value": "number", "loc": "342;21;29;8620;8628" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [{ "id": "required" }],
               "loc": "339;11;344;12;8537;8670"
@@ -857,8 +824,7 @@
             {
               "name": { "value": "path-integer", "loc": "346;21;35;8704;8718" },
               "typeName": { "value": "integer", "loc": "348;21;30;8766;8775" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [{ "id": "required" }],
               "loc": "345;11;350;12;8682;8817"
@@ -866,8 +832,7 @@
             {
               "name": { "value": "path-boolean", "loc": "352;21;35;8851;8865" },
               "typeName": { "value": "boolean", "loc": "354;21;30;8913;8922" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [{ "id": "required" }],
               "loc": "351;11;356;12;8829;8964"
@@ -878,8 +843,7 @@
                 "loc": "358;21;40;8998;9017"
               },
               "typeName": { "value": "string", "loc": "362;32;40;9144;9152" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [{ "id": "required" }],
               "loc": "357;11;364;12;8976;9196"
@@ -890,8 +854,7 @@
                 "loc": "366;21;38;9230;9247"
               },
               "typeName": { "value": "exhaustiveParamsPathEnumArray" },
-              "isUnknown": false,
-              "isLocal": true,
+              "isPrimitive": false,
               "isArray": true,
               "rules": [
                 { "id": "required" },
@@ -913,8 +876,7 @@
                 "loc": "374;21;40;9495;9514"
               },
               "typeName": { "value": "number", "loc": "378;32;40;9641;9649" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [{ "id": "required" }],
               "loc": "373;11;380;12;9473;9693"
@@ -925,8 +887,7 @@
                 "loc": "382;21;41;9727;9747"
               },
               "typeName": { "value": "integer", "loc": "386;32;41;9874;9883" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [{ "id": "required" }],
               "loc": "381;11;388;12;9705;9927"
@@ -940,8 +901,7 @@
                 "value": "boolean",
                 "loc": "393;32;41;10069;10078"
               },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [{ "id": "required" }],
               "loc": "389;11;395;12;9939;10122"
@@ -952,8 +912,7 @@
                 "loc": "397;21;36;10156;10171"
               },
               "typeName": { "value": "string", "loc": "399;21;29;10221;10229" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "396;11;400;12;10134;10241"
@@ -964,8 +923,7 @@
                 "loc": "402;21;34;10275;10288"
               },
               "typeName": { "value": "exhaustiveParamsHeaderEnum" },
-              "isUnknown": false,
-              "isLocal": true,
+              "isPrimitive": false,
               "isArray": false,
               "rules": [
                 {
@@ -986,8 +944,7 @@
                 "loc": "408;21;36;10437;10452"
               },
               "typeName": { "value": "number", "loc": "410;21;29;10502;10510" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "407;11;411;12;10415;10522"
@@ -1001,8 +958,7 @@
                 "value": "integer",
                 "loc": "415;21;30;10622;10631"
               },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "412;11;416;12;10534;10643"
@@ -1016,8 +972,7 @@
                 "value": "boolean",
                 "loc": "420;21;30;10743;10752"
               },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": false,
               "rules": [],
               "loc": "417;11;421;12;10655;10764"
@@ -1028,8 +983,7 @@
                 "loc": "423;21;42;10798;10819"
               },
               "typeName": { "value": "string", "loc": "426;32;40;10909;10917" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [],
               "loc": "422;11;427;12;10776;10931"
@@ -1040,8 +994,7 @@
                 "loc": "429;21;40;10965;10984"
               },
               "typeName": { "value": "exhaustiveParamsHeaderEnumArray" },
-              "isUnknown": false,
-              "isLocal": true,
+              "isPrimitive": false,
               "isArray": true,
               "rules": [
                 {
@@ -1062,8 +1015,7 @@
                 "loc": "436;21;42;11202;11223"
               },
               "typeName": { "value": "number", "loc": "440;32;40;11354;11362" },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [],
               "loc": "435;11;441;12;11180;11376"
@@ -1077,8 +1029,7 @@
                 "value": "integer",
                 "loc": "447;32;41;11561;11570"
               },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [],
               "loc": "442;11;448;12;11388;11584"
@@ -1092,8 +1043,7 @@
                 "value": "boolean",
                 "loc": "454;32;41;11769;11778"
               },
-              "isUnknown": false,
-              "isLocal": false,
+              "isPrimitive": true,
               "isArray": true,
               "rules": [],
               "loc": "449;11;455;12;11596;11792"
@@ -1101,8 +1051,7 @@
             {
               "name": { "value": "body", "loc": "457;21;27;11826;11832" },
               "typeName": { "value": "exhaustiveParamsBody" },
-              "isUnknown": false,
-              "isLocal": true,
+              "isPrimitive": false,
               "isArray": false,
               "rules": [],
               "loc": "456;11;466;12;11804;12076"
@@ -1685,9 +1634,8 @@
         {
           "name": { "value": "id", "loc": "510;9;13;13126;13130" },
           "typeName": { "value": "string", "loc": "557;15;23;14370;14378" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [
             {
               "id": "string-max-length",
@@ -1700,18 +1648,16 @@
         {
           "name": { "value": "name", "loc": "511;9;15;13172;13178" },
           "typeName": { "value": "string", "loc": "511;27;35;13190;13198" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [],
           "loc": "511;17;37;13180;13200"
         },
         {
           "name": { "value": "size", "loc": "512;9;15;13210;13216" },
           "typeName": { "value": "productSize", "loc": "515;5;18;13277;13290" },
-          "isUnknown": false,
+          "isPrimitive": false,
           "isArray": false,
-          "isLocal": true,
           "rules": [
             {
               "id": "string-enum",
@@ -1735,9 +1681,8 @@
         {
           "name": { "value": "id", "loc": "526;13;17;13527;13531" },
           "typeName": { "value": "string", "loc": "557;15;23;14370;14378" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [
             { "id": "required" },
             {
@@ -1751,9 +1696,8 @@
         {
           "name": { "value": "name", "loc": "537;9;15;13785;13791" },
           "typeName": { "value": "string", "loc": "538;19;27;13813;13821" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [
             {
               "id": "string-max-length",
@@ -1774,9 +1718,8 @@
         {
           "name": { "value": "fiz", "loc": "542;9;14;13905;13910" },
           "typeName": { "value": "number", "loc": "542;26;34;13922;13930" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [
             { "id": "required" },
             {
@@ -1790,9 +1733,8 @@
         {
           "name": { "value": "buzz", "loc": "543;9;15;13959;13965" },
           "typeName": { "value": "number", "loc": "543;27;35;13977;13985" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [
             {
               "id": "number-multiple-of",
@@ -1805,9 +1747,8 @@
         {
           "name": { "value": "fizbuzz", "loc": "544;9;18;14014;14023" },
           "typeName": { "value": "number", "loc": "544;30;38;14035;14043" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [
             {
               "id": "number-multiple-of",
@@ -1820,18 +1761,16 @@
         {
           "name": { "value": "foo", "loc": "545;9;14;14073;14078" },
           "typeName": { "value": "widgetFoo" },
-          "isUnknown": false,
+          "isPrimitive": false,
           "isArray": false,
-          "isLocal": true,
           "rules": [],
           "loc": "545;16;552;10;14080;14271"
         },
         {
           "name": { "value": "size", "loc": "553;9;15;14281;14287" },
           "typeName": { "value": "productSize", "loc": "515;5;18;13277;13290" },
-          "isUnknown": false,
+          "isPrimitive": false,
           "isArray": false,
-          "isLocal": true,
           "rules": [
             {
               "id": "string-enum",
@@ -1861,9 +1800,8 @@
         {
           "name": { "value": "name", "loc": "537;9;15;13785;13791" },
           "typeName": { "value": "string", "loc": "538;19;27;13813;13821" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [
             {
               "id": "string-max-length",
@@ -1884,9 +1822,8 @@
         {
           "name": { "value": "fiz", "loc": "542;9;14;13905;13910" },
           "typeName": { "value": "number", "loc": "542;26;34;13922;13930" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [
             { "id": "required" },
             {
@@ -1900,9 +1837,8 @@
         {
           "name": { "value": "buzz", "loc": "543;9;15;13959;13965" },
           "typeName": { "value": "number", "loc": "543;27;35;13977;13985" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [
             {
               "id": "number-multiple-of",
@@ -1915,9 +1851,8 @@
         {
           "name": { "value": "fizbuzz", "loc": "544;9;18;14014;14023" },
           "typeName": { "value": "number", "loc": "544;30;38;14035;14043" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [
             {
               "id": "number-multiple-of",
@@ -1930,18 +1865,16 @@
         {
           "name": { "value": "foo", "loc": "545;9;14;14073;14078" },
           "typeName": { "value": "newWidgetFoo" },
-          "isUnknown": false,
+          "isPrimitive": false,
           "isArray": false,
-          "isLocal": true,
           "rules": [],
           "loc": "545;16;552;10;14080;14271"
         },
         {
           "name": { "value": "size", "loc": "553;9;15;14281;14287" },
           "typeName": { "value": "productSize", "loc": "515;5;18;13277;13290" },
-          "isUnknown": false,
+          "isPrimitive": false,
           "isArray": false,
-          "isLocal": true,
           "rules": [
             {
               "id": "string-enum",
@@ -1965,9 +1898,8 @@
         {
           "name": { "value": "data", "loc": "26;11;17;588;594" },
           "typeName": { "value": "gizmo", "loc": "507;5;12;13061;13068" },
-          "isUnknown": false,
+          "isPrimitive": false,
           "isArray": true,
-          "isLocal": true,
           "rules": [{ "id": "required" }],
           "loc": "26;19;29;12;596;693"
         }
@@ -1981,9 +1913,8 @@
         {
           "name": { "value": "name", "loc": "152;17;23;3680;3686" },
           "typeName": { "value": "string", "loc": "152;35;43;3698;3706" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [{ "id": "required" }],
           "loc": "152;25;45;3688;3708"
         }
@@ -2003,18 +1934,16 @@
         {
           "name": { "value": "foo", "loc": "462;17;22;11962;11967" },
           "typeName": { "value": "string", "loc": "462;34;42;11979;11987" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [],
           "loc": "462;24;44;11969;11989"
         },
         {
           "name": { "value": "bar", "loc": "463;17;22;12007;12012" },
           "typeName": { "value": "string", "loc": "463;34;42;12024;12032" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [],
           "loc": "463;24;44;12014;12034"
         }
@@ -2028,18 +1957,16 @@
         {
           "name": { "value": "fiz", "loc": "549;13;18;14180;14185" },
           "typeName": { "value": "number", "loc": "549;30;38;14197;14205" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [],
           "loc": "549;20;40;14187;14207"
         },
         {
           "name": { "value": "buzz", "loc": "550;13;19;14221;14227" },
           "typeName": { "value": "number", "loc": "550;31;39;14239;14247" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [{ "id": "required" }],
           "loc": "550;21;41;14229;14249"
         }
@@ -2053,18 +1980,16 @@
         {
           "name": { "value": "fiz", "loc": "549;13;18;14180;14185" },
           "typeName": { "value": "number", "loc": "549;30;38;14197;14205" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [],
           "loc": "549;20;40;14187;14207"
         },
         {
           "name": { "value": "buzz", "loc": "550;13;19;14221;14227" },
           "typeName": { "value": "number", "loc": "550;31;39;14239;14247" },
-          "isUnknown": false,
+          "isPrimitive": true,
           "isArray": false,
-          "isLocal": false,
           "rules": [{ "id": "required" }],
           "loc": "550;21;41;14229;14249"
         }
