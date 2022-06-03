@@ -7,16 +7,15 @@ import * as AST from './types';
 
 import {
   Enum,
+  HttpMethod,
+  HttpPath,
   Interface,
   Method,
-  MethodSpec,
   ObjectValidationRule,
   Parameter,
-  PathSpec,
   Property,
   ReturnType,
   Service,
-  ServiceFactory,
   SecurityOption,
   SecurityScheme,
   Type,
@@ -26,7 +25,7 @@ import {
   PrimitiveValue,
 } from 'basketry';
 
-export class OAS2Parser implements ServiceFactory {
+export class OAS2Parser {
   constructor(schema: string) {
     this.schema = new AST.SchemaNode(parse(schema, { loc: true }));
   }
@@ -111,10 +110,10 @@ export class OAS2Parser implements ServiceFactory {
     return { value: 200 };
   }
 
-  private parseHttpProtocol(interfaceName: string): PathSpec[] {
+  private parseHttpProtocol(interfaceName: string): HttpPath[] {
     const paths = this.schema.paths.keys;
 
-    const pathSpecs: PathSpec[] = [];
+    const httpPaths: HttpPath[] = [];
 
     for (const path of paths) {
       const pathItem = this.resolve(
@@ -125,7 +124,7 @@ export class OAS2Parser implements ServiceFactory {
       const loc = this.schema.paths.propRange(path)!;
       const commonParameters = pathItem.parameters || [];
 
-      const pathSpec: PathSpec = {
+      const httpPath: HttpPath = {
         path: { value: path, loc: keyLoc },
         methods: [],
         loc,
@@ -141,7 +140,7 @@ export class OAS2Parser implements ServiceFactory {
         const verbLoc = pathItem.keyRange(verb);
         const methodLoc = pathItem.propRange(verb)!;
 
-        const methodSpec: MethodSpec = {
+        const httpMethod: HttpMethod = {
           name: {
             value: operation.operationId?.value || 'unknown',
             loc: operation.operationId
@@ -171,7 +170,7 @@ export class OAS2Parser implements ServiceFactory {
               resolved.in.value === 'query') &&
             resolved.nodeType === 'ArrayParameter'
           ) {
-            methodSpec.parameters.push({
+            httpMethod.parameters.push({
               name: { value: name.value, loc: AST.range(name) },
               in: { value: location.value, loc: AST.range(location) },
               array: {
@@ -183,7 +182,7 @@ export class OAS2Parser implements ServiceFactory {
               loc: AST.range(resolved),
             });
           } else {
-            methodSpec.parameters.push({
+            httpMethod.parameters.push({
               name: { value: name.value, loc: AST.range(name) },
               in: { value: location.value, loc: AST.range(location) },
               loc: AST.range(resolved),
@@ -191,12 +190,12 @@ export class OAS2Parser implements ServiceFactory {
           }
         }
 
-        pathSpec.methods.push(methodSpec);
+        httpPath.methods.push(httpMethod);
       }
 
-      if (pathSpec.methods.length) pathSpecs.push(pathSpec);
+      if (httpPath.methods.length) httpPaths.push(httpPath);
     }
-    return pathSpecs;
+    return httpPaths;
   }
 
   private *allOperations(): Iterable<{
