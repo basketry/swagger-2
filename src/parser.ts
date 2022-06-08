@@ -67,6 +67,7 @@ export class OAS2Parser {
       interfaces,
       types: Object.keys(typesByName).map((name) => typesByName[name]),
       enums: Object.keys(enumsByName).map((name) => enumsByName[name]),
+      unions: [],
       loc: AST.range(this.schema),
     };
   }
@@ -708,7 +709,7 @@ export class OAS2Parser {
 
   private parseStringName(
     def: AST.StringParameterNode | AST.StringSchemaNode,
-  ): Omit<PrimitiveValue, 'isArray'> {
+  ): Omit<PrimitiveValue, 'isArray' | 'rules'> {
     const { type, format } = def;
 
     if (format?.value === 'date') {
@@ -740,7 +741,7 @@ export class OAS2Parser {
 
   private parseNumberName(
     def: AST.NumberParameterNode | AST.NumberSchemaNode,
-  ): Omit<PrimitiveValue, 'isArray'> {
+  ): Omit<PrimitiveValue, 'isArray' | 'rules'> {
     const { type, format } = def;
 
     if (type.value === 'integer') {
