@@ -1,15 +1,33 @@
 {
   "swagger": "2.0",
+  "x-metaString": "bar",
+  "x-metaNumber": 1234,
+  "x-metaBoolean": true,
+  "x-metaNull": null,
+  "x-metaObject": { "foo": "bar" },
+  "x-metaArray": [{ "foo": "bar" }],
   "info": {
     "description": "Example schema to exercise all parser functionality",
     "version": "1.2.3-rc4",
-    "title": "Basketry Example"
+    "title": "Basketry Example",
+    "x-metaString": "bar",
+    "x-metaNumber": 1234,
+    "x-metaBoolean": true,
+    "x-metaNull": null,
+    "x-metaObject": { "foo": "bar" },
+    "x-metaArray": [{ "foo": "bar" }]
   },
   "parameters": {
     "search": {
       "name": "search",
       "in": "query",
-      "type": "string"
+      "type": "string",
+      "x-metaString": "bar",
+      "x-metaNumber": 1234,
+      "x-metaBoolean": true,
+      "x-metaNull": null,
+      "x-metaObject": { "foo": "bar" },
+      "x-metaArray": [{ "foo": "bar" }]
     }
   },
   "responses": {

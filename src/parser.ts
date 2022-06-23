@@ -23,10 +23,13 @@ import {
   Literal,
   TypedValue,
   PrimitiveValue,
+  Meta,
+  encodeRange,
 } from 'basketry';
+import { relative } from 'path';
 
 export class OAS2Parser {
-  constructor(schema: string) {
+  constructor(schema: string, private readonly sourcePath: string) {
     this.schema = new AST.SchemaNode(parse(schema, { loc: true }));
   }
 
@@ -56,6 +59,7 @@ export class OAS2Parser {
 
     return {
       basketry: '1',
+      sourcePath: relative(process.cwd(), this.sourcePath),
       title: {
         value: pascal(this.schema.info.title.value),
         loc: AST.range(this.schema.info.title),
@@ -69,7 +73,28 @@ export class OAS2Parser {
       enums: Object.keys(enumsByName).map((name) => enumsByName[name]),
       unions: [],
       loc: AST.range(this.schema),
+      meta: this.parseMeta(this.schema),
     };
+  }
+
+  private parseMeta(node: AST.JsonNode): Meta | undefined {
+    const n = node.node;
+    if (!AST.isObjectNode(n)) return undefined;
+
+    const meta: Meta = n.children
+      .filter((child) => child.key.value.startsWith('x-'))
+      .map((child) => ({
+        key: {
+          value: child.key.value.substring(2),
+          loc: encodeRange(child.key.loc),
+        },
+        value: {
+          value: AST.toJson(child.value),
+          loc: encodeRange(child.value.loc),
+        },
+      }));
+
+    return meta.length ? meta : undefined;
   }
 
   private parseInterfaces(): Interface[] {
@@ -206,7 +231,7 @@ export class OAS2Parser {
   }> {
     for (const path of this.schema.paths.keys) {
       for (const verb of this.schema.paths.read(path)!.keys) {
-        if (verb === 'parameters') continue;
+        if (verb === 'parameters' || verb.startsWith('x-')) continue;
 
         const operation: AST.OperationNode =
           this.schema.paths.read(path)![verb];
@@ -259,6 +284,7 @@ export class OAS2Parser {
         ),
         returnType: this.parseReturnType(operation),
         loc: this.schema.paths.read(path)!.propRange(verb)!,
+        meta: this.parseMeta(operation),
       });
     }
     return methods;
@@ -311,6 +337,7 @@ export class OAS2Parser {
                 type: { value: 'basic', loc: AST.range(definition.type) },
                 name,
                 loc,
+                meta: this.parseMeta(definition),
               };
             case 'ApiKeySecurityScheme':
               return {
@@ -320,6 +347,7 @@ export class OAS2Parser {
                 parameter: literal(definition.name),
                 in: literal(definition.in),
                 loc,
+                meta: this.parseMeta(definition),
               };
             case 'OAuth2SecurityScheme': {
               switch (definition.flow.value) {
@@ -349,6 +377,7 @@ export class OAS2Parser {
                       },
                     ],
                     loc,
+                    meta: this.parseMeta(definition),
                   };
                 case 'password':
                   return {
@@ -379,6 +408,7 @@ export class OAS2Parser {
                       },
                     ],
                     loc,
+                    meta: this.parseMeta(definition),
                   };
                 case 'application':
                   return {
@@ -409,6 +439,7 @@ export class OAS2Parser {
                       },
                     ],
                     loc,
+                    meta: this.parseMeta(definition),
                   };
                 case 'accessCode':
                   return {
@@ -440,6 +471,7 @@ export class OAS2Parser {
                       },
                     ],
                     loc,
+                    meta: this.parseMeta(definition),
                   };
                 default:
                   return;
@@ -495,6 +527,7 @@ export class OAS2Parser {
         isArray: x.isArray,
         rules: this.parseRules(resolved, param.required?.value),
         loc: AST.range(param),
+        meta: this.parseMeta(param),
       };
     } else {
       return {
@@ -505,6 +538,7 @@ export class OAS2Parser {
         isArray: x.isArray,
         rules: this.parseRules(resolved, param.required?.value),
         loc: AST.range(param),
+        meta: this.parseMeta(param),
       };
     }
   }
@@ -864,6 +898,7 @@ export class OAS2Parser {
             : [],
         rules: this.parseObjectRules(node),
         loc: defLoc,
+        meta: this.parseMeta(node),
       };
     });
   }
@@ -904,6 +939,7 @@ export class OAS2Parser {
             isArray: x.isArray,
             rules: this.parseRules(resolvedProp, requiredSet.has(name)),
             loc: AST.range(resolvedProp),
+            meta: this.parseMeta(resolvedProp),
           });
         } else {
           props.push({
@@ -914,6 +950,7 @@ export class OAS2Parser {
             isArray: x.isArray,
             rules: this.parseRules(resolvedProp, requiredSet.has(name)),
             loc: AST.range(resolvedProp),
+            meta: this.parseMeta(resolvedProp),
           });
         }
       }

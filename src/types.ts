@@ -160,6 +160,20 @@ export function resolveParamOrSchema(
   }
 }
 
+export function toJson(node: parse.ASTNode | undefined) {
+  if (node === undefined) return undefined;
+  if (isLiteralNode(node)) {
+    return node.value;
+  } else if (isObjectNode(node)) {
+    return node.children.reduce(
+      (acc, child) => ({ ...acc, [child.key.value]: toJson(child.value) }),
+      {},
+    );
+  } else if (isArrayNode(node)) {
+    return node.children.map((child) => toJson(child));
+  }
+}
+
 export abstract class JsonNode {
   constructor(readonly node: parse.ASTNode) {}
 
@@ -173,6 +187,18 @@ export abstract class JsonNode {
     return isObjectNode(this.node)
       ? this.node.children.map((n) => n.key.value)
       : [];
+  }
+
+  toJson() {
+    return toJson(this.node);
+  }
+
+  prop(key: string): parse.ValueNode | undefined {
+    if (isObjectNode(this.node)) {
+      return this.node.children.find((c) => c.key.value === key)?.value;
+    } else {
+      return undefined;
+    }
   }
 
   keyRange(key: string): string | undefined {
@@ -1397,7 +1423,7 @@ function isIdentifierNode(
   return node?.type === 'Identifier';
 }
 
-function isObjectNode(
+export function isObjectNode(
   node: parse.ASTNode | undefined,
 ): node is parse.ObjectNode {
   return node?.type === 'Object';
