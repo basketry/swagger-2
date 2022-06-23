@@ -2,8 +2,13 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as https from 'https';
 
-import { ReturnType, validate } from 'basketry';
+import { ReturnType, Service, validate } from 'basketry';
 import parser from '.';
+
+function noSource(service: Service): Omit<Service, 'sourcePath'> {
+  const { sourcePath, ...rest } = service;
+  return rest;
+}
 
 describe('parser', () => {
   it('recreates a valid exhaustive snapshot', () => {
@@ -21,7 +26,7 @@ describe('parser', () => {
     );
 
     // ASSERT
-    expect(result).toStrictEqual(snapshot);
+    expect(noSource(result)).toStrictEqual(noSource(snapshot));
   });
 
   it('recreates a valid petstore snapshot', () => {
@@ -39,7 +44,7 @@ describe('parser', () => {
     );
 
     // ASSERT
-    expect(result).toStrictEqual(snapshot);
+    expect(noSource(result)).toStrictEqual(noSource(snapshot));
   });
 
   it('creates a type for every custom typeName', () => {
