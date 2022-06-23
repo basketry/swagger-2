@@ -1,5 +1,6 @@
 {
   "basketry": "1",
+  "sourcePath": "src/snapshot/petstore.oas2.json",
   "title": { "value": "SwaggerPetstore", "loc": "6;14;32;364;382" },
   "majorVersion": { "value": 1, "loc": "5;16;23;342;349" },
   "interfaces": [
