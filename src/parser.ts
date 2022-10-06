@@ -28,11 +28,16 @@ import {
   encodeRange,
 } from 'basketry';
 import { relative } from 'path';
-import { parse } from './json';
+import { parse as parseJson } from './json';
+import { parse as parseYaml } from './yaml';
 
 export class OAS2Parser {
   constructor(schema: string, private readonly sourcePath: string) {
-    this.schema = new OAS2.SchemaNode(parse(schema));
+    if (schema.trimStart().startsWith('{')) {
+      this.schema = new OAS2.SchemaNode(parseJson(schema));
+    } else {
+      this.schema = new OAS2.SchemaNode(parseYaml(schema));
+    }
   }
 
   private readonly schema: OAS2.SchemaNode;
