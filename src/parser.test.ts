@@ -9,6 +9,7 @@ function noSource(service: Service): Omit<Service, 'sourcePath'> {
   const { sourcePath, ...rest } = service;
   return rest;
 }
+import { dump as yamlStringify } from 'yaml-ast-parser';
 
 describe('parser', () => {
   it('recreates a valid exhaustive snapshot', () => {
@@ -27,6 +28,29 @@ describe('parser', () => {
 
     // ASSERT
     expect(noSource(result)).toStrictEqual(noSource(snapshot));
+  });
+
+  it('parses identical services from JSON and YAML content', () => {
+    // ARRANGE
+    const jsonPath: string = join('src', 'snapshot', 'example.oas2.json');
+    const jsonContent = readFileSync(jsonPath).toString();
+    const yamlContent = yamlStringify(JSON.parse(jsonContent), {});
+
+    const replacer = (key: string, value: any) => {
+      return key === 'loc' ? 'REDACTED' : value;
+    };
+
+    // ACT
+    const jsonResult = JSON.parse(
+      JSON.stringify(parser(jsonContent, jsonPath).service, replacer),
+    );
+
+    const yamlResult = JSON.parse(
+      JSON.stringify(parser(yamlContent, jsonPath).service, replacer),
+    );
+
+    // ASSERT
+    expect(jsonResult).toStrictEqual(yamlResult);
   });
 
   it('recreates a valid petstore snapshot', () => {
