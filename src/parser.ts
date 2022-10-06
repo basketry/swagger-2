@@ -1,9 +1,10 @@
 import { major } from 'semver';
 import { singular } from 'pluralize';
 import { camel, pascal } from 'case';
-import * as parse from 'json-to-ast';
 
-import * as AST from './types';
+import { range, DocumentNode } from './document';
+import * as AST from './ast';
+import * as OAS2 from './types';
 
 import {
   Enum,
@@ -27,13 +28,14 @@ import {
   encodeRange,
 } from 'basketry';
 import { relative } from 'path';
+import { parse } from './json';
 
 export class OAS2Parser {
   constructor(schema: string, private readonly sourcePath: string) {
-    this.schema = new AST.SchemaNode(parse(schema, { loc: true }));
+    this.schema = new OAS2.SchemaNode(parse(schema));
   }
 
-  private readonly schema: AST.SchemaNode;
+  private readonly schema: OAS2.SchemaNode;
 
   private readonly ruleFactories: ValidationRuleFactory[] = factories;
   private enums: Enum[];
@@ -62,24 +64,24 @@ export class OAS2Parser {
       sourcePath: relative(process.cwd(), this.sourcePath),
       title: {
         value: pascal(this.schema.info.title.value),
-        loc: AST.range(this.schema.info.title),
+        loc: range(this.schema.info.title),
       },
       majorVersion: {
         value: major(this.schema.info.version.value),
-        loc: AST.range(this.schema.info.version),
+        loc: range(this.schema.info.version),
       },
       interfaces,
       types: Object.keys(typesByName).map((name) => typesByName[name]),
       enums: Object.keys(enumsByName).map((name) => enumsByName[name]),
       unions: [],
-      loc: AST.range(this.schema),
+      loc: range(this.schema),
       meta: this.parseMeta(this.schema),
     };
   }
 
-  private parseMeta(node: AST.JsonNode): Meta | undefined {
+  private parseMeta(node: DocumentNode): Meta | undefined {
     const n = node.node;
-    if (!AST.isObjectNode(n)) return undefined;
+    if (!n.isObject()) return undefined;
 
     const meta: Meta = n.children
       .filter((child) => child.key.value.startsWith('x-'))
@@ -89,7 +91,7 @@ export class OAS2Parser {
           loc: encodeRange(child.key.loc),
         },
         value: {
-          value: AST.toJson(child.value),
+          value: OAS2.toJson(child.value),
           loc: encodeRange(child.value.loc),
         },
       }));
@@ -109,7 +111,7 @@ export class OAS2Parser {
 
   private parseResponseCode(
     verb: string,
-    operation: AST.OperationNode,
+    operation: OAS2.OperationNode,
   ): Literal<number> {
     const primary = this.parsePrimaryResponseKey(operation);
 
@@ -117,7 +119,7 @@ export class OAS2Parser {
       return primary as Literal<number>;
     } else if (primary?.value === 'default') {
       const res = operation.responses.read(primary.value);
-      if (res && this.resolve(res, AST.ResponseNode).schema) {
+      if (res && this.resolve(res, OAS2.ResponseNode).schema) {
         switch (verb) {
           case 'delete':
             return { value: 202, loc: primary.loc };
@@ -144,7 +146,7 @@ export class OAS2Parser {
     for (const path of paths) {
       const pathItem = this.resolve(
         this.schema.paths.read(path)!,
-        AST.PathItemNode,
+        OAS2.PathItemNode,
       );
       const keyLoc = this.schema.paths.keyRange(path);
       const loc = this.schema.paths.propRange(path)!;
@@ -158,7 +160,7 @@ export class OAS2Parser {
 
       for (const verb of pathItem.keys) {
         if (verb === 'parameters') continue;
-        const operation = pathItem[verb]! as AST.OperationNode;
+        const operation = pathItem[verb]! as OAS2.OperationNode;
         if (this.parseInterfaceName(path, operation) !== interfaceName) {
           continue;
         }
@@ -170,7 +172,7 @@ export class OAS2Parser {
           name: {
             value: operation.operationId?.value || 'unknown',
             loc: operation.operationId
-              ? AST.range(operation.operationId)
+              ? range(operation.operationId)
               : undefined,
           },
           verb: { value: verb as any, loc: verbLoc },
@@ -185,7 +187,7 @@ export class OAS2Parser {
         ]) {
           const name = this.parseParameterName(param);
 
-          const resolved = AST.resolveParam(this.schema.node, param);
+          const resolved = OAS2.resolveParam(this.schema.node, param);
           if (!resolved) throw new Error('Cannot resolve reference');
 
           const location = this.parseParameterLocation(param);
@@ -197,21 +199,21 @@ export class OAS2Parser {
             resolved.nodeType === 'ArrayParameter'
           ) {
             httpMethod.parameters.push({
-              name: { value: name.value, loc: AST.range(name) },
-              in: { value: location.value, loc: AST.range(location) },
+              name: { value: name.value, loc: range(name) },
+              in: { value: location.value, loc: range(location) },
               array: {
                 value: resolved.collectionFormat?.value || 'csv',
                 loc: resolved.collectionFormat
-                  ? AST.range(resolved.collectionFormat)
+                  ? range(resolved.collectionFormat)
                   : undefined,
               },
-              loc: AST.range(resolved),
+              loc: range(resolved),
             });
           } else {
             httpMethod.parameters.push({
-              name: { value: name.value, loc: AST.range(name) },
-              in: { value: location.value, loc: AST.range(location) },
-              loc: AST.range(resolved),
+              name: { value: name.value, loc: range(name) },
+              in: { value: location.value, loc: range(location) },
+              loc: range(resolved),
             });
           }
         }
@@ -227,13 +229,13 @@ export class OAS2Parser {
   private *allOperations(): Iterable<{
     path: string;
     verb: string;
-    operation: AST.OperationNode;
+    operation: OAS2.OperationNode;
   }> {
     for (const path of this.schema.paths.keys) {
       for (const verb of this.schema.paths.read(path)!.keys) {
         if (verb === 'parameters' || verb.startsWith('x-')) continue;
 
-        const operation: AST.OperationNode =
+        const operation: OAS2.OperationNode =
           this.schema.paths.read(path)![verb];
 
         yield { path, verb, operation };
@@ -251,7 +253,7 @@ export class OAS2Parser {
 
   private parseInterfaceName(
     path: string,
-    operation: AST.OperationNode,
+    operation: OAS2.OperationNode,
   ): string {
     return operation.tags?.[0].value || path.split('/')[1];
   }
@@ -269,7 +271,7 @@ export class OAS2Parser {
       }
 
       const nameLoc = operation.operationId
-        ? AST.range(operation.operationId)
+        ? range(operation.operationId)
         : undefined;
       methods.push({
         name: {
@@ -291,29 +293,29 @@ export class OAS2Parser {
   }
 
   private parseDescription(
-    summary: AST.LiteralNode<string> | undefined,
-    description: AST.LiteralNode<string> | undefined,
+    summary: OAS2.LiteralNode<string> | undefined,
+    description: OAS2.LiteralNode<string> | undefined,
   ): Literal<string> | Literal<string>[] | undefined {
     if (summary && description)
       return [
-        { value: summary.value, loc: AST.range(summary) },
-        { value: description.value, loc: AST.range(description) },
+        { value: summary.value, loc: range(summary) },
+        { value: description.value, loc: range(description) },
       ];
-    if (summary) return { value: summary.value, loc: AST.range(summary) };
+    if (summary) return { value: summary.value, loc: range(summary) };
     if (description)
-      return { value: description.value, loc: AST.range(description) };
+      return { value: description.value, loc: range(description) };
     return;
   }
 
   private parseDescriptionOnly(
-    description: AST.LiteralNode<string> | undefined,
+    description: OAS2.LiteralNode<string> | undefined,
   ): Literal<string> | undefined {
     if (description)
-      return { value: description.value, loc: AST.range(description) };
+      return { value: description.value, loc: range(description) };
     return;
   }
 
-  private parseSecurity(operation: AST.OperationNode): SecurityOption[] {
+  private parseSecurity(operation: OAS2.OperationNode): SecurityOption[] {
     const { securityDefinitions, security: defaultSecurity } = this.schema;
     const { security: operationSecurity } = operation;
     const security = operationSecurity || defaultSecurity || [];
@@ -334,14 +336,14 @@ export class OAS2Parser {
           switch (definition.nodeType) {
             case 'BasicSecurityScheme':
               return {
-                type: { value: 'basic', loc: AST.range(definition.type) },
+                type: { value: 'basic', loc: range(definition.type) },
                 name,
                 loc,
                 meta: this.parseMeta(definition),
               };
             case 'ApiKeySecurityScheme':
               return {
-                type: { value: 'apiKey', loc: AST.range(definition.type) },
+                type: { value: 'apiKey', loc: range(definition.type) },
                 name,
                 description: this.parseDescriptionOnly(definition.description),
                 parameter: literal(definition.name),
@@ -353,7 +355,7 @@ export class OAS2Parser {
               switch (definition.flow.value) {
                 case 'implicit':
                   return {
-                    type: { value: 'oauth2', loc: AST.range(definition.type) },
+                    type: { value: 'oauth2', loc: range(definition.type) },
                     name,
                     description: this.parseDescriptionOnly(
                       definition.description,
@@ -362,7 +364,7 @@ export class OAS2Parser {
                       {
                         type: {
                           value: 'implicit',
-                          loc: AST.range(definition.flow),
+                          loc: range(definition.flow),
                         },
                         authorizationUrl: literal(definition.authorizationUrl),
                         // WARNING! This is different than the others
@@ -381,7 +383,7 @@ export class OAS2Parser {
                   };
                 case 'password':
                   return {
-                    type: { value: 'oauth2', loc: AST.range(definition.type) },
+                    type: { value: 'oauth2', loc: range(definition.type) },
                     name,
                     description: this.parseDescriptionOnly(
                       definition.description,
@@ -390,7 +392,7 @@ export class OAS2Parser {
                       {
                         type: {
                           value: 'password',
-                          loc: AST.range(definition.flow),
+                          loc: range(definition.flow),
                         },
                         tokenUrl: literal(definition.tokenUrl),
                         // WARNING! This is different than implicit
@@ -412,7 +414,7 @@ export class OAS2Parser {
                   };
                 case 'application':
                   return {
-                    type: { value: 'oauth2', loc: AST.range(definition.type) },
+                    type: { value: 'oauth2', loc: range(definition.type) },
                     name,
                     description: this.parseDescriptionOnly(
                       definition.description,
@@ -421,7 +423,7 @@ export class OAS2Parser {
                       {
                         type: {
                           value: 'clientCredentials',
-                          loc: AST.range(definition.flow),
+                          loc: range(definition.flow),
                         },
                         tokenUrl: literal(definition.tokenUrl),
                         // WARNING! This is different than implicit
@@ -443,7 +445,7 @@ export class OAS2Parser {
                   };
                 case 'accessCode':
                   return {
-                    type: { value: 'oauth2', loc: AST.range(definition.type) },
+                    type: { value: 'oauth2', loc: range(definition.type) },
                     name,
                     description: this.parseDescriptionOnly(
                       definition.description,
@@ -452,7 +454,7 @@ export class OAS2Parser {
                       {
                         type: {
                           value: 'authorizationCode',
-                          loc: AST.range(definition.flow),
+                          loc: range(definition.flow),
                         },
                         authorizationUrl: literal(definition.authorizationUrl),
                         tokenUrl: literal(definition.tokenUrl),
@@ -488,8 +490,8 @@ export class OAS2Parser {
   }
 
   private parseParameters(
-    operation: AST.OperationNode,
-    commonParameters: (AST.ParameterNode | AST.RefNode)[],
+    operation: OAS2.OperationNode,
+    commonParameters: (OAS2.ParameterNode | OAS2.RefNode)[],
   ): Parameter[] {
     const allParameters = [
       ...commonParameters,
@@ -499,18 +501,18 @@ export class OAS2Parser {
 
     return allParameters.map((p) =>
       this.parseParameter(
-        AST.resolveParam(this.schema.node, p)!,
+        OAS2.resolveParam(this.schema.node, p)!,
         operation.operationId?.value || '',
       ),
     );
   }
 
   private parseParameter(
-    param: AST.ParameterNode,
+    param: OAS2.ParameterNode,
     methodName: string,
   ): Parameter {
     const unresolved = isBodyParameter(param) ? param.schema : param;
-    const resolved = AST.resolveParamOrSchema(this.schema.node, unresolved);
+    const resolved = OAS2.resolveParamOrSchema(this.schema.node, unresolved);
     if (!resolved) throw new Error('Cannot resolve reference');
     if (resolved.nodeType === 'BodyParameter') {
       throw new Error('Unexpected body parameter');
@@ -520,42 +522,42 @@ export class OAS2Parser {
 
     if (x.isPrimitive) {
       return {
-        name: { value: param.name.value, loc: AST.range(param.name) },
+        name: { value: param.name.value, loc: range(param.name) },
         description: this.parseDescription(undefined, param.description),
         typeName: x.typeName,
         isPrimitive: x.isPrimitive,
         isArray: x.isArray,
         rules: this.parseRules(resolved, param.required?.value),
-        loc: AST.range(param),
+        loc: range(param),
         meta: this.parseMeta(param),
       };
     } else {
       return {
-        name: { value: param.name.value, loc: AST.range(param.name) },
+        name: { value: param.name.value, loc: range(param.name) },
         description: this.parseDescription(undefined, param.description),
         typeName: x.typeName,
         isPrimitive: x.isPrimitive,
         isArray: x.isArray,
         rules: this.parseRules(resolved, param.required?.value),
-        loc: AST.range(param),
+        loc: range(param),
         meta: this.parseMeta(param),
       };
     }
   }
 
   private parseParameterLocation(
-    def: AST.ParameterNode | AST.RefNode,
-  ): AST.ParameterNode['in'] {
-    const resolved = AST.resolveParam(this.schema.node, def);
+    def: OAS2.ParameterNode | OAS2.RefNode,
+  ): OAS2.ParameterNode['in'] {
+    const resolved = OAS2.resolveParam(this.schema.node, def);
     if (!resolved) throw new Error('Cannot resolve reference');
 
     return resolved.in;
   }
 
   private parseParameterName(
-    def: AST.ParameterNode | AST.RefNode,
-  ): AST.ParameterNode['name'] {
-    const resolved = AST.resolveParam(this.schema.node, def);
+    def: OAS2.ParameterNode | OAS2.RefNode,
+  ): OAS2.ParameterNode['name'] {
+    const resolved = OAS2.resolveParam(this.schema.node, def);
     if (!resolved) throw new Error('Cannot resolve reference');
 
     return resolved.name;
@@ -563,9 +565,9 @@ export class OAS2Parser {
 
   private parseType(
     def:
-      | Exclude<AST.ParameterNode, AST.BodyParameterNode>
-      | AST.JsonSchemaNode
-      | AST.RefNode,
+      | Exclude<OAS2.ParameterNode, OAS2.BodyParameterNode>
+      | OAS2.JsonSchemaNode
+      | OAS2.RefNode,
     localName: string,
     parentName: string,
   ): {
@@ -573,8 +575,8 @@ export class OAS2Parser {
     rules: ValidationRule[];
     loc: string;
   } & TypedValue {
-    if (AST.isRefNode(def)) {
-      const res = AST.resolveParamOrSchema(this.schema.node, def);
+    if (OAS2.isRefNode(def)) {
+      const res = OAS2.resolveParamOrSchema(this.schema.node, def);
       if (!res) throw new Error('Cannot resolve reference');
       if (res.nodeType === 'BodyParameter') {
         throw new Error('Unexpected body parameter');
@@ -582,28 +584,28 @@ export class OAS2Parser {
 
       // TODO: do a better job of detecting a definitions ref
       if (def.$ref.value.startsWith('#/definitions/')) {
-        if (AST.isObject(res)) {
+        if (OAS2.isObject(res)) {
           return {
             typeName: {
               value: def.$ref.value.substring(14),
-              loc: AST.refRange(this.schema.node, def.$ref.value),
+              loc: OAS2.refRange(this.schema.node, def.$ref.value),
             },
             isPrimitive: false,
             isArray: false,
             rules: this.parseRules(res),
-            loc: AST.range(res),
+            loc: range(res),
           };
-        } else if (AST.isString(res) && res.enum) {
+        } else if (OAS2.isString(res) && res.enum) {
           const name = {
             value: def.$ref.value.substring(14),
-            loc: AST.refRange(this.schema.node, def.$ref.value),
+            loc: OAS2.refRange(this.schema.node, def.$ref.value),
           };
 
           this.enums.push({
             name: name,
             values: res.enum.map((n) => ({
               value: n.value,
-              loc: AST.range(n),
+              loc: range(n),
             })),
             loc: res.propRange('enum')!,
           });
@@ -612,7 +614,7 @@ export class OAS2Parser {
             isPrimitive: false,
             isArray: false,
             rules: this.parseRules(res),
-            loc: AST.range(res),
+            loc: range(res),
           };
         } else {
           return this.parseType(res, localName, parentName);
@@ -621,12 +623,12 @@ export class OAS2Parser {
         return {
           typeName: {
             value: def.$ref.value,
-            loc: AST.refRange(this.schema.node, def.$ref.value),
+            loc: OAS2.refRange(this.schema.node, def.$ref.value),
           },
           isPrimitive: false,
           isArray: false,
           rules: this.parseRules(res),
-          loc: AST.range(res),
+          loc: range(res),
         };
       }
     }
@@ -641,7 +643,7 @@ export class OAS2Parser {
             name: { value: enumName },
             values: def.enum.map((n) => ({
               value: n.value,
-              loc: AST.range(n),
+              loc: range(n),
             })),
             loc: def.propRange('enum')!,
           });
@@ -650,14 +652,14 @@ export class OAS2Parser {
             isPrimitive: false,
             isArray: false,
             rules,
-            loc: AST.range(def),
+            loc: range(def),
           };
         } else {
           return {
             ...this.parseStringName(def),
             isArray: false,
             rules,
-            loc: AST.range(def),
+            loc: range(def),
           };
         }
       case 'NumberParameter':
@@ -666,7 +668,7 @@ export class OAS2Parser {
           ...this.parseNumberName(def),
           isArray: false,
           rules,
-          loc: AST.range(def),
+          loc: range(def),
         };
       case 'BooleanParameter':
       case 'BooleanSchema':
@@ -674,12 +676,12 @@ export class OAS2Parser {
         return {
           typeName: {
             value: def.type.value,
-            loc: AST.range(def.type),
+            loc: range(def.type),
           },
           isPrimitive: true,
           isArray: false,
           rules,
-          loc: AST.range(def),
+          loc: range(def),
         };
       case 'ArrayParameter':
       case 'ArraySchema':
@@ -691,7 +693,7 @@ export class OAS2Parser {
             isPrimitive: items.isPrimitive,
             isArray: true,
             rules,
-            loc: AST.range(def),
+            loc: range(def),
           };
         } else {
           return {
@@ -699,7 +701,7 @@ export class OAS2Parser {
             isPrimitive: items.isPrimitive,
             isArray: true,
             rules,
-            loc: AST.range(def),
+            loc: range(def),
           };
         }
 
@@ -716,11 +718,11 @@ export class OAS2Parser {
           description: def.description
             ? {
                 value: def.description.value,
-                loc: AST.range(def.description),
+                loc: range(def.description),
               }
             : undefined,
           rules: this.parseObjectRules(def),
-          loc: AST.range(def),
+          loc: range(def),
         });
 
         return {
@@ -728,7 +730,7 @@ export class OAS2Parser {
           isPrimitive: false,
           isArray: false,
           rules,
-          loc: AST.range(def),
+          loc: range(def),
         };
       default:
         return {
@@ -736,13 +738,13 @@ export class OAS2Parser {
           isPrimitive: true,
           isArray: false,
           rules,
-          loc: AST.range(def),
+          loc: range(def),
         };
     }
   }
 
   private parseStringName(
-    def: AST.StringParameterNode | AST.StringSchemaNode,
+    def: OAS2.StringParameterNode | OAS2.StringSchemaNode,
   ): Omit<PrimitiveValue, 'isArray' | 'rules'> {
     const { type, format } = def;
 
@@ -750,7 +752,7 @@ export class OAS2Parser {
       return {
         typeName: {
           value: 'date',
-          loc: AST.range(def),
+          loc: range(def),
         },
         isPrimitive: true,
       };
@@ -758,7 +760,7 @@ export class OAS2Parser {
       return {
         typeName: {
           value: 'date-time',
-          loc: AST.range(def),
+          loc: range(def),
         },
         isPrimitive: true,
       };
@@ -766,7 +768,7 @@ export class OAS2Parser {
       return {
         typeName: {
           value: type.value,
-          loc: AST.range(type),
+          loc: range(type),
         },
         isPrimitive: true,
       };
@@ -774,7 +776,7 @@ export class OAS2Parser {
   }
 
   private parseNumberName(
-    def: AST.NumberParameterNode | AST.NumberSchemaNode,
+    def: OAS2.NumberParameterNode | OAS2.NumberSchemaNode,
   ): Omit<PrimitiveValue, 'isArray' | 'rules'> {
     const { type, format } = def;
 
@@ -783,7 +785,7 @@ export class OAS2Parser {
         return {
           typeName: {
             value: 'integer',
-            loc: AST.range(def),
+            loc: range(def),
           },
           isPrimitive: true,
         };
@@ -791,7 +793,7 @@ export class OAS2Parser {
         return {
           typeName: {
             value: 'long',
-            loc: AST.range(def),
+            loc: range(def),
           },
           isPrimitive: true,
         };
@@ -801,7 +803,7 @@ export class OAS2Parser {
         return {
           typeName: {
             value: 'float',
-            loc: AST.range(def),
+            loc: range(def),
           },
           isPrimitive: true,
         };
@@ -809,7 +811,7 @@ export class OAS2Parser {
         return {
           typeName: {
             value: 'double',
-            loc: AST.range(def),
+            loc: range(def),
           },
           isPrimitive: true,
         };
@@ -819,14 +821,14 @@ export class OAS2Parser {
     return {
       typeName: {
         value: type.value,
-        loc: AST.range(type),
+        loc: range(type),
       },
       isPrimitive: true,
     };
   }
 
   private parsePrimaryResponseKey(
-    operation: AST.OperationNode,
+    operation: OAS2.OperationNode,
   ): Literal<number> | Literal<'default'> | undefined {
     const hasDefault =
       typeof operation.responses.read('default') !== 'undefined';
@@ -844,15 +846,15 @@ export class OAS2Parser {
   }
 
   private parseReturnType(
-    operation: AST.OperationNode,
+    operation: OAS2.OperationNode,
   ): ReturnType | undefined {
     const primaryCode = this.parsePrimaryResponseKey(operation);
     const success = operation.responses.read(`${primaryCode?.value}`);
     if (!success) return;
 
-    const response = this.resolve(success, AST.ResponseNode);
+    const response = this.resolve(success, OAS2.ResponseNode);
     const name =
-      AST.isRefNode(success) && success.$ref.value.startsWith('#/responses/')
+      OAS2.isRefNode(success) && success.$ref.value.startsWith('#/responses/')
         ? success.$ref.value.substring(12)
         : undefined;
 
@@ -870,12 +872,14 @@ export class OAS2Parser {
 
     const definitions = this.schema.definitions.keys
       // .map((name) => ({ ...this.schema.definitions![name], name }))
-      .map<[string, AST.JsonSchemaNode, string | undefined, string]>((name) => [
-        name,
-        this.schema.definitions!.read(name)!,
-        this.schema.definitions!.keyRange(name),
-        this.schema.definitions!.propRange(name)!,
-      ])
+      .map<[string, OAS2.JsonSchemaNode, string | undefined, string]>(
+        (name) => [
+          name,
+          this.schema.definitions!.read(name)!,
+          this.schema.definitions!.keyRange(name),
+          this.schema.definitions!.propRange(name)!,
+        ],
+      )
       .filter(([, node]) => node.nodeType === 'ObjectSchema');
 
     return definitions.map(([name, node, nameLoc, defLoc]) => {
@@ -884,7 +888,7 @@ export class OAS2Parser {
         description: node.description
           ? {
               value: node.description.value,
-              loc: AST.range(node.description),
+              loc: range(node.description),
             }
           : undefined,
         properties:
@@ -904,15 +908,15 @@ export class OAS2Parser {
   }
 
   private parseProperties(
-    properties: AST.PropertiesNode | undefined,
-    required: AST.LiteralNode<string>[] | undefined,
-    allOf: (AST.RefNode | AST.ObjectSchemaNode)[] | undefined,
+    properties: OAS2.PropertiesNode | undefined,
+    required: OAS2.LiteralNode<string>[] | undefined,
+    allOf: (OAS2.RefNode | OAS2.ObjectSchemaNode)[] | undefined,
     parentName?: string,
   ): Property[] {
     if (allOf) {
       return allOf
         .map((subDef) => {
-          const resolved = this.resolve(subDef, AST.ObjectSchemaNode);
+          const resolved = this.resolve(subDef, OAS2.ObjectSchemaNode);
           const p = resolved.properties;
           const r = safeConcat(resolved.required, required);
           return this.parseProperties(p, r, undefined, parentName);
@@ -926,7 +930,7 @@ export class OAS2Parser {
         const prop = properties?.read(name);
         if (!prop) continue;
 
-        const resolvedProp = AST.resolveSchema(this.schema.node, prop);
+        const resolvedProp = OAS2.resolveSchema(this.schema.node, prop);
         if (!resolvedProp) throw new Error('Cannot resolve reference');
 
         const x = this.parseType(prop, name, parentName || '');
@@ -938,7 +942,7 @@ export class OAS2Parser {
             isPrimitive: x.isPrimitive,
             isArray: x.isArray,
             rules: this.parseRules(resolvedProp, requiredSet.has(name)),
-            loc: AST.range(resolvedProp),
+            loc: range(resolvedProp),
             meta: this.parseMeta(resolvedProp),
           });
         } else {
@@ -949,7 +953,7 @@ export class OAS2Parser {
             isPrimitive: x.isPrimitive,
             isArray: x.isArray,
             rules: this.parseRules(resolvedProp, requiredSet.has(name)),
-            loc: AST.range(resolvedProp),
+            loc: range(resolvedProp),
             meta: this.parseMeta(resolvedProp),
           });
         }
@@ -958,15 +962,17 @@ export class OAS2Parser {
     }
   }
 
-  private resolve<T extends AST.JsonNode>(
-    itemOrRef: T | AST.RefNode,
-    Node: new (n: AST.RawNode) => T,
+  private resolve<T extends OAS2.DocumentNode>(
+    itemOrRef: T | OAS2.RefNode,
+    Node: new (n: AST.ASTNode) => T,
   ): T {
-    return AST.resolve(this.schema.node, itemOrRef, Node);
+    return OAS2.resolve(this.schema.node, itemOrRef, Node);
   }
 
   private parseRules(
-    def: AST.JsonSchemaNode | Exclude<AST.ParameterNode, AST.BodyParameterNode>,
+    def:
+      | OAS2.JsonSchemaNode
+      | Exclude<OAS2.ParameterNode, OAS2.BodyParameterNode>,
     required?: boolean,
   ): ValidationRule[] {
     const localRules = this.ruleFactories
@@ -976,7 +982,7 @@ export class OAS2Parser {
     const itemRules =
       def.nodeType === 'ArrayParameter' || def.nodeType === 'ArraySchema'
         ? this.ruleFactories
-            .map((f) => f(AST.resolveSchema(this.schema.node, def.items)!))
+            .map((f) => f(OAS2.resolveSchema(this.schema.node, def.items)!))
             .filter((x): x is ValidationRule => !!x)
         : [];
 
@@ -986,7 +992,9 @@ export class OAS2Parser {
   }
 
   private parseObjectRules(
-    def: AST.JsonSchemaNode | Exclude<AST.ParameterNode, AST.BodyParameterNode>,
+    def:
+      | OAS2.JsonSchemaNode
+      | Exclude<OAS2.ParameterNode, OAS2.BodyParameterNode>,
   ): ObjectValidationRule[] {
     return objectFactories
       .map((f) => f(def))
@@ -996,21 +1004,25 @@ export class OAS2Parser {
 
 export interface ValidationRuleFactory {
   (
-    def: AST.JsonSchemaNode | Exclude<AST.ParameterNode, AST.BodyParameterNode>,
+    def:
+      | OAS2.JsonSchemaNode
+      | Exclude<OAS2.ParameterNode, OAS2.BodyParameterNode>,
   ): ValidationRule | undefined;
 }
 
 export interface ObjectValidationRuleFactory {
   (
-    def: AST.JsonSchemaNode | Exclude<AST.ParameterNode, AST.BodyParameterNode>,
+    def:
+      | OAS2.JsonSchemaNode
+      | Exclude<OAS2.ParameterNode, OAS2.BodyParameterNode>,
   ): ObjectValidationRule | undefined;
 }
 
 const stringMaxLengthFactory: ValidationRuleFactory = (def) => {
-  if (AST.isString(def) && typeof def.maxLength?.value === 'number') {
+  if (OAS2.isString(def) && typeof def.maxLength?.value === 'number') {
     return {
       id: 'string-max-length',
-      length: { value: def.maxLength.value, loc: AST.range(def.maxLength) },
+      length: { value: def.maxLength.value, loc: range(def.maxLength) },
       loc: def.propRange('maxLength')!,
     };
   } else {
@@ -1019,10 +1031,10 @@ const stringMaxLengthFactory: ValidationRuleFactory = (def) => {
 };
 
 const stringMinLengthFactory: ValidationRuleFactory = (def) => {
-  if (AST.isString(def) && typeof def.minLength?.value === 'number') {
+  if (OAS2.isString(def) && typeof def.minLength?.value === 'number') {
     return {
       id: 'string-min-length',
-      length: { value: def.minLength.value, loc: AST.range(def.minLength) },
+      length: { value: def.minLength.value, loc: range(def.minLength) },
       loc: def.propRange('minLength')!,
     };
   } else {
@@ -1031,10 +1043,10 @@ const stringMinLengthFactory: ValidationRuleFactory = (def) => {
 };
 
 const stringPatternFactory: ValidationRuleFactory = (def) => {
-  if (AST.isString(def) && typeof def.pattern?.value === 'string') {
+  if (OAS2.isString(def) && typeof def.pattern?.value === 'string') {
     return {
       id: 'string-pattern',
-      pattern: { value: def.pattern.value, loc: AST.range(def.pattern) },
+      pattern: { value: def.pattern.value, loc: range(def.pattern) },
       loc: def.propRange('pattern')!,
     };
   } else {
@@ -1043,10 +1055,10 @@ const stringPatternFactory: ValidationRuleFactory = (def) => {
 };
 
 const stringFormatFactory: ValidationRuleFactory = (def) => {
-  if (AST.isString(def) && typeof def.format?.value === 'string') {
+  if (OAS2.isString(def) && typeof def.format?.value === 'string') {
     return {
       id: 'string-format',
-      format: { value: def.format.value, loc: AST.range(def.format) },
+      format: { value: def.format.value, loc: range(def.format) },
       loc: def.propRange('format')!,
     };
   } else {
@@ -1055,10 +1067,10 @@ const stringFormatFactory: ValidationRuleFactory = (def) => {
 };
 
 const stringEnumFactory: ValidationRuleFactory = (def) => {
-  if (AST.isString(def) && Array.isArray(def.enum)) {
+  if (OAS2.isString(def) && Array.isArray(def.enum)) {
     return {
       id: 'string-enum',
-      values: def.enum.map((n) => ({ value: n.value, loc: AST.range(n) })),
+      values: def.enum.map((n) => ({ value: n.value, loc: range(n) })),
       loc: def.propRange('enum')!,
     };
   } else {
@@ -1067,10 +1079,10 @@ const stringEnumFactory: ValidationRuleFactory = (def) => {
 };
 
 const numberMultipleOfFactory: ValidationRuleFactory = (def) => {
-  if (AST.isNumber(def) && typeof def.multipleOf?.value === 'number') {
+  if (OAS2.isNumber(def) && typeof def.multipleOf?.value === 'number') {
     return {
       id: 'number-multiple-of',
-      value: { value: def.multipleOf.value, loc: AST.range(def.multipleOf) },
+      value: { value: def.multipleOf.value, loc: range(def.multipleOf) },
       loc: def.propRange('multipleOf')!,
     };
   } else {
@@ -1079,10 +1091,10 @@ const numberMultipleOfFactory: ValidationRuleFactory = (def) => {
 };
 
 const numberGreaterThanFactory: ValidationRuleFactory = (def) => {
-  if (AST.isNumber(def) && typeof def.minimum?.value === 'number') {
+  if (OAS2.isNumber(def) && typeof def.minimum?.value === 'number') {
     return {
       id: def.exclusiveMinimum?.value ? 'number-gt' : 'number-gte',
-      value: { value: def.minimum.value, loc: AST.range(def.minimum) },
+      value: { value: def.minimum.value, loc: range(def.minimum) },
       loc: def.propRange('minimum')!,
     };
   } else {
@@ -1091,10 +1103,10 @@ const numberGreaterThanFactory: ValidationRuleFactory = (def) => {
 };
 
 const numberLessThanFactory: ValidationRuleFactory = (def) => {
-  if (AST.isNumber(def) && typeof def.maximum?.value === 'number') {
+  if (OAS2.isNumber(def) && typeof def.maximum?.value === 'number') {
     return {
       id: def.exclusiveMinimum?.value ? 'number-lt' : 'number-lte',
-      value: { value: def.maximum.value, loc: AST.range(def.maximum) },
+      value: { value: def.maximum.value, loc: range(def.maximum) },
       loc: def.propRange('maximum')!,
     };
   } else {
@@ -1103,10 +1115,10 @@ const numberLessThanFactory: ValidationRuleFactory = (def) => {
 };
 
 const arrayMinItemsFactory: ValidationRuleFactory = (def) => {
-  if (AST.isArray(def) && typeof def.minItems?.value === 'number') {
+  if (OAS2.isArray(def) && typeof def.minItems?.value === 'number') {
     return {
       id: 'array-min-items',
-      min: { value: def.minItems.value, loc: AST.range(def.minItems) },
+      min: { value: def.minItems.value, loc: range(def.minItems) },
       loc: def.propRange('minItems')!,
     };
   } else {
@@ -1115,10 +1127,10 @@ const arrayMinItemsFactory: ValidationRuleFactory = (def) => {
 };
 
 const arrayMaxItemsFactory: ValidationRuleFactory = (def) => {
-  if (AST.isArray(def) && typeof def.maxItems?.value === 'number') {
+  if (OAS2.isArray(def) && typeof def.maxItems?.value === 'number') {
     return {
       id: 'array-max-items',
-      max: { value: def.maxItems.value, loc: AST.range(def.maxItems) },
+      max: { value: def.maxItems.value, loc: range(def.maxItems) },
       loc: def.propRange('maxItems')!,
     };
   } else {
@@ -1127,7 +1139,7 @@ const arrayMaxItemsFactory: ValidationRuleFactory = (def) => {
 };
 
 const arrayUniqueItemsFactory: ValidationRuleFactory = (def) => {
-  if (AST.isArray(def) && def.uniqueItems) {
+  if (OAS2.isArray(def) && def.uniqueItems) {
     return {
       id: 'array-unique-items',
       required: true,
@@ -1139,12 +1151,12 @@ const arrayUniqueItemsFactory: ValidationRuleFactory = (def) => {
 };
 
 const objectMinPropertiesFactory: ObjectValidationRuleFactory = (def) => {
-  if (AST.isObject(def) && typeof def.minProperties?.value === 'number') {
+  if (OAS2.isObject(def) && typeof def.minProperties?.value === 'number') {
     return {
       id: 'object-min-properties',
       min: {
         value: def.minProperties.value,
-        loc: AST.range(def.minProperties),
+        loc: range(def.minProperties),
       },
       loc: def.propRange('minProperties')!,
     };
@@ -1154,12 +1166,12 @@ const objectMinPropertiesFactory: ObjectValidationRuleFactory = (def) => {
 };
 
 const objectMaxPropertiesFactory: ObjectValidationRuleFactory = (def) => {
-  if (AST.isObject(def) && typeof def.maxProperties?.value === 'number') {
+  if (OAS2.isObject(def) && typeof def.maxProperties?.value === 'number') {
     return {
       id: 'object-max-properties',
       max: {
         value: def.maxProperties.value,
-        loc: AST.range(def.maxProperties),
+        loc: range(def.maxProperties),
       },
       loc: def.propRange('maxProperties')!,
     };
@@ -1172,8 +1184,8 @@ const objectAdditionalPropertiesFactory: ObjectValidationRuleFactory = (
   def,
 ) => {
   if (
-    AST.isObject(def) &&
-    AST.isLiteral(def.additionalProperties) &&
+    OAS2.isObject(def) &&
+    OAS2.isLiteral(def.additionalProperties) &&
     def.additionalProperties.value === false
   ) {
     return {
@@ -1206,7 +1218,7 @@ const objectFactories = [
   objectAdditionalPropertiesFactory,
 ];
 
-function isBodyParameter(obj: any): obj is AST.BodyParameterNode {
+function isBodyParameter(obj: any): obj is OAS2.BodyParameterNode {
   return typeof obj['in']?.value === 'string' && obj.in.value === 'body';
 }
 
@@ -1230,10 +1242,10 @@ function safeConcat<T>(
 }
 
 function literal<T extends string | number | boolean | null>(
-  node: AST.LiteralNode<T>,
+  node: OAS2.LiteralNode<T>,
 ): Literal<T> {
   return {
     value: node.value,
-    loc: AST.range(node),
+    loc: range(node),
   };
 }

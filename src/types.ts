@@ -1,28 +1,25 @@
-import { encodeRange, Range } from 'basketry';
-import * as parse from 'json-to-ast';
+import { encodeRange } from 'basketry';
+import * as AST from './ast';
+import { DocumentNode, LiteralNode } from './document';
 
-export function range(node: RawNode | JsonNode): string {
-  const loc = node.loc!;
+export { DocumentNode, LiteralNode };
 
-  return encodeRange(loc);
-}
-
-export function refRange(root: parse.ASTNode, ref: string): string {
+export function refRange(root: AST.ASTNode, ref: string): string {
   if (!ref.startsWith('#')) throw new Error(`Cannot resolve ref '${ref}'`);
 
-  let node: parse.ASTNode = root;
+  let node: AST.ASTNode = root;
 
-  let result: string = range(node);
+  let result: string = encodeRange(node.loc);
 
   for (const segment of ref.split('/')) {
     if (segment === '#') {
       node = root;
     } else {
-      if (isObjectNode(node)) {
+      if (node.isObject()) {
         const child = node.children.find((n) => n.key.value === segment);
         if (!child) throw new Error(`Cannot resolve ref '${ref}'`);
         node = child.value;
-        result = range(child.key);
+        result = encodeRange(child.key.loc);
       } else {
         throw new Error(`Cannot resolve ref '${ref}'`);
       }
@@ -32,16 +29,16 @@ export function refRange(root: parse.ASTNode, ref: string): string {
   return result;
 }
 
-export function resolveRef(root: parse.ASTNode, ref: string): parse.ASTNode {
+export function resolveRef(root: AST.ASTNode, ref: string): AST.ASTNode {
   if (!ref.startsWith('#')) throw new Error(`Cannot resolve ref '${ref}'`);
 
-  let result: parse.ASTNode = root;
+  let result: AST.ASTNode = root;
 
   for (const segment of ref.split('/')) {
     if (segment === '#') {
       result = root;
     } else {
-      if (isObjectNode(result)) {
+      if (result.isObject()) {
         const child = result.children.find((n) => n.key.value === segment);
         if (!child) throw new Error(`Cannot resolve ref '${ref}'`);
         result = child.value;
@@ -54,12 +51,10 @@ export function resolveRef(root: parse.ASTNode, ref: string): parse.ASTNode {
   return result;
 }
 
-export type RawNode = parse.ASTNode;
-
-export function resolve<T extends JsonNode>(
-  root: parse.ASTNode,
+export function resolve<T extends DocumentNode>(
+  root: AST.ASTNode,
   itemOrRef: T | RefNode,
-  Node: new (n: parse.ASTNode) => T,
+  Node: new (n: AST.ASTNode) => T,
 ): T {
   return isRefNode(itemOrRef)
     ? new Node(resolveRef(root, itemOrRef.$ref.value))
@@ -74,21 +69,21 @@ export type ParameterNode =
   | ArrayParameterNode;
 
 export function resolveParam(
-  root: parse.ASTNode,
+  root: AST.ASTNode,
   paramOrRef: RefNode | ParameterNode,
 ): ParameterNode | undefined {
   if (!isRefNode(paramOrRef)) return paramOrRef;
 
   const node = resolveRef(root, paramOrRef.$ref.value);
-  if (!isObjectNode(node)) return;
+  if (!node.isObject()) return;
 
   const inNode = node.children.find((n) => n.key.value === 'in')?.value;
-  if (!isLiteralNode(inNode)) return;
+  if (!inNode?.isLiteral()) return;
 
   if (inNode.value === 'body') return new BodyParameterNode(node);
 
   const typeNode = node.children.find((n) => n.key.value === 'type')?.value;
-  if (!isLiteralNode(typeNode)) return;
+  if (!typeNode?.isLiteral()) return;
   switch (typeNode.value) {
     case 'string':
       return new StringParameterNode(node);
@@ -113,16 +108,16 @@ export type JsonSchemaNode =
   | ObjectSchemaNode;
 
 export function resolveSchema(
-  root: parse.ASTNode,
+  root: AST.ASTNode,
   paramOrRef: RefNode | JsonSchemaNode,
 ): JsonSchemaNode | undefined {
   if (!isRefNode(paramOrRef)) return paramOrRef;
 
   const node = resolveRef(root, paramOrRef.$ref.value);
-  if (!isObjectNode(node)) return;
+  if (!node.isObject()) return;
 
   const typeNode = node.children.find((n) => n.key.value === 'type')?.value;
-  if (!isLiteralNode(typeNode)) return;
+  if (!typeNode?.isLiteral()) return;
 
   switch (typeNode.value) {
     case 'string':
@@ -144,113 +139,39 @@ export function resolveSchema(
 }
 
 export function resolveParamOrSchema(
-  root: parse.ASTNode,
+  root: AST.ASTNode,
   itemOrRef: RefNode | ParameterNode | JsonSchemaNode,
 ): ParameterNode | JsonSchemaNode | undefined {
   if (!isRefNode(itemOrRef)) return itemOrRef;
 
   const node = resolveRef(root, itemOrRef.$ref.value);
-  if (!isObjectNode(node)) return;
+  if (!node.isObject()) return;
 
   const inNode = node.children.find((n) => n.key.value === 'in')?.value;
-  if (isLiteralNode(inNode)) {
+  if (inNode?.isLiteral()) {
     return resolveParam(root, itemOrRef);
   } else {
     return resolveSchema(root, itemOrRef);
   }
 }
 
-export function toJson(node: parse.ASTNode | undefined) {
+export function toJson(node: AST.ASTNode | undefined) {
   if (node === undefined) return undefined;
-  if (isLiteralNode(node)) {
+  if (node.isLiteral()) {
     return node.value;
-  } else if (isObjectNode(node)) {
+  } else if (node.isObject()) {
     return node.children.reduce(
       (acc, child) => ({ ...acc, [child.key.value]: toJson(child.value) }),
       {},
     );
-  } else if (isArrayNode(node)) {
+  } else if (node.isArray()) {
     return node.children.map((child) => toJson(child));
   }
 }
 
-export abstract class JsonNode {
-  constructor(readonly node: parse.ASTNode) {}
-
-  abstract readonly nodeType: string;
-
-  get loc(): parse.Location {
-    return this.node.loc!;
-  }
-
-  get keys(): string[] {
-    return isObjectNode(this.node)
-      ? this.node.children.map((n) => n.key.value)
-      : [];
-  }
-
-  toJson() {
-    return toJson(this.node);
-  }
-
-  prop(key: string): parse.ValueNode | undefined {
-    if (isObjectNode(this.node)) {
-      return this.node.children.find((c) => c.key.value === key)?.value;
-    } else {
-      return undefined;
-    }
-  }
-
-  keyRange(key: string): string | undefined {
-    const prop = this.getProperty(key);
-    if (!prop) return;
-
-    return range(prop.key);
-  }
-
-  propRange(key: string): string | undefined {
-    const prop = this.getProperty(key);
-    if (!prop) return;
-
-    return range(prop);
-  }
-
-  protected getChild<T extends JsonNode>(
-    key: string,
-    Node: new (n: parse.ASTNode) => T,
-  ): T | undefined {
-    const prop = this.getProperty(key);
-    return prop?.value ? new Node(prop.value) : undefined;
-  }
-
-  protected getArray<T extends JsonNode>(
-    key: string,
-    Node: new (n: parse.ASTNode) => T,
-  ): T[] | undefined {
-    const array = this.getProperty(key)?.value;
-
-    return isArrayNode(array)
-      ? array.children.map((n) => new Node(n))
-      : undefined;
-  }
-
-  protected getProperty(key: string) {
-    if (isObjectNode(this.node)) {
-      return this.node.children.find((n) => n.key.value === key);
-    }
-    return;
-  }
-
-  protected getLiteral<T extends string | number | boolean | null>(
-    key: string,
-  ): LiteralNode<T> | undefined {
-    return this.getChild(key, LiteralNode) as LiteralNode<T> | undefined;
-  }
-}
-
-export class SchemaNode extends JsonNode {
+export class SchemaNode extends DocumentNode {
   public readonly nodeType = 'Schema';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -290,14 +211,6 @@ export class SchemaNode extends JsonNode {
     return this.getChild('definitions', DefinitionsNode);
   }
 
-  // get parameters() {
-  //   return this.getChild('parameters');
-  // }
-
-  // get responses() {
-  //   return this.getChild('responses');
-  // }
-
   get securityDefinitions() {
     return this.getChild('securityDefinitions', SecurityDefinitionsNode);
   }
@@ -315,9 +228,9 @@ export class SchemaNode extends JsonNode {
   }
 }
 
-export class TagNode extends JsonNode {
+export class TagNode extends DocumentNode {
   public readonly nodeType = 'Tag';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -334,19 +247,19 @@ export class TagNode extends JsonNode {
   }
 }
 
-export class DefinitionsNode extends JsonNode {
+export class DefinitionsNode extends DocumentNode {
   public readonly nodeType = 'Definitions';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
   read(key: string): JsonSchemaNode | undefined {
     const value = this.getProperty(key)?.value;
-    if (!isObjectNode(value)) return;
+    if (!value?.isObject()) return;
 
     const typeNode = value.children.find((n) => n.key.value === 'type')?.value;
 
-    if (isLiteralNode(typeNode)) {
+    if (typeNode?.isLiteral()) {
       switch (typeNode.value) {
         case 'string':
           return new StringSchemaNode(value);
@@ -368,9 +281,9 @@ export class DefinitionsNode extends JsonNode {
   }
 }
 
-export class PathsNode extends JsonNode {
+export class PathsNode extends DocumentNode {
   public readonly nodeType = 'Paths';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -379,9 +292,9 @@ export class PathsNode extends JsonNode {
   }
 }
 
-export class InfoNode extends JsonNode {
+export class InfoNode extends DocumentNode {
   public readonly nodeType = 'Info';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -410,9 +323,9 @@ export class InfoNode extends JsonNode {
   }
 }
 
-export class ContactNode extends JsonNode {
+export class ContactNode extends DocumentNode {
   public readonly nodeType = 'Contact';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -429,9 +342,9 @@ export class ContactNode extends JsonNode {
   }
 }
 
-export class LicenseNode extends JsonNode {
+export class LicenseNode extends DocumentNode {
   public readonly nodeType = 'License';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -444,9 +357,9 @@ export class LicenseNode extends JsonNode {
   }
 }
 
-export class PathItemNode extends JsonNode {
+export class PathItemNode extends DocumentNode {
   public readonly nodeType = 'PathItem';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -482,13 +395,13 @@ export class PathItemNode extends JsonNode {
     const array = this.getProperty('parameters')?.value;
     if (!array) return;
 
-    if (!isArrayNode(array)) throw new Error('Value is not an array');
+    if (!array.isArray()) throw new Error('Value is not an array');
 
     return array.children.map((value) => {
       if (isRef(value)) return new RefNode(value);
-      if (isObjectNode(value)) {
+      if (value?.isObject()) {
         const inNode = value.children.find((n) => n.key.value === 'in')?.value;
-        if (isLiteralNode(inNode)) {
+        if (inNode?.isLiteral()) {
           switch (inNode.value) {
             case 'body':
               return new BodyParameterNode(value);
@@ -499,7 +412,7 @@ export class PathItemNode extends JsonNode {
               const typeNode = value.children.find(
                 (n) => n.key.value === 'type',
               )?.value;
-              if (isLiteralNode(typeNode)) {
+              if (typeNode?.isLiteral()) {
                 switch (typeNode.value) {
                   case 'string':
                     return new StringParameterNode(value);
@@ -522,9 +435,9 @@ export class PathItemNode extends JsonNode {
   }
 }
 
-export class BodyParameterNode extends JsonNode {
+export class BodyParameterNode extends DocumentNode {
   public readonly nodeType = 'BodyParameter';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -549,11 +462,11 @@ export class BodyParameterNode extends JsonNode {
 
     if (isRef(value)) return new RefNode(value!);
 
-    if (isObjectNode(value)) {
+    if (value?.isObject()) {
       const typeNode = value.children.find(
         (n) => n.key.value === 'type',
       )?.value;
-      if (isLiteralNode(typeNode)) {
+      if (typeNode?.isLiteral()) {
         switch (typeNode.value) {
           case 'string':
             return new StringSchemaNode(value);
@@ -576,8 +489,8 @@ export class BodyParameterNode extends JsonNode {
   }
 }
 
-export abstract class NonBodyParameterNode extends JsonNode {
-  constructor(node: parse.ASTNode) {
+export abstract class NonBodyParameterNode extends DocumentNode {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -608,9 +521,9 @@ export abstract class NonBodyParameterNode extends JsonNode {
   }
 }
 
-export class OperationNode extends JsonNode {
+export class OperationNode extends DocumentNode {
   public readonly nodeType = 'Operation';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -646,16 +559,16 @@ export class OperationNode extends JsonNode {
     const array = this.getProperty('parameters')?.value;
     if (!array) return;
 
-    if (!isArrayNode(array)) throw new Error('Value is not an array');
+    if (!array.isArray()) throw new Error('Value is not an array');
 
     return array.children
       .map((value) => {
         if (isRef(value)) return new RefNode(value);
-        if (isObjectNode(value)) {
+        if (value?.isObject()) {
           const inNode = value.children.find(
             (n) => n.key.value === 'in',
           )?.value;
-          if (isLiteralNode(inNode)) {
+          if (inNode?.isLiteral()) {
             switch (inNode.value) {
               case 'body':
                 return new BodyParameterNode(value);
@@ -666,7 +579,7 @@ export class OperationNode extends JsonNode {
                 const typeNode = value.children.find(
                   (n) => n.key.value === 'type',
                 )?.value;
-                if (isLiteralNode(typeNode)) {
+                if (typeNode?.isLiteral()) {
                   switch (typeNode.value) {
                     case 'string':
                       return new StringParameterNode(value);
@@ -708,9 +621,9 @@ export class OperationNode extends JsonNode {
   }
 }
 
-export class SecurityRequirementNode extends JsonNode {
+export class SecurityRequirementNode extends DocumentNode {
   public readonly nodeType = 'SecurityRequirement';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -719,9 +632,9 @@ export class SecurityRequirementNode extends JsonNode {
   }
 }
 
-export class SecurityDefinitionsNode extends JsonNode {
+export class SecurityDefinitionsNode extends DocumentNode {
   public readonly nodeType = 'SecurityDefinitions';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -733,10 +646,10 @@ export class SecurityDefinitionsNode extends JsonNode {
     | OAuth2SecuritySchemeNode
     | undefined {
     const child = this.getProperty(key)?.value;
-    if (!isObjectNode(child)) return;
+    if (!child?.isObject()) return;
     const typeNode = child.children.find((n) => n.key.value === 'type')?.value;
 
-    if (!isLiteralNode(typeNode)) return;
+    if (!typeNode?.isLiteral()) return;
 
     switch (typeNode.value) {
       case 'basic':
@@ -756,9 +669,9 @@ export type SecuritySchemeNode =
   | ApiKeySecuritySchemeNode
   | OAuth2SecuritySchemeNode;
 
-export class BasicSecuritySchemeNode extends JsonNode {
+export class BasicSecuritySchemeNode extends DocumentNode {
   public readonly nodeType = 'BasicSecurityScheme';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -771,9 +684,9 @@ export class BasicSecuritySchemeNode extends JsonNode {
   }
 }
 
-export class ApiKeySecuritySchemeNode extends JsonNode {
+export class ApiKeySecuritySchemeNode extends DocumentNode {
   public readonly nodeType = 'ApiKeySecurityScheme';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -794,9 +707,9 @@ export class ApiKeySecuritySchemeNode extends JsonNode {
   }
 }
 
-export class OAuth2SecuritySchemeNode extends JsonNode {
+export class OAuth2SecuritySchemeNode extends DocumentNode {
   public readonly nodeType = 'OAuth2SecurityScheme';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -827,34 +740,34 @@ export class OAuth2SecuritySchemeNode extends JsonNode {
   }
 }
 
-export class ScopesNode extends JsonNode {
+export class ScopesNode extends DocumentNode {
   public readonly nodeType = 'Scopes';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
   read(key: string): LiteralNode<string> | undefined {
     const child = this.getProperty(key)?.value;
-    return isLiteralNode(child) ? new LiteralNode<string>(child) : undefined;
+    return child?.isLiteral() ? new LiteralNode<string>(child) : undefined;
   }
 }
 
-export class ResponseDefinitionsNode extends JsonNode {
+export class ResponseDefinitionsNode extends DocumentNode {
   public readonly nodeType = 'ResponseDefinitions';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
   read(key: string): ResponseNode | RefNode | undefined {
     const child = this.getProperty(key)?.value;
-    if (!isObjectNode(child)) return;
+    if (!child?.isObject()) return;
     return isRef(child) ? new RefNode(child) : new ResponseNode(child);
   }
 }
 
-export class ResponseNode extends JsonNode {
+export class ResponseNode extends DocumentNode {
   public readonly nodeType = 'Response';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -868,11 +781,11 @@ export class ResponseNode extends JsonNode {
 
     if (isRef(value)) return new RefNode(value!);
 
-    if (isObjectNode(value)) {
+    if (value?.isObject()) {
       const typeNode = value.children.find(
         (n) => n.key.value === 'type',
       )?.value;
-      if (isLiteralNode(typeNode)) {
+      if (typeNode?.isLiteral()) {
         switch (typeNode.value) {
           case 'string':
             return new StringSchemaNode(value);
@@ -899,9 +812,9 @@ export class ResponseNode extends JsonNode {
   }
 }
 
-export class HeadersNode extends JsonNode {
+export class HeadersNode extends DocumentNode {
   public readonly nodeType = 'Headers';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -910,9 +823,9 @@ export class HeadersNode extends JsonNode {
   }
 }
 
-export class HeaderNode extends JsonNode {
+export class HeaderNode extends DocumentNode {
   public readonly nodeType = 'Header';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -927,7 +840,7 @@ export class HeaderNode extends JsonNode {
 
 export class StringParameterNode extends NonBodyParameterNode {
   public readonly nodeType = 'StringParameter';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -956,9 +869,9 @@ export class StringParameterNode extends NonBodyParameterNode {
   }
 }
 
-export class StringSchemaNode extends JsonNode {
+export class StringSchemaNode extends DocumentNode {
   public readonly nodeType = 'StringSchema';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -993,7 +906,7 @@ export class StringSchemaNode extends JsonNode {
 
 export class NumberParameterNode extends NonBodyParameterNode {
   public readonly nodeType = 'NumberParameter';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -1026,9 +939,9 @@ export class NumberParameterNode extends NonBodyParameterNode {
   }
 }
 
-export class NumberSchemaNode extends JsonNode {
+export class NumberSchemaNode extends DocumentNode {
   public readonly nodeType = 'NumberSchema';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -1067,7 +980,7 @@ export class NumberSchemaNode extends JsonNode {
 
 export class BooleanParameterNode extends NonBodyParameterNode {
   public readonly nodeType = 'BooleanParameter';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -1076,9 +989,9 @@ export class BooleanParameterNode extends NonBodyParameterNode {
   }
 }
 
-export class BooleanSchemaNode extends JsonNode {
+export class BooleanSchemaNode extends DocumentNode {
   public readonly nodeType = 'BooleanSchema';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -1091,9 +1004,9 @@ export class BooleanSchemaNode extends JsonNode {
   }
 }
 
-export class NullSchemaNode extends JsonNode {
+export class NullSchemaNode extends DocumentNode {
   public readonly nodeType = 'NullSchema';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -1108,7 +1021,7 @@ export class NullSchemaNode extends JsonNode {
 
 export class ArrayParameterNode extends NonBodyParameterNode {
   public readonly nodeType = 'ArrayParameter';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -1121,11 +1034,11 @@ export class ArrayParameterNode extends NonBodyParameterNode {
 
     if (isRef(value)) return new RefNode(value!);
 
-    if (isObjectNode(value)) {
+    if (value?.isObject()) {
       const typeNode = value.children.find(
         (n) => n.key.value === 'type',
       )?.value;
-      if (isLiteralNode(typeNode)) {
+      if (typeNode?.isLiteral()) {
         switch (typeNode.value) {
           case 'string':
             return new StringSchemaNode(value);
@@ -1160,9 +1073,9 @@ export class ArrayParameterNode extends NonBodyParameterNode {
   }
 }
 
-export class ArraySchemaNode extends JsonNode {
+export class ArraySchemaNode extends DocumentNode {
   public readonly nodeType = 'ArraySchema';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -1179,11 +1092,11 @@ export class ArraySchemaNode extends JsonNode {
 
     if (isRef(value)) return new RefNode(value!);
 
-    if (isObjectNode(value)) {
+    if (value?.isObject()) {
       const typeNode = value.children.find(
         (n) => n.key.value === 'type',
       )?.value;
-      if (isLiteralNode(typeNode)) {
+      if (typeNode?.isLiteral()) {
         switch (typeNode.value) {
           case 'string':
             return new StringSchemaNode(value);
@@ -1218,9 +1131,9 @@ export class ArraySchemaNode extends JsonNode {
   }
 }
 
-export class ObjectSchemaNode extends JsonNode {
+export class ObjectSchemaNode extends DocumentNode {
   public readonly nodeType = 'ObjectSchema';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -1242,7 +1155,7 @@ export class ObjectSchemaNode extends JsonNode {
 
   get allOf() {
     const prop = this.getProperty('allOf')?.value;
-    if (!isArrayNode(prop)) return;
+    if (!prop?.isArray()) return;
 
     return prop.children.map((child) =>
       isRef(child) ? new RefNode(child) : new ObjectSchemaNode(child),
@@ -1259,13 +1172,13 @@ export class ObjectSchemaNode extends JsonNode {
 
   get additionalProperties() {
     const value = this.getProperty('additionalProperties')?.value;
-    if (isLiteralNode(value)) {
+    if (value?.isLiteral()) {
       return this.getLiteral<boolean>('additionalProperties');
-    } else if (isObjectNode(value)) {
+    } else if (value?.isObject()) {
       const typeNode = value.children.find(
         (n) => n.key.value === 'type',
       )?.value;
-      if (isLiteralNode(typeNode)) {
+      if (typeNode?.isLiteral()) {
         switch (typeNode.value) {
           case 'string':
             return new StringSchemaNode(value);
@@ -1287,9 +1200,9 @@ export class ObjectSchemaNode extends JsonNode {
   }
 }
 
-export class PropertiesNode extends JsonNode {
+export class PropertiesNode extends DocumentNode {
   public readonly nodeType = 'Properties';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -1298,11 +1211,11 @@ export class PropertiesNode extends JsonNode {
 
     if (isRef(value) && value) return new RefNode(value);
 
-    if (!isObjectNode(value)) return;
+    if (!value?.isObject()) return;
 
     const typeNode = value.children.find((n) => n.key.value === 'type')?.value;
 
-    if (isLiteralNode(typeNode)) {
+    if (typeNode?.isLiteral()) {
       switch (typeNode.value) {
         case 'string':
           return new StringSchemaNode(value);
@@ -1324,9 +1237,9 @@ export class PropertiesNode extends JsonNode {
   }
 }
 
-export class ExternalDocumentationNode extends JsonNode {
+export class ExternalDocumentationNode extends DocumentNode {
   public readonly nodeType = 'ExternalDocumentation';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -1339,9 +1252,9 @@ export class ExternalDocumentationNode extends JsonNode {
   }
 }
 
-export class RefNode extends JsonNode {
+export class RefNode extends DocumentNode {
   public readonly nodeType = 'Ref';
-  constructor(node: parse.ASTNode) {
+  constructor(node: AST.ASTNode) {
     super(node);
   }
 
@@ -1350,24 +1263,7 @@ export class RefNode extends JsonNode {
   }
 }
 
-export class LiteralNode<
-  T extends string | number | boolean | null,
-> extends JsonNode {
-  public readonly nodeType = 'Literal';
-  constructor(node: parse.ASTNode) {
-    super(node);
-  }
-
-  get value(): T {
-    if (isLiteralNode(this.node) || isIdentifierNode(this.node)) {
-      return this.node.value as T;
-    }
-    console.log(this.node);
-    throw new Error('Cannot parse literal');
-  }
-}
-
-export function isRefNode(node: JsonNode): node is RefNode {
+export function isRefNode(node: DocumentNode): node is RefNode {
   return node.nodeType === 'Ref';
 }
 
@@ -1400,35 +1296,13 @@ export function isObject(
 }
 
 export function isLiteral<T extends string | number | boolean | null>(
-  item: JsonNode | undefined,
+  item: DocumentNode | undefined,
 ): item is LiteralNode<T> {
   return item?.nodeType === 'Literal';
 }
 
-function isRef(node: parse.ASTNode | undefined): boolean {
-  return (
-    isObjectNode(node) && node.children.some((n) => n.key.value === '$ref')
+function isRef(node: AST.ASTNode | undefined): boolean {
+  return !!(
+    node?.isObject() && node.children.some((n) => n.key.value === '$ref')
   );
-}
-
-function isLiteralNode(
-  node: parse.ASTNode | undefined,
-): node is parse.LiteralNode {
-  return node?.type === 'Literal';
-}
-
-function isIdentifierNode(
-  node: parse.ASTNode | undefined,
-): node is parse.IdentifierNode {
-  return node?.type === 'Identifier';
-}
-
-export function isObjectNode(
-  node: parse.ASTNode | undefined,
-): node is parse.ObjectNode {
-  return node?.type === 'Object';
-}
-
-function isArrayNode(node: parse.ASTNode | undefined): node is parse.ArrayNode {
-  return node?.type === 'Array';
 }
