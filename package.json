@@ -50,6 +50,7 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
+    "@basketry/ast": "^0.0.1",
     "basketry": "^0.0.32",
     "case": "^1.6.3",
     "json-to-ast": "^2.1.0",
