@@ -1,6 +1,5 @@
 import { encodeRange } from 'basketry';
-import * as AST from './ast';
-import { DocumentNode, LiteralNode } from './document';
+import { AST, DocumentNode, LiteralNode } from '@basketry/ast';
 
 export { DocumentNode, LiteralNode };
 

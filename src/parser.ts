@@ -2,8 +2,7 @@ import { major } from 'semver';
 import { singular } from 'pluralize';
 import { camel, pascal } from 'case';
 
-import { range, DocumentNode } from './document';
-import * as AST from './ast';
+import { AST, DocumentNode, parse } from '@basketry/ast';
 import * as OAS2 from './types';
 
 import {
@@ -28,16 +27,14 @@ import {
   encodeRange,
 } from 'basketry';
 import { relative } from 'path';
-import { parse as parseJson } from './json';
-import { parse as parseYaml } from './yaml';
+
+function range(node: AST.ASTNode | DocumentNode): string {
+  return encodeRange(node.loc);
+}
 
 export class OAS2Parser {
   constructor(schema: string, private readonly sourcePath: string) {
-    if (schema.trimStart().startsWith('{')) {
-      this.schema = new OAS2.SchemaNode(parseJson(schema));
-    } else {
-      this.schema = new OAS2.SchemaNode(parseYaml(schema));
-    }
+    this.schema = new OAS2.SchemaNode(parse(schema));
   }
 
   private readonly schema: OAS2.SchemaNode;
