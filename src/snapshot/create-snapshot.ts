@@ -31,7 +31,7 @@ writeFileSync(
   stringify(petstore),
 );
 
-function stringify(obj: any): string {
+export function stringify(obj: any): string {
   return format(
     JSON.stringify(obj, (key, value) => (key === 'loc' ? undefined : value)),
     {
