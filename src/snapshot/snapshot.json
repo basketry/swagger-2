@@ -70,6 +70,7 @@
             }
           ],
           "description": { "value": "Only has a summary" },
+          "deprecated": { "value": true },
           "returnType": {
             "kind": "ReturnType",
             "typeName": { "value": "gizmosResponse" },
@@ -110,6 +111,7 @@
               "name": { "value": "size" },
               "description": { "value": "Anonymous enum" },
               "typeName": { "value": "createGizmoSize" },
+              "deprecated": { "value": true },
               "isPrimitive": false,
               "isArray": false,
               "rules": [
@@ -1326,6 +1328,7 @@
     {
       "kind": "Type",
       "name": { "value": "widget" },
+      "deprecated": { "value": true },
       "properties": [
         {
           "kind": "Property",
@@ -1345,6 +1348,7 @@
         {
           "kind": "Property",
           "name": { "value": "name" },
+          "deprecated": { "value": true },
           "typeName": { "value": "string" },
           "isPrimitive": true,
           "isArray": false,
@@ -1447,6 +1451,7 @@
         {
           "kind": "Property",
           "name": { "value": "name" },
+          "deprecated": { "value": true },
           "typeName": { "value": "string" },
           "isPrimitive": true,
           "isArray": false,

@@ -847,6 +847,10 @@ export class StringParameterNode extends NonBodyParameterNode {
     return this.getLiteral<'string'>('type')!;
   }
 
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
   get default() {
     return this.getLiteral<string>('default');
   }
@@ -886,6 +890,10 @@ export class StringSchemaNode extends DocumentNode {
     return this.getLiteral<string>('description');
   }
 
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
   get default() {
     return this.getLiteral<string>('default');
   }
@@ -919,6 +927,10 @@ export class NumberParameterNode extends NonBodyParameterNode {
 
   get type() {
     return this.getLiteral<'integer' | 'number'>('type')!;
+  }
+
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
   }
 
   get default() {
@@ -964,6 +976,10 @@ export class NumberSchemaNode extends DocumentNode {
     return this.getLiteral<string>('description');
   }
 
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
   get default() {
     return this.getLiteral<number>('default');
   }
@@ -1003,6 +1019,10 @@ export class BooleanParameterNode extends NonBodyParameterNode {
     return this.getLiteral<'boolean'>('type')!;
   }
 
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
   get default() {
     return this.getLiteral<boolean>('default');
   }
@@ -1020,6 +1040,10 @@ export class BooleanSchemaNode extends DocumentNode {
 
   get description() {
     return this.getLiteral<string>('description');
+  }
+
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
   }
 
   get default() {
@@ -1041,6 +1065,10 @@ export class NullSchemaNode extends DocumentNode {
     return this.getLiteral<string>('description');
   }
 
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
   get default() {
     return this.getLiteral<null>('default');
   }
@@ -1054,6 +1082,10 @@ export class ArrayParameterNode extends NonBodyParameterNode {
 
   get type() {
     return this.getLiteral<'array'>('type')!;
+  }
+
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
   }
 
   get items() {
@@ -1114,6 +1146,10 @@ export class ArraySchemaNode extends DocumentNode {
     return this.getLiteral<string>('description');
   }
 
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
   get items() {
     const value = this.getProperty('items')?.value;
 
@@ -1170,6 +1206,10 @@ export class ObjectSchemaNode extends DocumentNode {
 
   get description() {
     return this.getLiteral<string>('description');
+  }
+
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
   }
 
   get required() {

@@ -86,6 +86,7 @@
   "paths": {
     "/gizmos": {
       "get": {
+        "deprecated": true,
         "summary": "Only has a summary",
         "operationId": "getGizmos",
         "parameters": [{ "$ref": "#/parameters/search" }],
@@ -104,6 +105,7 @@
         "operationId": "createGizmo",
         "parameters": [
           {
+            "deprecated": true,
             "in": "query",
             "description": "Anonymous enum",
             "name": "size",
@@ -538,6 +540,7 @@
     "widget": {
       "type": "object",
       "required": ["id"],
+      "deprecated": true,
       "allOf": [
         {
           "type": "object",
@@ -554,6 +557,7 @@
       "required": ["fiz"],
       "properties": {
         "name": {
+          "deprecated": true,
           "type": "string",
           "maxLength": 30,
           "pattern": "[0-9a-fA-F]+"
