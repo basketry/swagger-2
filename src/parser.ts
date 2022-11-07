@@ -555,6 +555,7 @@ export class OAS2Parser {
         typeName: x.typeName,
         deprecated: x.deprecated,
         default: x.default,
+        constant: x.constant,
         isPrimitive: x.isPrimitive,
         isArray: x.isArray,
         rules: this.parseRules(resolved, param.required?.value),
@@ -606,6 +607,7 @@ export class OAS2Parser {
     enumValues?: Scalar<string>[];
     rules: ValidationRule[];
     deprecated: Scalar<true> | undefined;
+    constant: Scalar<string | number | boolean> | undefined;
     loc: string;
   } & TypedValue {
     if (OAS2.isRefNode(def)) {
@@ -624,6 +626,7 @@ export class OAS2Parser {
               loc: OAS2.refRange(this.schema.node, def.$ref.value),
             },
             deprecated: undefined,
+            constant: undefined,
             isPrimitive: false,
             isArray: false,
             rules: this.parseRules(res),
@@ -648,6 +651,7 @@ export class OAS2Parser {
           return {
             typeName: name,
             deprecated: undefined,
+            constant: undefined,
             isPrimitive: false,
             isArray: false,
             rules: this.parseRules(res),
@@ -663,6 +667,7 @@ export class OAS2Parser {
             loc: OAS2.refRange(this.schema.node, def.$ref.value),
           },
           deprecated: undefined,
+          constant: undefined,
           isPrimitive: false,
           isArray: false,
           rules: this.parseRules(res),
@@ -690,6 +695,7 @@ export class OAS2Parser {
           return {
             typeName: { value: enumName },
             deprecated: dep(def.deprecated),
+            constant: con(def.const),
             isPrimitive: false,
             isArray: false,
             rules,
@@ -700,6 +706,7 @@ export class OAS2Parser {
             ...this.parseStringName(def),
             deprecated: dep(def.deprecated),
             default: scalar(def.default),
+            constant: con(def.const),
             isArray: false,
             rules,
             loc: range(def),
@@ -711,12 +718,26 @@ export class OAS2Parser {
           ...this.parseNumberName(def),
           deprecated: dep(def.deprecated),
           default: scalar(def.default),
+          constant: con(def.const),
           isArray: false,
           rules,
           loc: range(def),
         };
       case 'BooleanParameter':
       case 'BooleanSchema':
+        return {
+          typeName: {
+            value: def.type.value,
+            loc: range(def.type),
+          },
+          deprecated: dep(def.deprecated),
+          default: scalar(def.default),
+          constant: con(def.const),
+          isPrimitive: true,
+          isArray: false,
+          rules,
+          loc: range(def),
+        };
       case 'NullSchema':
         return {
           typeName: {
@@ -725,6 +746,7 @@ export class OAS2Parser {
           },
           deprecated: dep(def.deprecated),
           default: scalar(def.default),
+          constant: undefined,
           isPrimitive: true,
           isArray: false,
           rules,
@@ -738,6 +760,7 @@ export class OAS2Parser {
           return {
             typeName: items.typeName,
             deprecated: dep(def.deprecated),
+            constant: undefined,
             isPrimitive: items.isPrimitive,
             isArray: true,
             rules,
@@ -747,6 +770,7 @@ export class OAS2Parser {
           return {
             typeName: items.typeName,
             deprecated: dep(def.deprecated),
+            constant: undefined,
             isPrimitive: items.isPrimitive,
             isArray: true,
             rules,
@@ -779,6 +803,7 @@ export class OAS2Parser {
         return {
           typeName,
           deprecated: dep(def.deprecated),
+          constant: undefined,
           isPrimitive: false,
           isArray: false,
           rules,
@@ -788,6 +813,7 @@ export class OAS2Parser {
         return {
           typeName: { value: 'untyped' },
           deprecated: undefined,
+          constant: undefined,
           isPrimitive: true,
           isArray: false,
           rules,
@@ -1000,6 +1026,7 @@ export class OAS2Parser {
             deprecated: x.deprecated,
             typeName: x.typeName,
             default: x.default,
+            constant: x.constant,
             isPrimitive: x.isPrimitive,
             isArray: x.isArray,
             rules: this.parseRules(resolvedProp, requiredSet.has(name)),
@@ -1338,4 +1365,12 @@ export function dep(
   const x = scalar(node);
 
   return x?.value === true ? (x as any) : undefined;
+}
+
+export function con(
+  node: OAS2.LiteralNode<string | number | boolean> | undefined,
+): Scalar<string | number | boolean> | undefined {
+  const x = scalar(node);
+
+  return x?.value !== null ? (x as any) : undefined;
 }

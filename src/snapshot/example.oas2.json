@@ -545,7 +545,8 @@
         {
           "type": "object",
           "properties": {
-            "id": { "$ref": "#/definitions/id" }
+            "id": { "$ref": "#/definitions/id" },
+            "kind": { "type": "string", "const": "Widget" }
           }
         },
         { "$ref": "#/definitions/newWidget" }

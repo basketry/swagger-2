@@ -1347,6 +1347,15 @@
         },
         {
           "kind": "Property",
+          "name": { "value": "kind" },
+          "typeName": { "value": "string" },
+          "constant": { "value": "Widget" },
+          "isPrimitive": true,
+          "isArray": false,
+          "rules": []
+        },
+        {
+          "kind": "Property",
           "name": { "value": "name" },
           "deprecated": { "value": true },
           "typeName": { "value": "string" },
