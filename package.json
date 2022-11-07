@@ -1,6 +1,6 @@
 {
   "name": "@basketry/swagger-2",
-  "version": "0.0.17",
+  "version": "0.1.0-rc.1",
   "description": "Basketry parser for Swagger 2.0 service definitions",
   "main": "./lib/index.js",
   "scripts": {
@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@basketry/ast": "^0.0.1",
-    "basketry": "^0.0.32",
+    "basketry": "^0.1.0-rc.1",
     "case": "^1.6.3",
     "json-to-ast": "^2.1.0",
     "pluralize": "^8.0.0",

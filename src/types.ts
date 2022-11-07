@@ -847,6 +847,18 @@ export class StringParameterNode extends NonBodyParameterNode {
     return this.getLiteral<'string'>('type')!;
   }
 
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
+  get default() {
+    return this.getLiteral<string>('default');
+  }
+
+  get const() {
+    return this.getLiteral<string>('const');
+  }
+
   get minLength() {
     return this.getLiteral<number>('minLength');
   }
@@ -882,6 +894,18 @@ export class StringSchemaNode extends DocumentNode {
     return this.getLiteral<string>('description');
   }
 
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
+  get default() {
+    return this.getLiteral<string>('default');
+  }
+
+  get const() {
+    return this.getLiteral<string>('const');
+  }
+
   get minLength() {
     return this.getLiteral<number>('minLength');
   }
@@ -911,6 +935,18 @@ export class NumberParameterNode extends NonBodyParameterNode {
 
   get type() {
     return this.getLiteral<'integer' | 'number'>('type')!;
+  }
+
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
+  get default() {
+    return this.getLiteral<number>('default');
+  }
+
+  get const() {
+    return this.getLiteral<number>('const');
   }
 
   get multipleOf() {
@@ -952,6 +988,18 @@ export class NumberSchemaNode extends DocumentNode {
     return this.getLiteral<string>('description');
   }
 
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
+  get const() {
+    return this.getLiteral<number>('const');
+  }
+
+  get default() {
+    return this.getLiteral<number>('default');
+  }
+
   get multipleOf() {
     return this.getLiteral<number>('multipleOf');
   }
@@ -986,6 +1034,18 @@ export class BooleanParameterNode extends NonBodyParameterNode {
   get type() {
     return this.getLiteral<'boolean'>('type')!;
   }
+
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
+  get default() {
+    return this.getLiteral<boolean>('default');
+  }
+
+  get const() {
+    return this.getLiteral<boolean>('const');
+  }
 }
 
 export class BooleanSchemaNode extends DocumentNode {
@@ -1000,6 +1060,18 @@ export class BooleanSchemaNode extends DocumentNode {
 
   get description() {
     return this.getLiteral<string>('description');
+  }
+
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
+  get default() {
+    return this.getLiteral<boolean>('default');
+  }
+
+  get const() {
+    return this.getLiteral<boolean>('const');
   }
 }
 
@@ -1016,6 +1088,14 @@ export class NullSchemaNode extends DocumentNode {
   get description() {
     return this.getLiteral<string>('description');
   }
+
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
+  get default() {
+    return this.getLiteral<null>('default');
+  }
 }
 
 export class ArrayParameterNode extends NonBodyParameterNode {
@@ -1026,6 +1106,10 @@ export class ArrayParameterNode extends NonBodyParameterNode {
 
   get type() {
     return this.getLiteral<'array'>('type')!;
+  }
+
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
   }
 
   get items() {
@@ -1086,6 +1170,10 @@ export class ArraySchemaNode extends DocumentNode {
     return this.getLiteral<string>('description');
   }
 
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
+  }
+
   get items() {
     const value = this.getProperty('items')?.value;
 
@@ -1142,6 +1230,10 @@ export class ObjectSchemaNode extends DocumentNode {
 
   get description() {
     return this.getLiteral<string>('description');
+  }
+
+  get deprecated() {
+    return this.getLiteral<boolean>('deprecated');
   }
 
   get required() {

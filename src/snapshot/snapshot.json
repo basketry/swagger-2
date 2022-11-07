@@ -1,1687 +1,1277 @@
 {
-  "basketry": "1",
+  "kind": "Service",
+  "basketry": "1.1-rc",
   "sourcePath": "src/snapshot/example.oas2.json",
-  "title": { "value": "BasketryExample", "loc": "12;14;32;318;336" },
-  "majorVersion": { "value": 1, "loc": "11;16;27;292;303" },
+  "title": { "value": "BasketryExample" },
+  "majorVersion": { "value": 1 },
   "interfaces": [
     {
-      "name": "gizmo",
+      "kind": "Interface",
+      "name": { "value": "gizmo" },
       "methods": [
         {
-          "name": { "value": "getGizmos", "loc": "89;24;35;2056;2067" },
+          "kind": "Method",
+          "name": { "value": "getGizmos" },
           "security": [
             [
               {
-                "type": { "value": "oauth2", "loc": "70;15;23;1636;1644" },
-                "name": { "value": "oauth2Auth", "loc": "69;5;17;1606;1618" },
+                "kind": "OAuth2Scheme",
+                "type": { "value": "oauth2" },
+                "name": { "value": "oauth2Auth" },
                 "flows": [
                   {
-                    "type": {
-                      "value": "implicit",
-                      "loc": "71;15;25;1660;1670"
-                    },
-                    "authorizationUrl": {
-                      "value": "https://example.com/auth",
-                      "loc": "72;27;53;1698;1724"
-                    },
+                    "kind": "OAuth2ImplicitFlow",
+                    "type": { "value": "implicit" },
+                    "authorizationUrl": { "value": "https://example.com/auth" },
                     "scopes": [
                       {
-                        "name": {
-                          "value": "read:gizmos",
-                          "loc": "96;28;41;2277;2290"
-                        },
-                        "description": {
-                          "value": "Access gizmo data",
-                          "loc": "74;24;43;1767;1786"
-                        },
-                        "loc": "74;9;43;1752;1786"
+                        "kind": "OAuth2Scope",
+                        "name": { "value": "read:gizmos" },
+                        "description": { "value": "Access gizmo data" }
                       }
-                    ],
-                    "loc": "69;5;78;6;1606;1885"
+                    ]
                   }
-                ],
-                "loc": "69;5;78;6;1606;1885"
+                ]
               }
             ]
           ],
           "parameters": [
             {
-              "name": { "value": "search", "loc": "22;15;23;571;579" },
-              "typeName": { "value": "string", "loc": "24;15;23;616;624" },
+              "kind": "Parameter",
+              "name": { "value": "search" },
+              "typeName": { "value": "string" },
+              "default": { "value": "QWERTY" },
               "isPrimitive": true,
               "isArray": false,
               "rules": [],
-              "loc": "21;15;31;6;555;823",
               "meta": [
                 {
-                  "key": { "value": "metaString", "loc": "25;7;21;632;646" },
-                  "value": { "value": "bar", "loc": "25;23;28;648;653" }
+                  "key": { "value": "metaString" },
+                  "value": { "value": "bar" }
                 },
                 {
-                  "key": { "value": "metaNumber", "loc": "26;7;21;661;675" },
-                  "value": { "value": 1234, "loc": "26;23;27;677;681" }
+                  "key": { "value": "metaNumber" },
+                  "value": { "value": 1234 }
                 },
                 {
-                  "key": { "value": "metaBoolean", "loc": "27;7;22;689;704" },
-                  "value": { "value": true, "loc": "27;24;28;706;710" }
+                  "key": { "value": "metaBoolean" },
+                  "value": { "value": true }
+                },
+                { "key": { "value": "metaNull" }, "value": { "value": null } },
+                {
+                  "key": { "value": "metaObject" },
+                  "value": { "value": { "foo": "bar" } }
                 },
                 {
-                  "key": { "value": "metaNull", "loc": "28;7;19;718;730" },
-                  "value": { "value": null, "loc": "28;21;25;732;736" }
-                },
-                {
-                  "key": { "value": "metaObject", "loc": "29;7;21;744;758" },
-                  "value": {
-                    "value": { "foo": "bar" },
-                    "loc": "29;23;39;760;776"
-                  }
-                },
-                {
-                  "key": { "value": "metaArray", "loc": "30;7;20;784;797" },
-                  "value": {
-                    "value": [{ "foo": "bar" }],
-                    "loc": "30;22;40;799;817"
-                  }
+                  "key": { "value": "metaArray" },
+                  "value": { "value": [{ "foo": "bar" }] }
                 }
               ]
             }
           ],
-          "description": {
-            "value": "Only has a summary",
-            "loc": "88;20;40;2011;2031"
-          },
+          "description": { "value": "Only has a summary" },
+          "deprecated": { "value": true },
           "returnType": {
+            "kind": "ReturnType",
             "typeName": { "value": "gizmosResponse" },
             "isPrimitive": false,
             "isArray": false,
-            "rules": [],
-            "loc": "40;17;49;8;1039;1254"
-          },
-          "loc": "87;7;99;8;1983;2321"
+            "rules": []
+          }
         },
         {
-          "name": { "value": "createGizmo", "loc": "103;24;37;2496;2509" },
+          "kind": "Method",
+          "name": { "value": "createGizmo" },
           "security": [
             [
               {
-                "type": { "value": "oauth2", "loc": "70;15;23;1636;1644" },
-                "name": { "value": "oauth2Auth", "loc": "69;5;17;1606;1618" },
+                "kind": "OAuth2Scheme",
+                "type": { "value": "oauth2" },
+                "name": { "value": "oauth2Auth" },
                 "flows": [
                   {
-                    "type": {
-                      "value": "implicit",
-                      "loc": "71;15;25;1660;1670"
-                    },
-                    "authorizationUrl": {
-                      "value": "https://example.com/auth",
-                      "loc": "72;27;53;1698;1724"
-                    },
+                    "kind": "OAuth2ImplicitFlow",
+                    "type": { "value": "implicit" },
+                    "authorizationUrl": { "value": "https://example.com/auth" },
                     "scopes": [
                       {
-                        "name": {
-                          "value": "write:gizmos",
-                          "loc": "118;28;42;2901;2915"
-                        },
-                        "description": {
-                          "value": "Write gizmo data",
-                          "loc": "75;25;43;1812;1830"
-                        },
-                        "loc": "75;9;43;1796;1830"
+                        "kind": "OAuth2Scope",
+                        "name": { "value": "write:gizmos" },
+                        "description": { "value": "Write gizmo data" }
                       }
-                    ],
-                    "loc": "69;5;78;6;1606;1885"
+                    ]
                   }
-                ],
-                "loc": "69;5;78;6;1606;1885"
+                ]
               }
             ]
           ],
           "parameters": [
             {
-              "name": { "value": "size", "loc": "108;21;27;2639;2645" },
-              "description": {
-                "value": "Anonymous enum",
-                "loc": "107;28;44;2601;2617"
-              },
+              "kind": "Parameter",
+              "name": { "value": "size" },
+              "description": { "value": "Anonymous enum" },
               "typeName": { "value": "createGizmoSize" },
+              "deprecated": { "value": true },
               "isPrimitive": false,
               "isArray": false,
               "rules": [
                 {
+                  "kind": "ValidationRule",
                   "id": "string-enum",
                   "values": [
-                    { "value": "small", "loc": "110;22;29;2698;2705" },
-                    { "value": "medium", "loc": "110;31;39;2707;2715" },
-                    { "value": "big", "loc": "110;41;46;2717;2722" },
-                    { "value": "XL", "loc": "110;48;52;2724;2728" }
-                  ],
-                  "loc": "110;13;53;2689;2729"
+                    { "value": "small" },
+                    { "value": "medium" },
+                    { "value": "big" },
+                    { "value": "XL" }
+                  ]
                 }
-              ],
-              "loc": "105;11;111;12;2545;2741"
+              ]
             }
           ],
           "description": [
-            {
-              "value": "Has a summary in addition to a description",
-              "loc": "101;20;64;2358;2402"
-            },
-            {
-              "value": "Has a description in addition to a summary",
-              "loc": "102;24;68;2427;2471"
-            }
+            { "value": "Has a summary in addition to a description" },
+            { "value": "Has a description in addition to a summary" }
           ],
           "returnType": {
-            "typeName": { "value": "gizmo", "loc": "525;5;12;13604;13611" },
+            "kind": "ReturnType",
+            "typeName": { "value": "gizmo" },
             "isPrimitive": false,
             "isArray": false,
-            "rules": [],
-            "loc": "525;14;532;6;13613;13814"
-          },
-          "loc": "100;7;121;8;2329;2946"
+            "rules": []
+          }
         },
         {
-          "name": { "value": "updateGizmo", "loc": "123;24;37;2986;2999" },
+          "kind": "Method",
+          "name": { "value": "updateGizmo" },
           "security": [
             [
               {
-                "type": { "value": "oauth2", "loc": "70;15;23;1636;1644" },
-                "name": { "value": "oauth2Auth", "loc": "69;5;17;1606;1618" },
+                "kind": "OAuth2Scheme",
+                "type": { "value": "oauth2" },
+                "name": { "value": "oauth2Auth" },
                 "flows": [
                   {
-                    "type": {
-                      "value": "implicit",
-                      "loc": "71;15;25;1660;1670"
-                    },
-                    "authorizationUrl": {
-                      "value": "https://example.com/auth",
-                      "loc": "72;27;53;1698;1724"
-                    },
+                    "kind": "OAuth2ImplicitFlow",
+                    "type": { "value": "implicit" },
+                    "authorizationUrl": { "value": "https://example.com/auth" },
                     "scopes": [
                       {
-                        "name": {
-                          "value": "write:gizmos",
-                          "loc": "144;28;42;3546;3560"
-                        },
-                        "description": {
-                          "value": "Write gizmo data",
-                          "loc": "75;25;43;1812;1830"
-                        },
-                        "loc": "75;9;43;1796;1830"
+                        "kind": "OAuth2Scope",
+                        "name": { "value": "write:gizmos" },
+                        "description": { "value": "Write gizmo data" }
                       },
                       {
-                        "name": {
-                          "value": "admin:gizmos",
-                          "loc": "144;44;58;3562;3576"
-                        },
-                        "description": {
-                          "value": "Manage gizmos",
-                          "loc": "76;25;40;1856;1871"
-                        },
-                        "loc": "76;9;40;1840;1871"
+                        "kind": "OAuth2Scope",
+                        "name": { "value": "admin:gizmos" },
+                        "description": { "value": "Manage gizmos" }
                       }
-                    ],
-                    "loc": "69;5;78;6;1606;1885"
+                    ]
                   }
-                ],
-                "loc": "69;5;78;6;1606;1885"
+                ]
               }
             ]
           ],
           "parameters": [
             {
-              "name": { "value": "factors", "loc": "128;21;30;3133;3142" },
-              "description": {
-                "value": "array of primitive",
-                "loc": "127;28;48;3091;3111"
-              },
-              "typeName": { "value": "string", "loc": "134;23;31;3311;3319" },
+              "kind": "Parameter",
+              "name": { "value": "factors" },
+              "description": { "value": "array of primitive" },
+              "typeName": { "value": "string" },
               "isPrimitive": true,
               "isArray": true,
               "rules": [
                 {
+                  "kind": "ValidationRule",
                   "id": "array-max-items",
-                  "max": { "value": 6, "loc": "132;25;26;3263;3264" },
-                  "loc": "132;13;26;3251;3264"
+                  "max": { "value": 6 }
                 },
                 {
+                  "kind": "ValidationRule",
                   "id": "array-min-items",
-                  "min": { "value": 2, "loc": "131;25;26;3236;3237" },
-                  "loc": "131;13;26;3224;3237"
+                  "min": { "value": 2 }
                 },
                 {
+                  "kind": "ValidationRule",
                   "id": "string-pattern",
-                  "pattern": {
-                    "value": "[0-9a-fA-F]+",
-                    "loc": "135;26;40;3346;3360"
-                  },
-                  "loc": "135;15;40;3335;3360"
+                  "pattern": { "value": "[0-9a-fA-F]+" }
                 }
-              ],
-              "loc": "125;11;137;12;3035;3386"
+              ]
             }
           ],
           "returnType": {
-            "typeName": { "value": "gizmo", "loc": "525;5;12;13604;13611" },
+            "kind": "ReturnType",
+            "typeName": { "value": "gizmo" },
             "isPrimitive": false,
             "isArray": false,
-            "rules": [],
-            "loc": "525;14;532;6;13613;13814"
-          },
-          "loc": "122;7;147;8;2954;3607"
+            "rules": []
+          }
         }
       ],
       "protocols": {
         "http": [
           {
-            "path": { "value": "/gizmos", "loc": "86;5;14;1964;1973" },
+            "kind": "HttpPath",
+            "path": { "value": "/gizmos" },
             "methods": [
               {
-                "name": { "value": "getGizmos", "loc": "89;24;35;2056;2067" },
-                "verb": { "value": "get", "loc": "87;7;12;1983;1988" },
+                "kind": "HttpMethod",
+                "name": { "value": "getGizmos" },
+                "verb": { "value": "get" },
                 "parameters": [
                   {
-                    "name": { "value": "search", "loc": "22;15;23;571;579" },
-                    "in": { "value": "query", "loc": "23;13;20;593;600" },
-                    "loc": "21;15;31;6;555;823"
+                    "kind": "HttpParameter",
+                    "name": { "value": "search" },
+                    "in": { "value": "query" }
                   }
                 ],
-                "successCode": { "value": 200, "loc": "92;11;20;2161;2170" },
-                "loc": "87;7;99;8;1983;2321"
+                "successCode": { "value": 200 }
               },
               {
-                "name": {
-                  "value": "createGizmo",
-                  "loc": "103;24;37;2496;2509"
-                },
-                "verb": { "value": "post", "loc": "100;7;13;2329;2335" },
+                "kind": "HttpMethod",
+                "name": { "value": "createGizmo" },
+                "verb": { "value": "post" },
                 "parameters": [
                   {
-                    "name": { "value": "size", "loc": "108;21;27;2639;2645" },
-                    "in": { "value": "query", "loc": "106;19;26;2565;2572" },
-                    "loc": "105;11;111;12;2545;2741"
+                    "kind": "HttpParameter",
+                    "name": { "value": "size" },
+                    "in": { "value": "query" }
                   }
                 ],
-                "successCode": { "value": 201, "loc": "114;11;20;2786;2795" },
-                "loc": "100;7;121;8;2329;2946"
+                "successCode": { "value": 201 }
               },
               {
-                "name": {
-                  "value": "updateGizmo",
-                  "loc": "123;24;37;2986;2999"
-                },
-                "verb": { "value": "put", "loc": "122;7;12;2954;2959" },
+                "kind": "HttpMethod",
+                "name": { "value": "updateGizmo" },
+                "verb": { "value": "put" },
                 "parameters": [
                   {
-                    "name": {
-                      "value": "factors",
-                      "loc": "128;21;30;3133;3142"
-                    },
-                    "in": { "value": "query", "loc": "126;19;26;3055;3062" },
-                    "array": { "value": "csv", "loc": "130;33;38;3205;3210" },
-                    "loc": "125;11;137;12;3035;3386"
+                    "kind": "HttpParameter",
+                    "name": { "value": "factors" },
+                    "in": { "value": "query" },
+                    "array": { "value": "csv" }
                   }
                 ],
-                "successCode": { "value": 200, "loc": "140;11;20;3431;3440" },
-                "loc": "122;7;147;8;2954;3607"
+                "successCode": { "value": 200 }
               }
-            ],
-            "loc": "86;5;148;6;1964;3613"
+            ]
           }
         ]
       }
     },
     {
-      "name": "widget",
+      "kind": "Interface",
+      "name": { "value": "widget" },
       "methods": [
         {
-          "name": { "value": "getWidgets", "loc": "151;24;36;3671;3683" },
+          "kind": "Method",
+          "name": { "value": "getWidgets" },
           "security": [
             [
               {
-                "type": { "value": "apiKey", "loc": "60;15;23;1434;1442" },
-                "name": { "value": "apiKeyAuth", "loc": "59;5;17;1404;1416" },
-                "parameter": {
-                  "value": "x-apikey",
-                  "loc": "62;15;25;1480;1490"
-                },
-                "in": { "value": "header", "loc": "61;13;21;1456;1464" },
-                "loc": "59;5;63;6;1404;1496"
+                "kind": "ApiKeyScheme",
+                "type": { "value": "apiKey" },
+                "name": { "value": "apiKeyAuth" },
+                "parameter": { "value": "x-apikey" },
+                "in": { "value": "header" }
               }
             ]
           ],
           "parameters": [],
           "returnType": {
-            "typeName": { "value": "widget", "loc": "537;5;13;13915;13923" },
+            "kind": "ReturnType",
+            "typeName": { "value": "widget" },
             "isPrimitive": false,
             "isArray": false,
-            "rules": [],
-            "loc": "537;15;550;6;13925;14226"
-          },
-          "loc": "150;7;158;8;3639;3893"
+            "rules": []
+          }
         },
         {
-          "name": { "value": "createWidget", "loc": "160;24;38;3934;3948" },
+          "kind": "Method",
+          "name": { "value": "createWidget" },
           "security": [
             [
               {
-                "type": { "value": "apiKey", "loc": "60;15;23;1434;1442" },
-                "name": { "value": "apiKeyAuth", "loc": "59;5;17;1404;1416" },
-                "parameter": {
-                  "value": "x-apikey",
-                  "loc": "62;15;25;1480;1490"
-                },
-                "in": { "value": "header", "loc": "61;13;21;1456;1464" },
-                "loc": "59;5;63;6;1404;1496"
+                "kind": "ApiKeyScheme",
+                "type": { "value": "apiKey" },
+                "name": { "value": "apiKeyAuth" },
+                "parameter": { "value": "x-apikey" },
+                "in": { "value": "header" }
               }
             ]
           ],
           "parameters": [
             {
-              "name": { "value": "body", "loc": "164;21;27;4032;4038" },
-              "description": {
-                "value": "The new widget",
-                "loc": "165;28;44;4067;4083"
-              },
+              "kind": "Parameter",
+              "name": { "value": "body" },
+              "description": { "value": "The new widget" },
               "typeName": { "value": "createWidgetBody" },
               "isPrimitive": false,
               "isArray": false,
-              "rules": [],
-              "loc": "162;11;174;12;3984;4338"
+              "rules": []
             }
-          ],
-          "loc": "159;7;181;8;3901;4500"
+          ]
         },
         {
-          "name": { "value": "putWidget", "loc": "183;24;35;4540;4551" },
+          "kind": "Method",
+          "name": { "value": "putWidget" },
           "security": [
             [
               {
-                "type": { "value": "apiKey", "loc": "60;15;23;1434;1442" },
-                "name": { "value": "apiKeyAuth", "loc": "59;5;17;1404;1416" },
-                "parameter": {
-                  "value": "x-apikey",
-                  "loc": "62;15;25;1480;1490"
-                },
-                "in": { "value": "header", "loc": "61;13;21;1456;1464" },
-                "loc": "59;5;63;6;1404;1496"
+                "kind": "ApiKeyScheme",
+                "type": { "value": "apiKey" },
+                "name": { "value": "apiKeyAuth" },
+                "parameter": { "value": "x-apikey" },
+                "in": { "value": "header" }
               }
             ]
           ],
-          "parameters": [],
-          "loc": "182;7;189;8;4508;4673"
+          "parameters": []
         },
         {
-          "name": { "value": "getWidgetFoo", "loc": "193;24;38;4746;4760" },
+          "kind": "Method",
+          "name": { "value": "getWidgetFoo" },
           "security": [
             [
               {
-                "type": { "value": "apiKey", "loc": "60;15;23;1434;1442" },
-                "name": { "value": "apiKeyAuth", "loc": "59;5;17;1404;1416" },
-                "parameter": {
-                  "value": "x-apikey",
-                  "loc": "62;15;25;1480;1490"
-                },
-                "in": { "value": "header", "loc": "61;13;21;1456;1464" },
-                "loc": "59;5;63;6;1404;1496"
+                "kind": "ApiKeyScheme",
+                "type": { "value": "apiKey" },
+                "name": { "value": "apiKeyAuth" },
+                "parameter": { "value": "x-apikey" },
+                "in": { "value": "header" }
               }
             ]
           ],
           "parameters": [
             {
-              "name": { "value": "id", "loc": "211;19;23;5216;5220" },
-              "description": {
-                "value": "The widget ID",
-                "loc": "212;26;41;5247;5262"
-              },
-              "typeName": { "value": "string", "loc": "214;19;27;5306;5314" },
+              "kind": "Parameter",
+              "name": { "value": "id" },
+              "description": { "value": "The widget ID" },
+              "typeName": { "value": "string" },
               "isPrimitive": true,
               "isArray": false,
               "rules": [
-                { "id": "required" },
+                { "kind": "ValidationRule", "id": "required" },
                 {
+                  "kind": "ValidationRule",
                   "id": "string-max-length",
-                  "length": { "value": 30, "loc": "216;24;26;5367;5369" },
-                  "loc": "216;11;26;5354;5369"
+                  "length": { "value": 30 }
                 }
-              ],
-              "loc": "210;9;217;10;5196;5379"
+              ]
             }
           ],
           "returnType": {
-            "typeName": { "value": "widget", "loc": "537;5;13;13915;13923" },
+            "kind": "ReturnType",
+            "typeName": { "value": "widget" },
             "isPrimitive": false,
             "isArray": false,
-            "rules": [],
-            "loc": "537;15;550;6;13925;14226"
-          },
-          "loc": "192;7;200;8;4714;4970"
+            "rules": []
+          }
         },
         {
-          "name": { "value": "deleteWidgetFoo", "loc": "202;24;41;5013;5030" },
+          "kind": "Method",
+          "name": { "value": "deleteWidgetFoo" },
           "security": [
             [
               {
-                "type": { "value": "apiKey", "loc": "60;15;23;1434;1442" },
-                "name": { "value": "apiKeyAuth", "loc": "59;5;17;1404;1416" },
-                "parameter": {
-                  "value": "x-apikey",
-                  "loc": "62;15;25;1480;1490"
-                },
-                "in": { "value": "header", "loc": "61;13;21;1456;1464" },
-                "loc": "59;5;63;6;1404;1496"
+                "kind": "ApiKeyScheme",
+                "type": { "value": "apiKey" },
+                "name": { "value": "apiKeyAuth" },
+                "parameter": { "value": "x-apikey" },
+                "in": { "value": "header" }
               }
             ]
           ],
           "parameters": [
             {
-              "name": { "value": "id", "loc": "211;19;23;5216;5220" },
-              "description": {
-                "value": "The widget ID",
-                "loc": "212;26;41;5247;5262"
-              },
-              "typeName": { "value": "string", "loc": "214;19;27;5306;5314" },
+              "kind": "Parameter",
+              "name": { "value": "id" },
+              "description": { "value": "The widget ID" },
+              "typeName": { "value": "string" },
               "isPrimitive": true,
               "isArray": false,
               "rules": [
-                { "id": "required" },
+                { "kind": "ValidationRule", "id": "required" },
                 {
+                  "kind": "ValidationRule",
                   "id": "string-max-length",
-                  "length": { "value": 30, "loc": "216;24;26;5367;5369" },
-                  "loc": "216;11;26;5354;5369"
+                  "length": { "value": 30 }
                 }
-              ],
-              "loc": "210;9;217;10;5196;5379"
+              ]
             }
-          ],
-          "loc": "201;7;208;8;4978;5164"
+          ]
         }
       ],
       "protocols": {
         "http": [
           {
-            "path": { "value": "/widgets", "loc": "149;5;15;3619;3629" },
+            "kind": "HttpPath",
+            "path": { "value": "/widgets" },
             "methods": [
               {
-                "name": { "value": "getWidgets", "loc": "151;24;36;3671;3683" },
-                "verb": { "value": "get", "loc": "150;7;12;3639;3644" },
+                "kind": "HttpMethod",
+                "name": { "value": "getWidgets" },
+                "verb": { "value": "get" },
                 "parameters": [],
-                "successCode": { "value": 200, "loc": "153;11;20;3718;3727" },
-                "loc": "150;7;158;8;3639;3893"
+                "successCode": { "value": 200 }
               },
               {
-                "name": {
-                  "value": "createWidget",
-                  "loc": "160;24;38;3934;3948"
-                },
-                "verb": { "value": "post", "loc": "159;7;13;3901;3907" },
+                "kind": "HttpMethod",
+                "name": { "value": "createWidget" },
+                "verb": { "value": "post" },
                 "parameters": [
                   {
-                    "name": { "value": "body", "loc": "164;21;27;4032;4038" },
-                    "in": { "value": "body", "loc": "163;19;25;4004;4010" },
-                    "loc": "162;11;174;12;3984;4338"
+                    "kind": "HttpParameter",
+                    "name": { "value": "body" },
+                    "in": { "value": "body" }
                   }
                 ],
-                "successCode": { "value": 204, "loc": "177;11;20;4383;4392" },
-                "loc": "159;7;181;8;3901;4500"
+                "successCode": { "value": 204 }
               },
               {
-                "name": { "value": "putWidget", "loc": "183;24;35;4540;4551" },
-                "verb": { "value": "put", "loc": "182;7;12;4508;4513" },
+                "kind": "HttpMethod",
+                "name": { "value": "putWidget" },
+                "verb": { "value": "put" },
                 "parameters": [],
-                "successCode": { "value": 200 },
-                "loc": "182;7;189;8;4508;4673"
+                "successCode": { "value": 200 }
               }
-            ],
-            "loc": "149;5;190;6;3619;4679"
+            ]
           },
           {
-            "path": {
-              "value": "/widgets/{id}/foo",
-              "loc": "191;5;24;4685;4704"
-            },
+            "kind": "HttpPath",
+            "path": { "value": "/widgets/{id}/foo" },
             "methods": [
               {
-                "name": {
-                  "value": "getWidgetFoo",
-                  "loc": "193;24;38;4746;4760"
-                },
-                "verb": { "value": "get", "loc": "192;7;12;4714;4719" },
+                "kind": "HttpMethod",
+                "name": { "value": "getWidgetFoo" },
+                "verb": { "value": "get" },
                 "parameters": [
                   {
-                    "name": { "value": "id", "loc": "211;19;23;5216;5220" },
-                    "in": { "value": "path", "loc": "213;17;23;5280;5286" },
-                    "loc": "210;9;217;10;5196;5379"
+                    "kind": "HttpParameter",
+                    "name": { "value": "id" },
+                    "in": { "value": "path" }
                   }
                 ],
-                "successCode": { "value": 200, "loc": "195;11;20;4795;4804" },
-                "loc": "192;7;200;8;4714;4970"
+                "successCode": { "value": 200 }
               },
               {
-                "name": {
-                  "value": "deleteWidgetFoo",
-                  "loc": "202;24;41;5013;5030"
-                },
-                "verb": { "value": "delete", "loc": "201;7;15;4978;4986" },
+                "kind": "HttpMethod",
+                "name": { "value": "deleteWidgetFoo" },
+                "verb": { "value": "delete" },
                 "parameters": [
                   {
-                    "name": { "value": "id", "loc": "211;19;23;5216;5220" },
-                    "in": { "value": "path", "loc": "213;17;23;5280;5286" },
-                    "loc": "210;9;217;10;5196;5379"
+                    "kind": "HttpParameter",
+                    "name": { "value": "id" },
+                    "in": { "value": "path" }
                   }
                 ],
-                "successCode": { "value": 204, "loc": "204;11;20;5065;5074" },
-                "loc": "201;7;208;8;4978;5164"
+                "successCode": { "value": 204 }
               }
-            ],
-            "loc": "191;5;219;6;4685;5393"
+            ]
           }
         ]
       }
     },
     {
-      "name": "exhaustive",
+      "kind": "Interface",
+      "name": { "value": "exhaustive" },
       "methods": [
         {
-          "name": {
-            "value": "exhaustiveFormats",
-            "loc": "222;24;43;5454;5473"
-          },
+          "kind": "Method",
+          "name": { "value": "exhaustiveFormats" },
           "security": [],
           "parameters": [
             {
-              "name": {
-                "value": "string-no-format",
-                "loc": "225;21;39;5531;5549"
-              },
-              "typeName": { "value": "string", "loc": "227;21;29;5598;5606" },
+              "kind": "Parameter",
+              "name": { "value": "string-no-format" },
+              "typeName": { "value": "string" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "224;11;228;12;5509;5618"
+              "rules": []
             },
             {
-              "name": { "value": "string-date", "loc": "230;21;34;5652;5665" },
-              "typeName": { "value": "date", "loc": "229;11;234;12;5630;5764" },
+              "kind": "Parameter",
+              "name": { "value": "string-date" },
+              "typeName": { "value": "date" },
               "isPrimitive": true,
               "isArray": false,
               "rules": [
                 {
+                  "kind": "ValidationRule",
                   "id": "string-format",
-                  "format": { "value": "date", "loc": "233;23;29;5746;5752" },
-                  "loc": "233;13;29;5736;5752"
+                  "format": { "value": "date" }
                 }
-              ],
-              "loc": "229;11;234;12;5630;5764"
+              ]
             },
             {
-              "name": {
-                "value": "string-date-time",
-                "loc": "236;21;39;5798;5816"
-              },
-              "typeName": {
-                "value": "date-time",
-                "loc": "235;11;240;12;5776;5920"
-              },
+              "kind": "Parameter",
+              "name": { "value": "string-date-time" },
+              "typeName": { "value": "date-time" },
               "isPrimitive": true,
               "isArray": false,
               "rules": [
                 {
+                  "kind": "ValidationRule",
                   "id": "string-format",
-                  "format": {
-                    "value": "date-time",
-                    "loc": "239;23;34;5897;5908"
-                  },
-                  "loc": "239;13;34;5887;5908"
+                  "format": { "value": "date-time" }
                 }
-              ],
-              "loc": "235;11;240;12;5776;5920"
+              ]
             },
             {
-              "name": {
-                "value": "integer-no-format",
-                "loc": "242;21;40;5954;5973"
-              },
-              "typeName": { "value": "integer", "loc": "244;21;30;6022;6031" },
+              "kind": "Parameter",
+              "name": { "value": "integer-no-format" },
+              "typeName": { "value": "integer" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "241;11;245;12;5932;6043"
+              "rules": []
             },
             {
-              "name": {
-                "value": "integer-int32",
-                "loc": "247;21;36;6077;6092"
-              },
-              "typeName": {
-                "value": "integer",
-                "loc": "246;11;251;12;6055;6193"
-              },
+              "kind": "Parameter",
+              "name": { "value": "integer-int32" },
+              "typeName": { "value": "integer" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "246;11;251;12;6055;6193"
+              "rules": []
             },
             {
-              "name": {
-                "value": "integer-int64",
-                "loc": "253;21;36;6227;6242"
-              },
-              "typeName": { "value": "long", "loc": "252;11;257;12;6205;6343" },
+              "kind": "Parameter",
+              "name": { "value": "integer-int64" },
+              "typeName": { "value": "long" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "252;11;257;12;6205;6343"
+              "rules": []
             },
             {
-              "name": {
-                "value": "number-no-format",
-                "loc": "259;21;39;6377;6395"
-              },
-              "typeName": { "value": "number", "loc": "261;21;29;6444;6452" },
+              "kind": "Parameter",
+              "name": { "value": "number-no-format" },
+              "typeName": { "value": "number" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "258;11;262;12;6355;6464"
+              "rules": []
             },
             {
-              "name": { "value": "number-float", "loc": "264;21;35;6498;6512" },
-              "typeName": {
-                "value": "float",
-                "loc": "263;11;268;12;6476;6612"
-              },
+              "kind": "Parameter",
+              "name": { "value": "number-float" },
+              "typeName": { "value": "float" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "263;11;268;12;6476;6612"
+              "rules": []
             },
             {
-              "name": {
-                "value": "number-double",
-                "loc": "270;21;36;6646;6661"
-              },
-              "typeName": {
-                "value": "double",
-                "loc": "269;11;274;12;6624;6762"
-              },
+              "kind": "Parameter",
+              "name": { "value": "number-double" },
+              "typeName": { "value": "double" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "269;11;274;12;6624;6762"
+              "rules": []
             }
-          ],
-          "loc": "221;7;282;8;5422;6964"
+          ]
         },
         {
-          "name": { "value": "exhaustiveParams", "loc": "286;24;42;7201;7219" },
+          "kind": "Method",
+          "name": { "value": "exhaustiveParams" },
           "security": [],
           "parameters": [
             {
-              "name": { "value": "query-string", "loc": "289;21;35;7277;7291" },
-              "typeName": { "value": "string", "loc": "291;21;29;7340;7348" },
+              "kind": "Parameter",
+              "name": { "value": "query-string" },
+              "typeName": { "value": "string" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "288;11;292;12;7255;7360"
+              "rules": []
             },
             {
-              "name": { "value": "query-enum", "loc": "294;21;33;7394;7406" },
+              "kind": "Parameter",
+              "name": { "value": "query-enum" },
               "typeName": { "value": "exhaustiveParamsQueryEnum" },
               "isPrimitive": false,
               "isArray": false,
               "rules": [
                 {
+                  "kind": "ValidationRule",
                   "id": "string-enum",
                   "values": [
-                    { "value": "one", "loc": "297;22;27;7486;7491" },
-                    { "value": "two", "loc": "297;29;34;7493;7498" },
-                    { "value": "three", "loc": "297;36;43;7500;7507" }
-                  ],
-                  "loc": "297;13;44;7477;7508"
+                    { "value": "one" },
+                    { "value": "two" },
+                    { "value": "three" }
+                  ]
                 }
-              ],
-              "loc": "293;11;298;12;7372;7520"
+              ]
             },
             {
-              "name": { "value": "query-number", "loc": "300;21;35;7554;7568" },
-              "typeName": { "value": "number", "loc": "302;21;29;7617;7625" },
+              "kind": "Parameter",
+              "name": { "value": "query-number" },
+              "typeName": { "value": "number" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "299;11;303;12;7532;7637"
+              "rules": []
             },
             {
-              "name": {
-                "value": "query-integer",
-                "loc": "305;21;36;7671;7686"
-              },
-              "typeName": { "value": "integer", "loc": "307;21;30;7735;7744" },
+              "kind": "Parameter",
+              "name": { "value": "query-integer" },
+              "typeName": { "value": "integer" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "304;11;308;12;7649;7756"
+              "rules": []
             },
             {
-              "name": {
-                "value": "query-boolean",
-                "loc": "310;21;36;7790;7805"
-              },
-              "typeName": { "value": "boolean", "loc": "312;21;30;7854;7863" },
+              "kind": "Parameter",
+              "name": { "value": "query-boolean" },
+              "typeName": { "value": "boolean" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "309;11;313;12;7768;7875"
+              "rules": []
             },
             {
-              "name": {
-                "value": "query-string-array",
-                "loc": "315;21;41;7909;7929"
-              },
-              "typeName": { "value": "string", "loc": "318;32;40;8018;8026" },
+              "kind": "Parameter",
+              "name": { "value": "query-string-array" },
+              "typeName": { "value": "string" },
               "isPrimitive": true,
               "isArray": true,
-              "rules": [],
-              "loc": "314;11;319;12;7887;8040"
+              "rules": []
             },
             {
-              "name": {
-                "value": "query-enum-array",
-                "loc": "321;21;39;8074;8092"
-              },
+              "kind": "Parameter",
+              "name": { "value": "query-enum-array" },
               "typeName": { "value": "exhaustiveParamsQueryEnumArray" },
               "isPrimitive": false,
               "isArray": true,
               "rules": [
                 {
+                  "kind": "ValidationRule",
                   "id": "string-enum",
                   "values": [
-                    { "value": "one", "loc": "324;51;56;8200;8205" },
-                    { "value": "two", "loc": "324;58;63;8207;8212" },
-                    { "value": "three", "loc": "324;65;72;8214;8221" }
-                  ],
-                  "loc": "324;42;73;8191;8222"
+                    { "value": "one" },
+                    { "value": "two" },
+                    { "value": "three" }
+                  ]
                 }
-              ],
-              "loc": "320;11;325;12;8052;8236"
+              ]
             },
             {
-              "name": {
-                "value": "query-number-array",
-                "loc": "327;21;41;8270;8290"
-              },
-              "typeName": { "value": "number", "loc": "330;32;40;8379;8387" },
+              "kind": "Parameter",
+              "name": { "value": "query-number-array" },
+              "typeName": { "value": "number" },
               "isPrimitive": true,
               "isArray": true,
-              "rules": [],
-              "loc": "326;11;331;12;8248;8401"
+              "rules": []
             },
             {
-              "name": {
-                "value": "query-integer-array",
-                "loc": "333;21;42;8435;8456"
-              },
-              "typeName": { "value": "integer", "loc": "336;32;41;8545;8554" },
+              "kind": "Parameter",
+              "name": { "value": "query-integer-array" },
+              "typeName": { "value": "integer" },
               "isPrimitive": true,
               "isArray": true,
-              "rules": [],
-              "loc": "332;11;337;12;8413;8568"
+              "rules": []
             },
             {
-              "name": {
-                "value": "query-boolean-array",
-                "loc": "339;21;42;8602;8623"
-              },
-              "typeName": { "value": "boolean", "loc": "342;32;41;8712;8721" },
+              "kind": "Parameter",
+              "name": { "value": "query-boolean-array" },
+              "typeName": { "value": "boolean" },
               "isPrimitive": true,
               "isArray": true,
-              "rules": [],
-              "loc": "338;11;343;12;8580;8735"
+              "rules": []
             },
             {
-              "name": { "value": "path-string", "loc": "345;21;34;8769;8782" },
-              "typeName": { "value": "string", "loc": "347;21;29;8830;8838" },
+              "kind": "Parameter",
+              "name": { "value": "path-string" },
+              "typeName": { "value": "string" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [{ "id": "required" }],
-              "loc": "344;11;349;12;8747;8880"
+              "rules": [{ "kind": "ValidationRule", "id": "required" }]
             },
             {
-              "name": { "value": "path-enum", "loc": "351;21;32;8914;8925" },
+              "kind": "Parameter",
+              "name": { "value": "path-enum" },
               "typeName": { "value": "exhaustiveParamsPathEnum" },
               "isPrimitive": false,
               "isArray": false,
               "rules": [
-                { "id": "required" },
+                { "kind": "ValidationRule", "id": "required" },
                 {
+                  "kind": "ValidationRule",
                   "id": "string-enum",
                   "values": [
-                    { "value": "one", "loc": "355;22;27;9034;9039" },
-                    { "value": "two", "loc": "355;29;34;9041;9046" },
-                    { "value": "three", "loc": "355;36;43;9048;9055" }
-                  ],
-                  "loc": "355;13;44;9025;9056"
+                    { "value": "one" },
+                    { "value": "two" },
+                    { "value": "three" }
+                  ]
                 }
-              ],
-              "loc": "350;11;356;12;8892;9068"
+              ]
             },
             {
-              "name": { "value": "path-number", "loc": "358;21;34;9102;9115" },
-              "typeName": { "value": "number", "loc": "360;21;29;9163;9171" },
+              "kind": "Parameter",
+              "name": { "value": "path-number" },
+              "typeName": { "value": "number" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [{ "id": "required" }],
-              "loc": "357;11;362;12;9080;9213"
+              "rules": [{ "kind": "ValidationRule", "id": "required" }]
             },
             {
-              "name": { "value": "path-integer", "loc": "364;21;35;9247;9261" },
-              "typeName": { "value": "integer", "loc": "366;21;30;9309;9318" },
+              "kind": "Parameter",
+              "name": { "value": "path-integer" },
+              "typeName": { "value": "integer" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [{ "id": "required" }],
-              "loc": "363;11;368;12;9225;9360"
+              "rules": [{ "kind": "ValidationRule", "id": "required" }]
             },
             {
-              "name": { "value": "path-boolean", "loc": "370;21;35;9394;9408" },
-              "typeName": { "value": "boolean", "loc": "372;21;30;9456;9465" },
+              "kind": "Parameter",
+              "name": { "value": "path-boolean" },
+              "typeName": { "value": "boolean" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [{ "id": "required" }],
-              "loc": "369;11;374;12;9372;9507"
+              "rules": [{ "kind": "ValidationRule", "id": "required" }]
             },
             {
-              "name": {
-                "value": "path-string-array",
-                "loc": "376;21;40;9541;9560"
-              },
-              "typeName": { "value": "string", "loc": "380;32;40;9687;9695" },
+              "kind": "Parameter",
+              "name": { "value": "path-string-array" },
+              "typeName": { "value": "string" },
               "isPrimitive": true,
               "isArray": true,
-              "rules": [{ "id": "required" }],
-              "loc": "375;11;382;12;9519;9739"
+              "rules": [{ "kind": "ValidationRule", "id": "required" }]
             },
             {
-              "name": {
-                "value": "path-enum-array",
-                "loc": "384;21;38;9773;9790"
-              },
+              "kind": "Parameter",
+              "name": { "value": "path-enum-array" },
               "typeName": { "value": "exhaustiveParamsPathEnumArray" },
               "isPrimitive": false,
               "isArray": true,
               "rules": [
-                { "id": "required" },
+                { "kind": "ValidationRule", "id": "required" },
                 {
+                  "kind": "ValidationRule",
                   "id": "string-enum",
                   "values": [
-                    { "value": "one", "loc": "388;51;56;9938;9943" },
-                    { "value": "two", "loc": "388;58;63;9945;9950" },
-                    { "value": "three", "loc": "388;65;72;9952;9959" }
-                  ],
-                  "loc": "388;42;73;9929;9960"
+                    { "value": "one" },
+                    { "value": "two" },
+                    { "value": "three" }
+                  ]
                 }
-              ],
-              "loc": "383;11;390;12;9751;10004"
+              ]
             },
             {
-              "name": {
-                "value": "path-number-array",
-                "loc": "392;21;40;10038;10057"
-              },
-              "typeName": { "value": "number", "loc": "396;32;40;10184;10192" },
+              "kind": "Parameter",
+              "name": { "value": "path-number-array" },
+              "typeName": { "value": "number" },
               "isPrimitive": true,
               "isArray": true,
-              "rules": [{ "id": "required" }],
-              "loc": "391;11;398;12;10016;10236"
+              "rules": [{ "kind": "ValidationRule", "id": "required" }]
             },
             {
-              "name": {
-                "value": "path-integer-array",
-                "loc": "400;21;41;10270;10290"
-              },
-              "typeName": {
-                "value": "integer",
-                "loc": "404;32;41;10417;10426"
-              },
+              "kind": "Parameter",
+              "name": { "value": "path-integer-array" },
+              "typeName": { "value": "integer" },
               "isPrimitive": true,
               "isArray": true,
-              "rules": [{ "id": "required" }],
-              "loc": "399;11;406;12;10248;10470"
+              "rules": [{ "kind": "ValidationRule", "id": "required" }]
             },
             {
-              "name": {
-                "value": "path-boolean-array",
-                "loc": "408;21;41;10504;10524"
-              },
-              "typeName": {
-                "value": "boolean",
-                "loc": "411;32;41;10612;10621"
-              },
+              "kind": "Parameter",
+              "name": { "value": "path-boolean-array" },
+              "typeName": { "value": "boolean" },
               "isPrimitive": true,
               "isArray": true,
-              "rules": [{ "id": "required" }],
-              "loc": "407;11;413;12;10482;10665"
+              "rules": [{ "kind": "ValidationRule", "id": "required" }]
             },
             {
-              "name": {
-                "value": "header-string",
-                "loc": "415;21;36;10699;10714"
-              },
-              "typeName": { "value": "string", "loc": "417;21;29;10764;10772" },
+              "kind": "Parameter",
+              "name": { "value": "header-string" },
+              "typeName": { "value": "string" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "414;11;418;12;10677;10784"
+              "rules": []
             },
             {
-              "name": {
-                "value": "header-enum",
-                "loc": "420;21;34;10818;10831"
-              },
+              "kind": "Parameter",
+              "name": { "value": "header-enum" },
               "typeName": { "value": "exhaustiveParamsHeaderEnum" },
               "isPrimitive": false,
               "isArray": false,
               "rules": [
                 {
+                  "kind": "ValidationRule",
                   "id": "string-enum",
                   "values": [
-                    { "value": "one", "loc": "423;22;27;10912;10917" },
-                    { "value": "two", "loc": "423;29;34;10919;10924" },
-                    { "value": "three", "loc": "423;36;43;10926;10933" }
-                  ],
-                  "loc": "423;13;44;10903;10934"
+                    { "value": "one" },
+                    { "value": "two" },
+                    { "value": "three" }
+                  ]
                 }
-              ],
-              "loc": "419;11;424;12;10796;10946"
+              ]
             },
             {
-              "name": {
-                "value": "header-number",
-                "loc": "426;21;36;10980;10995"
-              },
-              "typeName": { "value": "number", "loc": "428;21;29;11045;11053" },
+              "kind": "Parameter",
+              "name": { "value": "header-number" },
+              "typeName": { "value": "number" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "425;11;429;12;10958;11065"
+              "rules": []
             },
             {
-              "name": {
-                "value": "header-integer",
-                "loc": "431;21;37;11099;11115"
-              },
-              "typeName": {
-                "value": "integer",
-                "loc": "433;21;30;11165;11174"
-              },
+              "kind": "Parameter",
+              "name": { "value": "header-integer" },
+              "typeName": { "value": "integer" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "430;11;434;12;11077;11186"
+              "rules": []
             },
             {
-              "name": {
-                "value": "header-boolean",
-                "loc": "436;21;37;11220;11236"
-              },
-              "typeName": {
-                "value": "boolean",
-                "loc": "438;21;30;11286;11295"
-              },
+              "kind": "Parameter",
+              "name": { "value": "header-boolean" },
+              "typeName": { "value": "boolean" },
               "isPrimitive": true,
               "isArray": false,
-              "rules": [],
-              "loc": "435;11;439;12;11198;11307"
+              "rules": []
             },
             {
-              "name": {
-                "value": "header-string-array",
-                "loc": "441;21;42;11341;11362"
-              },
-              "typeName": { "value": "string", "loc": "444;32;40;11452;11460" },
+              "kind": "Parameter",
+              "name": { "value": "header-string-array" },
+              "typeName": { "value": "string" },
               "isPrimitive": true,
               "isArray": true,
-              "rules": [],
-              "loc": "440;11;445;12;11319;11474"
+              "rules": []
             },
             {
-              "name": {
-                "value": "header-enum-array",
-                "loc": "447;21;40;11508;11527"
-              },
+              "kind": "Parameter",
+              "name": { "value": "header-enum-array" },
               "typeName": { "value": "exhaustiveParamsHeaderEnumArray" },
               "isPrimitive": false,
               "isArray": true,
               "rules": [
                 {
+                  "kind": "ValidationRule",
                   "id": "string-enum",
                   "values": [
-                    { "value": "one", "loc": "451;51;56;11675;11680" },
-                    { "value": "two", "loc": "451;58;63;11682;11687" },
-                    { "value": "three", "loc": "451;65;72;11689;11696" }
-                  ],
-                  "loc": "451;42;73;11666;11697"
+                    { "value": "one" },
+                    { "value": "two" },
+                    { "value": "three" }
+                  ]
                 }
-              ],
-              "loc": "446;11;452;12;11486;11711"
+              ]
             },
             {
-              "name": {
-                "value": "header-number-array",
-                "loc": "454;21;42;11745;11766"
-              },
-              "typeName": { "value": "number", "loc": "458;32;40;11897;11905" },
+              "kind": "Parameter",
+              "name": { "value": "header-number-array" },
+              "typeName": { "value": "number" },
               "isPrimitive": true,
               "isArray": true,
-              "rules": [],
-              "loc": "453;11;459;12;11723;11919"
+              "rules": []
             },
             {
-              "name": {
-                "value": "header-integer-array",
-                "loc": "461;21;43;11953;11975"
-              },
-              "typeName": {
-                "value": "integer",
-                "loc": "465;32;41;12104;12113"
-              },
+              "kind": "Parameter",
+              "name": { "value": "header-integer-array" },
+              "typeName": { "value": "integer" },
               "isPrimitive": true,
               "isArray": true,
-              "rules": [],
-              "loc": "460;11;466;12;11931;12127"
+              "rules": []
             },
             {
-              "name": {
-                "value": "header-boolean-array",
-                "loc": "468;21;43;12161;12183"
-              },
-              "typeName": {
-                "value": "boolean",
-                "loc": "472;32;41;12312;12321"
-              },
+              "kind": "Parameter",
+              "name": { "value": "header-boolean-array" },
+              "typeName": { "value": "boolean" },
               "isPrimitive": true,
               "isArray": true,
-              "rules": [],
-              "loc": "467;11;473;12;12139;12335"
+              "rules": []
             },
             {
-              "name": { "value": "body", "loc": "475;21;27;12369;12375" },
+              "kind": "Parameter",
+              "name": { "value": "body" },
               "typeName": { "value": "exhaustiveParamsBody" },
               "isPrimitive": false,
               "isArray": false,
-              "rules": [],
-              "loc": "474;11;484;12;12347;12619"
+              "rules": []
             }
-          ],
-          "loc": "285;7;492;8;7169;12802"
+          ]
         }
       ],
       "protocols": {
         "http": [
           {
-            "path": { "value": "/exhaustive", "loc": "220;5;18;5399;5412" },
+            "kind": "HttpPath",
+            "path": { "value": "/exhaustive" },
             "methods": [
               {
-                "name": {
-                  "value": "exhaustiveFormats",
-                  "loc": "222;24;43;5454;5473"
-                },
-                "verb": { "value": "get", "loc": "221;7;12;5422;5427" },
+                "kind": "HttpMethod",
+                "name": { "value": "exhaustiveFormats" },
+                "verb": { "value": "get" },
                 "parameters": [
                   {
-                    "name": {
-                      "value": "string-no-format",
-                      "loc": "225;21;39;5531;5549"
-                    },
-                    "in": { "value": "query", "loc": "226;19;26;5569;5576" },
-                    "loc": "224;11;228;12;5509;5618"
+                    "kind": "HttpParameter",
+                    "name": { "value": "string-no-format" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "string-date",
-                      "loc": "230;21;34;5652;5665"
-                    },
-                    "in": { "value": "query", "loc": "231;19;26;5685;5692" },
-                    "loc": "229;11;234;12;5630;5764"
+                    "kind": "HttpParameter",
+                    "name": { "value": "string-date" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "string-date-time",
-                      "loc": "236;21;39;5798;5816"
-                    },
-                    "in": { "value": "query", "loc": "237;19;26;5836;5843" },
-                    "loc": "235;11;240;12;5776;5920"
+                    "kind": "HttpParameter",
+                    "name": { "value": "string-date-time" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "integer-no-format",
-                      "loc": "242;21;40;5954;5973"
-                    },
-                    "in": { "value": "query", "loc": "243;19;26;5993;6000" },
-                    "loc": "241;11;245;12;5932;6043"
+                    "kind": "HttpParameter",
+                    "name": { "value": "integer-no-format" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "integer-int32",
-                      "loc": "247;21;36;6077;6092"
-                    },
-                    "in": { "value": "query", "loc": "248;19;26;6112;6119" },
-                    "loc": "246;11;251;12;6055;6193"
+                    "kind": "HttpParameter",
+                    "name": { "value": "integer-int32" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "integer-int64",
-                      "loc": "253;21;36;6227;6242"
-                    },
-                    "in": { "value": "query", "loc": "254;19;26;6262;6269" },
-                    "loc": "252;11;257;12;6205;6343"
+                    "kind": "HttpParameter",
+                    "name": { "value": "integer-int64" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "number-no-format",
-                      "loc": "259;21;39;6377;6395"
-                    },
-                    "in": { "value": "query", "loc": "260;19;26;6415;6422" },
-                    "loc": "258;11;262;12;6355;6464"
+                    "kind": "HttpParameter",
+                    "name": { "value": "number-no-format" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "number-float",
-                      "loc": "264;21;35;6498;6512"
-                    },
-                    "in": { "value": "query", "loc": "265;19;26;6532;6539" },
-                    "loc": "263;11;268;12;6476;6612"
+                    "kind": "HttpParameter",
+                    "name": { "value": "number-float" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "number-double",
-                      "loc": "270;21;36;6646;6661"
-                    },
-                    "in": { "value": "query", "loc": "271;19;26;6681;6688" },
-                    "loc": "269;11;274;12;6624;6762"
+                    "kind": "HttpParameter",
+                    "name": { "value": "number-double" },
+                    "in": { "value": "query" }
                   }
                 ],
-                "successCode": { "value": 204, "loc": "277;11;20;6807;6816" },
-                "loc": "221;7;282;8;5422;6964"
+                "successCode": { "value": 204 }
               }
-            ],
-            "loc": "220;5;283;6;5399;6970"
+            ]
           },
           {
+            "kind": "HttpPath",
             "path": {
-              "value": "/exhaustive/{path-string}/{path-enum}/{path-number}/{path-integer}/{path-boolean}/{path-string-array}/{path-enum-array}/{path-number-array}/{path-integer-array}/{path-boolean-array}",
-              "loc": "284;5;188;6976;7159"
+              "value": "/exhaustive/{path-string}/{path-enum}/{path-number}/{path-integer}/{path-boolean}/{path-string-array}/{path-enum-array}/{path-number-array}/{path-integer-array}/{path-boolean-array}"
             },
             "methods": [
               {
-                "name": {
-                  "value": "exhaustiveParams",
-                  "loc": "286;24;42;7201;7219"
-                },
-                "verb": { "value": "get", "loc": "285;7;12;7169;7174" },
+                "kind": "HttpMethod",
+                "name": { "value": "exhaustiveParams" },
+                "verb": { "value": "get" },
                 "parameters": [
                   {
-                    "name": {
-                      "value": "query-string",
-                      "loc": "289;21;35;7277;7291"
-                    },
-                    "in": { "value": "query", "loc": "290;19;26;7311;7318" },
-                    "loc": "288;11;292;12;7255;7360"
+                    "kind": "HttpParameter",
+                    "name": { "value": "query-string" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "query-enum",
-                      "loc": "294;21;33;7394;7406"
-                    },
-                    "in": { "value": "query", "loc": "295;19;26;7426;7433" },
-                    "loc": "293;11;298;12;7372;7520"
+                    "kind": "HttpParameter",
+                    "name": { "value": "query-enum" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "query-number",
-                      "loc": "300;21;35;7554;7568"
-                    },
-                    "in": { "value": "query", "loc": "301;19;26;7588;7595" },
-                    "loc": "299;11;303;12;7532;7637"
+                    "kind": "HttpParameter",
+                    "name": { "value": "query-number" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "query-integer",
-                      "loc": "305;21;36;7671;7686"
-                    },
-                    "in": { "value": "query", "loc": "306;19;26;7706;7713" },
-                    "loc": "304;11;308;12;7649;7756"
+                    "kind": "HttpParameter",
+                    "name": { "value": "query-integer" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "query-boolean",
-                      "loc": "310;21;36;7790;7805"
-                    },
-                    "in": { "value": "query", "loc": "311;19;26;7825;7832" },
-                    "loc": "309;11;313;12;7768;7875"
+                    "kind": "HttpParameter",
+                    "name": { "value": "query-boolean" },
+                    "in": { "value": "query" }
                   },
                   {
-                    "name": {
-                      "value": "query-string-array",
-                      "loc": "315;21;41;7909;7929"
-                    },
-                    "in": { "value": "query", "loc": "316;19;26;7949;7956" },
-                    "array": { "value": "csv" },
-                    "loc": "314;11;319;12;7887;8040"
+                    "kind": "HttpParameter",
+                    "name": { "value": "query-string-array" },
+                    "in": { "value": "query" },
+                    "array": { "value": "csv" }
                   },
                   {
-                    "name": {
-                      "value": "query-enum-array",
-                      "loc": "321;21;39;8074;8092"
-                    },
-                    "in": { "value": "query", "loc": "322;19;26;8112;8119" },
-                    "array": { "value": "csv" },
-                    "loc": "320;11;325;12;8052;8236"
+                    "kind": "HttpParameter",
+                    "name": { "value": "query-enum-array" },
+                    "in": { "value": "query" },
+                    "array": { "value": "csv" }
                   },
                   {
-                    "name": {
-                      "value": "query-number-array",
-                      "loc": "327;21;41;8270;8290"
-                    },
-                    "in": { "value": "query", "loc": "328;19;26;8310;8317" },
-                    "array": { "value": "csv" },
-                    "loc": "326;11;331;12;8248;8401"
+                    "kind": "HttpParameter",
+                    "name": { "value": "query-number-array" },
+                    "in": { "value": "query" },
+                    "array": { "value": "csv" }
                   },
                   {
-                    "name": {
-                      "value": "query-integer-array",
-                      "loc": "333;21;42;8435;8456"
-                    },
-                    "in": { "value": "query", "loc": "334;19;26;8476;8483" },
-                    "array": { "value": "csv" },
-                    "loc": "332;11;337;12;8413;8568"
+                    "kind": "HttpParameter",
+                    "name": { "value": "query-integer-array" },
+                    "in": { "value": "query" },
+                    "array": { "value": "csv" }
                   },
                   {
-                    "name": {
-                      "value": "query-boolean-array",
-                      "loc": "339;21;42;8602;8623"
-                    },
-                    "in": { "value": "query", "loc": "340;19;26;8643;8650" },
-                    "array": { "value": "csv" },
-                    "loc": "338;11;343;12;8580;8735"
+                    "kind": "HttpParameter",
+                    "name": { "value": "query-boolean-array" },
+                    "in": { "value": "query" },
+                    "array": { "value": "csv" }
                   },
                   {
-                    "name": {
-                      "value": "path-string",
-                      "loc": "345;21;34;8769;8782"
-                    },
-                    "in": { "value": "path", "loc": "346;19;25;8802;8808" },
-                    "loc": "344;11;349;12;8747;8880"
+                    "kind": "HttpParameter",
+                    "name": { "value": "path-string" },
+                    "in": { "value": "path" }
                   },
                   {
-                    "name": {
-                      "value": "path-enum",
-                      "loc": "351;21;32;8914;8925"
-                    },
-                    "in": { "value": "path", "loc": "352;19;25;8945;8951" },
-                    "loc": "350;11;356;12;8892;9068"
+                    "kind": "HttpParameter",
+                    "name": { "value": "path-enum" },
+                    "in": { "value": "path" }
                   },
                   {
-                    "name": {
-                      "value": "path-number",
-                      "loc": "358;21;34;9102;9115"
-                    },
-                    "in": { "value": "path", "loc": "359;19;25;9135;9141" },
-                    "loc": "357;11;362;12;9080;9213"
+                    "kind": "HttpParameter",
+                    "name": { "value": "path-number" },
+                    "in": { "value": "path" }
                   },
                   {
-                    "name": {
-                      "value": "path-integer",
-                      "loc": "364;21;35;9247;9261"
-                    },
-                    "in": { "value": "path", "loc": "365;19;25;9281;9287" },
-                    "loc": "363;11;368;12;9225;9360"
+                    "kind": "HttpParameter",
+                    "name": { "value": "path-integer" },
+                    "in": { "value": "path" }
                   },
                   {
-                    "name": {
-                      "value": "path-boolean",
-                      "loc": "370;21;35;9394;9408"
-                    },
-                    "in": { "value": "path", "loc": "371;19;25;9428;9434" },
-                    "loc": "369;11;374;12;9372;9507"
+                    "kind": "HttpParameter",
+                    "name": { "value": "path-boolean" },
+                    "in": { "value": "path" }
                   },
                   {
-                    "name": {
-                      "value": "path-string-array",
-                      "loc": "376;21;40;9541;9560"
-                    },
-                    "in": { "value": "path", "loc": "377;19;25;9580;9586" },
-                    "array": { "value": "csv", "loc": "379;33;38;9649;9654" },
-                    "loc": "375;11;382;12;9519;9739"
+                    "kind": "HttpParameter",
+                    "name": { "value": "path-string-array" },
+                    "in": { "value": "path" },
+                    "array": { "value": "csv" }
                   },
                   {
-                    "name": {
-                      "value": "path-enum-array",
-                      "loc": "384;21;38;9773;9790"
-                    },
-                    "in": { "value": "path", "loc": "385;19;25;9810;9816" },
-                    "array": { "value": "pipes", "loc": "387;33;40;9879;9886" },
-                    "loc": "383;11;390;12;9751;10004"
+                    "kind": "HttpParameter",
+                    "name": { "value": "path-enum-array" },
+                    "in": { "value": "path" },
+                    "array": { "value": "pipes" }
                   },
                   {
-                    "name": {
-                      "value": "path-number-array",
-                      "loc": "392;21;40;10038;10057"
-                    },
-                    "in": { "value": "path", "loc": "393;19;25;10077;10083" },
-                    "array": { "value": "ssv", "loc": "395;33;38;10146;10151" },
-                    "loc": "391;11;398;12;10016;10236"
+                    "kind": "HttpParameter",
+                    "name": { "value": "path-number-array" },
+                    "in": { "value": "path" },
+                    "array": { "value": "ssv" }
                   },
                   {
-                    "name": {
-                      "value": "path-integer-array",
-                      "loc": "400;21;41;10270;10290"
-                    },
-                    "in": { "value": "path", "loc": "401;19;25;10310;10316" },
-                    "array": { "value": "tsv", "loc": "403;33;38;10379;10384" },
-                    "loc": "399;11;406;12;10248;10470"
+                    "kind": "HttpParameter",
+                    "name": { "value": "path-integer-array" },
+                    "in": { "value": "path" },
+                    "array": { "value": "tsv" }
                   },
                   {
-                    "name": {
-                      "value": "path-boolean-array",
-                      "loc": "408;21;41;10504;10524"
-                    },
-                    "in": { "value": "path", "loc": "409;19;25;10544;10550" },
-                    "array": { "value": "csv" },
-                    "loc": "407;11;413;12;10482;10665"
+                    "kind": "HttpParameter",
+                    "name": { "value": "path-boolean-array" },
+                    "in": { "value": "path" },
+                    "array": { "value": "csv" }
                   },
                   {
-                    "name": {
-                      "value": "header-string",
-                      "loc": "415;21;36;10699;10714"
-                    },
-                    "in": { "value": "header", "loc": "416;19;27;10734;10742" },
-                    "loc": "414;11;418;12;10677;10784"
+                    "kind": "HttpParameter",
+                    "name": { "value": "header-string" },
+                    "in": { "value": "header" }
                   },
                   {
-                    "name": {
-                      "value": "header-enum",
-                      "loc": "420;21;34;10818;10831"
-                    },
-                    "in": { "value": "header", "loc": "421;19;27;10851;10859" },
-                    "loc": "419;11;424;12;10796;10946"
+                    "kind": "HttpParameter",
+                    "name": { "value": "header-enum" },
+                    "in": { "value": "header" }
                   },
                   {
-                    "name": {
-                      "value": "header-number",
-                      "loc": "426;21;36;10980;10995"
-                    },
-                    "in": { "value": "header", "loc": "427;19;27;11015;11023" },
-                    "loc": "425;11;429;12;10958;11065"
+                    "kind": "HttpParameter",
+                    "name": { "value": "header-number" },
+                    "in": { "value": "header" }
                   },
                   {
-                    "name": {
-                      "value": "header-integer",
-                      "loc": "431;21;37;11099;11115"
-                    },
-                    "in": { "value": "header", "loc": "432;19;27;11135;11143" },
-                    "loc": "430;11;434;12;11077;11186"
+                    "kind": "HttpParameter",
+                    "name": { "value": "header-integer" },
+                    "in": { "value": "header" }
                   },
                   {
-                    "name": {
-                      "value": "header-boolean",
-                      "loc": "436;21;37;11220;11236"
-                    },
-                    "in": { "value": "header", "loc": "437;19;27;11256;11264" },
-                    "loc": "435;11;439;12;11198;11307"
+                    "kind": "HttpParameter",
+                    "name": { "value": "header-boolean" },
+                    "in": { "value": "header" }
                   },
                   {
-                    "name": {
-                      "value": "header-string-array",
-                      "loc": "441;21;42;11341;11362"
-                    },
-                    "in": { "value": "header", "loc": "442;19;27;11382;11390" },
-                    "array": { "value": "csv" },
-                    "loc": "440;11;445;12;11319;11474"
+                    "kind": "HttpParameter",
+                    "name": { "value": "header-string-array" },
+                    "in": { "value": "header" },
+                    "array": { "value": "csv" }
                   },
                   {
-                    "name": {
-                      "value": "header-enum-array",
-                      "loc": "447;21;40;11508;11527"
-                    },
-                    "in": { "value": "header", "loc": "448;19;27;11547;11555" },
-                    "array": { "value": "csv", "loc": "450;33;38;11618;11623" },
-                    "loc": "446;11;452;12;11486;11711"
+                    "kind": "HttpParameter",
+                    "name": { "value": "header-enum-array" },
+                    "in": { "value": "header" },
+                    "array": { "value": "csv" }
                   },
                   {
-                    "name": {
-                      "value": "header-number-array",
-                      "loc": "454;21;42;11745;11766"
-                    },
-                    "in": { "value": "header", "loc": "455;19;27;11786;11794" },
-                    "array": {
-                      "value": "pipes",
-                      "loc": "457;33;40;11857;11864"
-                    },
-                    "loc": "453;11;459;12;11723;11919"
+                    "kind": "HttpParameter",
+                    "name": { "value": "header-number-array" },
+                    "in": { "value": "header" },
+                    "array": { "value": "pipes" }
                   },
                   {
-                    "name": {
-                      "value": "header-integer-array",
-                      "loc": "461;21;43;11953;11975"
-                    },
-                    "in": { "value": "header", "loc": "462;19;27;11995;12003" },
-                    "array": { "value": "ssv", "loc": "464;33;38;12066;12071" },
-                    "loc": "460;11;466;12;11931;12127"
+                    "kind": "HttpParameter",
+                    "name": { "value": "header-integer-array" },
+                    "in": { "value": "header" },
+                    "array": { "value": "ssv" }
                   },
                   {
-                    "name": {
-                      "value": "header-boolean-array",
-                      "loc": "468;21;43;12161;12183"
-                    },
-                    "in": { "value": "header", "loc": "469;19;27;12203;12211" },
-                    "array": { "value": "tsv", "loc": "471;33;38;12274;12279" },
-                    "loc": "467;11;473;12;12139;12335"
+                    "kind": "HttpParameter",
+                    "name": { "value": "header-boolean-array" },
+                    "in": { "value": "header" },
+                    "array": { "value": "tsv" }
                   },
                   {
-                    "name": { "value": "body", "loc": "475;21;27;12369;12375" },
-                    "in": { "value": "body", "loc": "476;19;25;12395;12401" },
-                    "loc": "474;11;484;12;12347;12619"
+                    "kind": "HttpParameter",
+                    "name": { "value": "body" },
+                    "in": { "value": "body" }
                   }
                 ],
-                "successCode": { "value": 204, "loc": "487;11;20;12664;12673" },
-                "loc": "285;7;492;8;7169;12802"
+                "successCode": { "value": 204 }
               }
-            ],
-            "loc": "284;5;493;6;6976;12808"
+            ]
           }
         ]
       }
     },
     {
-      "name": "authPermutation",
+      "kind": "Interface",
+      "name": { "value": "authPermutation" },
       "methods": [
         {
-          "name": {
-            "value": "all-auth-schemes",
-            "loc": "496;24;42;12875;12893"
-          },
+          "kind": "Method",
+          "name": { "value": "all-auth-schemes" },
           "security": [
             [
               {
-                "type": { "value": "basic", "loc": "54;15;22;1326;1333" },
-                "name": { "value": "basicAuth", "loc": "53;5;16;1297;1308" },
-                "loc": "53;5;55;6;1297;1339"
+                "kind": "BasicScheme",
+                "type": { "value": "basic" },
+                "name": { "value": "basicAuth" }
               }
             ],
             [
               {
-                "type": { "value": "basic", "loc": "57;15;22;1385;1392" },
-                "name": {
-                  "value": "alternate-basic-auth",
-                  "loc": "56;5;27;1345;1367"
-                },
-                "loc": "56;5;58;6;1345;1398"
+                "kind": "BasicScheme",
+                "type": { "value": "basic" },
+                "name": { "value": "alternate-basic-auth" }
               }
             ],
             [
               {
-                "type": { "value": "apiKey", "loc": "60;15;23;1434;1442" },
-                "name": { "value": "apiKeyAuth", "loc": "59;5;17;1404;1416" },
-                "parameter": {
-                  "value": "x-apikey",
-                  "loc": "62;15;25;1480;1490"
-                },
-                "in": { "value": "header", "loc": "61;13;21;1456;1464" },
-                "loc": "59;5;63;6;1404;1496"
+                "kind": "ApiKeyScheme",
+                "type": { "value": "apiKey" },
+                "name": { "value": "apiKeyAuth" },
+                "parameter": { "value": "x-apikey" },
+                "in": { "value": "header" }
               }
             ],
             [
               {
-                "type": { "value": "oauth2", "loc": "70;15;23;1636;1644" },
-                "name": { "value": "oauth2Auth", "loc": "69;5;17;1606;1618" },
+                "kind": "OAuth2Scheme",
+                "type": { "value": "oauth2" },
+                "name": { "value": "oauth2Auth" },
                 "flows": [
                   {
-                    "type": {
-                      "value": "implicit",
-                      "loc": "71;15;25;1660;1670"
-                    },
-                    "authorizationUrl": {
-                      "value": "https://example.com/auth",
-                      "loc": "72;27;53;1698;1724"
-                    },
+                    "kind": "OAuth2ImplicitFlow",
+                    "type": { "value": "implicit" },
+                    "authorizationUrl": { "value": "https://example.com/auth" },
                     "scopes": [
                       {
-                        "name": {
-                          "value": "admin:gizmos",
-                          "loc": "501;28;42;13049;13063"
-                        },
-                        "description": {
-                          "value": "Manage gizmos",
-                          "loc": "76;25;40;1856;1871"
-                        },
-                        "loc": "76;9;40;1840;1871"
+                        "kind": "OAuth2Scope",
+                        "name": { "value": "admin:gizmos" },
+                        "description": { "value": "Manage gizmos" }
                       }
-                    ],
-                    "loc": "69;5;78;6;1606;1885"
+                    ]
                   }
-                ],
-                "loc": "69;5;78;6;1606;1885"
+                ]
               }
             ]
           ],
-          "parameters": [],
-          "loc": "495;7;508;8;12843;13186"
+          "parameters": []
         },
         {
-          "name": {
-            "value": "combo-auth-schemes",
-            "loc": "510;24;44;13226;13246"
-          },
+          "kind": "Method",
+          "name": { "value": "combo-auth-schemes" },
           "security": [
             [
               {
-                "type": { "value": "basic", "loc": "54;15;22;1326;1333" },
-                "name": { "value": "basicAuth", "loc": "53;5;16;1297;1308" },
-                "loc": "53;5;55;6;1297;1339"
+                "kind": "BasicScheme",
+                "type": { "value": "basic" },
+                "name": { "value": "basicAuth" }
               },
               {
-                "type": { "value": "apiKey", "loc": "60;15;23;1434;1442" },
-                "name": { "value": "apiKeyAuth", "loc": "59;5;17;1404;1416" },
-                "parameter": {
-                  "value": "x-apikey",
-                  "loc": "62;15;25;1480;1490"
-                },
-                "in": { "value": "header", "loc": "61;13;21;1456;1464" },
-                "loc": "59;5;63;6;1404;1496"
+                "kind": "ApiKeyScheme",
+                "type": { "value": "apiKey" },
+                "name": { "value": "apiKeyAuth" },
+                "parameter": { "value": "x-apikey" },
+                "in": { "value": "header" }
               }
             ],
             [
               {
-                "type": { "value": "basic", "loc": "54;15;22;1326;1333" },
-                "name": { "value": "basicAuth", "loc": "53;5;16;1297;1308" },
-                "loc": "53;5;55;6;1297;1339"
+                "kind": "BasicScheme",
+                "type": { "value": "basic" },
+                "name": { "value": "basicAuth" }
               },
               {
-                "type": { "value": "apiKey", "loc": "65;15;23;1541;1549" },
-                "name": {
-                  "value": "alternateApiKeyAuth",
-                  "loc": "64;5;26;1502;1523"
-                },
-                "parameter": { "value": "apikey", "loc": "67;15;23;1586;1594" },
-                "in": { "value": "query", "loc": "66;13;20;1563;1570" },
-                "loc": "64;5;68;6;1502;1600"
+                "kind": "ApiKeyScheme",
+                "type": { "value": "apiKey" },
+                "name": { "value": "alternateApiKeyAuth" },
+                "parameter": { "value": "apikey" },
+                "in": { "value": "query" }
               }
             ],
             [
               {
-                "type": { "value": "basic", "loc": "57;15;22;1385;1392" },
-                "name": {
-                  "value": "alternate-basic-auth",
-                  "loc": "56;5;27;1345;1367"
-                },
-                "loc": "56;5;58;6;1345;1398"
+                "kind": "BasicScheme",
+                "type": { "value": "basic" },
+                "name": { "value": "alternate-basic-auth" }
               },
               {
-                "type": { "value": "oauth2", "loc": "70;15;23;1636;1644" },
-                "name": { "value": "oauth2Auth", "loc": "69;5;17;1606;1618" },
+                "kind": "OAuth2Scheme",
+                "type": { "value": "oauth2" },
+                "name": { "value": "oauth2Auth" },
                 "flows": [
                   {
-                    "type": {
-                      "value": "implicit",
-                      "loc": "71;15;25;1660;1670"
-                    },
-                    "authorizationUrl": {
-                      "value": "https://example.com/auth",
-                      "loc": "72;27;53;1698;1724"
-                    },
+                    "kind": "OAuth2ImplicitFlow",
+                    "type": { "value": "implicit" },
+                    "authorizationUrl": { "value": "https://example.com/auth" },
                     "scopes": [
                       {
-                        "name": {
-                          "value": "admin:gizmos",
-                          "loc": "514;56;70;13432;13446"
-                        },
-                        "description": {
-                          "value": "Manage gizmos",
-                          "loc": "76;25;40;1856;1871"
-                        },
-                        "loc": "76;9;40;1840;1871"
+                        "kind": "OAuth2Scope",
+                        "name": { "value": "admin:gizmos" },
+                        "description": { "value": "Manage gizmos" }
                       }
-                    ],
-                    "loc": "69;5;78;6;1606;1885"
+                    ]
                   }
-                ],
-                "loc": "69;5;78;6;1606;1885"
+                ]
               }
             ]
           ],
-          "parameters": [],
-          "loc": "509;7;521;8;13194;13569"
+          "parameters": []
         }
       ],
       "protocols": {
         "http": [
           {
-            "path": {
-              "value": "/authPermutations",
-              "loc": "494;5;24;12814;12833"
-            },
+            "kind": "HttpPath",
+            "path": { "value": "/authPermutations" },
             "methods": [
               {
-                "name": {
-                  "value": "all-auth-schemes",
-                  "loc": "496;24;42;12875;12893"
-                },
-                "verb": { "value": "get", "loc": "495;7;12;12843;12848" },
+                "kind": "HttpMethod",
+                "name": { "value": "all-auth-schemes" },
+                "verb": { "value": "get" },
                 "parameters": [],
-                "successCode": { "value": 200, "loc": "504;11;16;13111;13116" },
-                "loc": "495;7;508;8;12843;13186"
+                "successCode": { "value": 200 }
               },
               {
-                "name": {
-                  "value": "combo-auth-schemes",
-                  "loc": "510;24;44;13226;13246"
-                },
-                "verb": { "value": "put", "loc": "509;7;12;13194;13199" },
+                "kind": "HttpMethod",
+                "name": { "value": "combo-auth-schemes" },
+                "verb": { "value": "put" },
                 "parameters": [],
-                "successCode": { "value": 200, "loc": "517;11;16;13494;13499" },
-                "loc": "509;7;521;8;13194;13569"
+                "successCode": { "value": 200 }
               }
-            ],
-            "loc": "494;5;522;6;12814;13575"
+            ]
           }
         ]
       }
@@ -1689,476 +1279,471 @@
   ],
   "types": [
     {
-      "name": { "value": "gizmo", "loc": "525;5;12;13604;13611" },
+      "kind": "Type",
+      "name": { "value": "gizmo" },
       "properties": [
         {
-          "name": { "value": "id", "loc": "528;9;13;13669;13673" },
-          "typeName": { "value": "string", "loc": "575;15;23;14913;14921" },
+          "kind": "Property",
+          "name": { "value": "id" },
+          "typeName": { "value": "string" },
           "isPrimitive": true,
           "isArray": false,
           "rules": [
             {
+              "kind": "ValidationRule",
               "id": "string-max-length",
-              "length": { "value": 30, "loc": "576;20;22;14942;14944" },
-              "loc": "576;7;22;14929;14944"
+              "length": { "value": 30 }
             }
-          ],
-          "loc": "574;11;577;6;14897;14950"
+          ]
         },
         {
-          "name": { "value": "name", "loc": "529;9;15;13715;13721" },
-          "typeName": { "value": "string", "loc": "529;27;35;13733;13741" },
+          "kind": "Property",
+          "name": { "value": "name" },
+          "typeName": { "value": "string" },
           "isPrimitive": true,
           "isArray": false,
-          "rules": [],
-          "loc": "529;17;37;13723;13743"
+          "rules": []
         },
         {
-          "name": { "value": "size", "loc": "530;9;15;13753;13759" },
-          "typeName": { "value": "productSize", "loc": "533;5;18;13820;13833" },
+          "kind": "Property",
+          "name": { "value": "size" },
+          "typeName": { "value": "productSize" },
           "isPrimitive": false,
           "isArray": false,
           "rules": [
             {
+              "kind": "ValidationRule",
               "id": "string-enum",
               "values": [
-                { "value": "small", "loc": "535;16;23;13876;13883" },
-                { "value": "medium", "loc": "535;25;33;13885;13893" },
-                { "value": "large", "loc": "535;35;42;13895;13902" }
-              ],
-              "loc": "535;7;43;13867;13903"
+                { "value": "small" },
+                { "value": "medium" },
+                { "value": "large" }
+              ]
             }
-          ],
-          "loc": "533;20;536;6;13835;13909"
+          ]
         }
       ],
-      "rules": [],
-      "loc": "525;5;532;6;13604;13814"
+      "rules": []
     },
     {
-      "name": { "value": "widget", "loc": "537;5;13;13915;13923" },
+      "kind": "Type",
+      "name": { "value": "widget" },
+      "deprecated": { "value": true },
       "properties": [
         {
-          "name": { "value": "id", "loc": "544;13;17;14070;14074" },
-          "typeName": { "value": "string", "loc": "575;15;23;14913;14921" },
+          "kind": "Property",
+          "name": { "value": "id" },
+          "typeName": { "value": "string" },
           "isPrimitive": true,
           "isArray": false,
           "rules": [
-            { "id": "required" },
+            { "kind": "ValidationRule", "id": "required" },
             {
+              "kind": "ValidationRule",
               "id": "string-max-length",
-              "length": { "value": 30, "loc": "576;20;22;14942;14944" },
-              "loc": "576;7;22;14929;14944"
+              "length": { "value": 30 }
             }
-          ],
-          "loc": "574;11;577;6;14897;14950"
+          ]
         },
         {
-          "name": { "value": "name", "loc": "555;9;15;14328;14334" },
-          "typeName": { "value": "string", "loc": "556;19;27;14356;14364" },
+          "kind": "Property",
+          "name": { "value": "kind" },
+          "typeName": { "value": "string" },
+          "constant": { "value": "Widget" },
+          "isPrimitive": true,
+          "isArray": false,
+          "rules": []
+        },
+        {
+          "kind": "Property",
+          "name": { "value": "name" },
+          "deprecated": { "value": true },
+          "typeName": { "value": "string" },
           "isPrimitive": true,
           "isArray": false,
           "rules": [
             {
+              "kind": "ValidationRule",
               "id": "string-max-length",
-              "length": { "value": 30, "loc": "557;24;26;14389;14391" },
-              "loc": "557;11;26;14376;14391"
+              "length": { "value": 30 }
             },
             {
+              "kind": "ValidationRule",
               "id": "string-pattern",
-              "pattern": {
-                "value": "[0-9a-fA-F]+",
-                "loc": "558;22;36;14414;14428"
-              },
-              "loc": "558;11;36;14403;14428"
+              "pattern": { "value": "[0-9a-fA-F]+" }
             }
-          ],
-          "loc": "555;17;559;10;14336;14438"
+          ]
         },
         {
-          "name": { "value": "fiz", "loc": "560;9;14;14448;14453" },
-          "typeName": { "value": "number", "loc": "560;26;34;14465;14473" },
+          "kind": "Property",
+          "name": { "value": "fiz" },
+          "typeName": { "value": "number" },
           "isPrimitive": true,
           "isArray": false,
           "rules": [
-            { "id": "required" },
+            { "kind": "ValidationRule", "id": "required" },
             {
+              "kind": "ValidationRule",
               "id": "number-multiple-of",
-              "value": { "value": 3, "loc": "560;50;51;14489;14490" },
-              "loc": "560;36;51;14475;14490"
+              "value": { "value": 3 }
             }
-          ],
-          "loc": "560;16;53;14455;14492"
+          ]
         },
         {
-          "name": { "value": "buzz", "loc": "561;9;15;14502;14508" },
-          "typeName": { "value": "number", "loc": "561;27;35;14520;14528" },
-          "isPrimitive": true,
-          "isArray": false,
-          "rules": [
-            {
-              "id": "number-multiple-of",
-              "value": { "value": 5, "loc": "561;51;52;14544;14545" },
-              "loc": "561;37;52;14530;14545"
-            }
-          ],
-          "loc": "561;17;54;14510;14547"
-        },
-        {
-          "name": { "value": "fizbuzz", "loc": "562;9;18;14557;14566" },
-          "typeName": { "value": "number", "loc": "562;30;38;14578;14586" },
+          "kind": "Property",
+          "name": { "value": "buzz" },
+          "typeName": { "value": "number" },
+          "default": { "value": 12345 },
           "isPrimitive": true,
           "isArray": false,
           "rules": [
             {
+              "kind": "ValidationRule",
               "id": "number-multiple-of",
-              "value": { "value": 15, "loc": "562;54;56;14602;14604" },
-              "loc": "562;40;56;14588;14604"
+              "value": { "value": 5 }
             }
-          ],
-          "loc": "562;20;58;14568;14606"
+          ]
         },
         {
-          "name": { "value": "foo", "loc": "563;9;14;14616;14621" },
+          "kind": "Property",
+          "name": { "value": "fizbuzz" },
+          "typeName": { "value": "number" },
+          "isPrimitive": true,
+          "isArray": false,
+          "rules": [
+            {
+              "kind": "ValidationRule",
+              "id": "number-multiple-of",
+              "value": { "value": 15 }
+            }
+          ]
+        },
+        {
+          "kind": "Property",
+          "name": { "value": "foo" },
           "typeName": { "value": "widgetFoo" },
           "isPrimitive": false,
           "isArray": false,
-          "rules": [],
-          "loc": "563;16;570;10;14623;14814"
+          "rules": []
         },
         {
-          "name": { "value": "size", "loc": "571;9;15;14824;14830" },
-          "typeName": { "value": "productSize", "loc": "533;5;18;13820;13833" },
+          "kind": "Property",
+          "name": { "value": "size" },
+          "typeName": { "value": "productSize" },
           "isPrimitive": false,
           "isArray": false,
           "rules": [
             {
+              "kind": "ValidationRule",
               "id": "string-enum",
               "values": [
-                { "value": "small", "loc": "535;16;23;13876;13883" },
-                { "value": "medium", "loc": "535;25;33;13885;13893" },
-                { "value": "large", "loc": "535;35;42;13895;13902" }
-              ],
-              "loc": "535;7;43;13867;13903"
+                { "value": "small" },
+                { "value": "medium" },
+                { "value": "large" }
+              ]
             }
-          ],
-          "loc": "533;20;536;6;13835;13909"
+          ]
         }
       ],
       "rules": [
         {
+          "kind": "ObjectValidationRule",
           "id": "object-additional-properties",
-          "forbidden": true,
-          "loc": "549;7;36;14191;14220"
+          "forbidden": true
         }
-      ],
-      "loc": "537;5;550;6;13915;14226"
+      ]
     },
     {
-      "name": { "value": "newWidget", "loc": "551;5;16;14232;14243" },
+      "kind": "Type",
+      "name": { "value": "newWidget" },
       "properties": [
         {
-          "name": { "value": "name", "loc": "555;9;15;14328;14334" },
-          "typeName": { "value": "string", "loc": "556;19;27;14356;14364" },
+          "kind": "Property",
+          "name": { "value": "name" },
+          "deprecated": { "value": true },
+          "typeName": { "value": "string" },
           "isPrimitive": true,
           "isArray": false,
           "rules": [
             {
+              "kind": "ValidationRule",
               "id": "string-max-length",
-              "length": { "value": 30, "loc": "557;24;26;14389;14391" },
-              "loc": "557;11;26;14376;14391"
+              "length": { "value": 30 }
             },
             {
+              "kind": "ValidationRule",
               "id": "string-pattern",
-              "pattern": {
-                "value": "[0-9a-fA-F]+",
-                "loc": "558;22;36;14414;14428"
-              },
-              "loc": "558;11;36;14403;14428"
+              "pattern": { "value": "[0-9a-fA-F]+" }
             }
-          ],
-          "loc": "555;17;559;10;14336;14438"
+          ]
         },
         {
-          "name": { "value": "fiz", "loc": "560;9;14;14448;14453" },
-          "typeName": { "value": "number", "loc": "560;26;34;14465;14473" },
+          "kind": "Property",
+          "name": { "value": "fiz" },
+          "typeName": { "value": "number" },
           "isPrimitive": true,
           "isArray": false,
           "rules": [
-            { "id": "required" },
+            { "kind": "ValidationRule", "id": "required" },
             {
+              "kind": "ValidationRule",
               "id": "number-multiple-of",
-              "value": { "value": 3, "loc": "560;50;51;14489;14490" },
-              "loc": "560;36;51;14475;14490"
+              "value": { "value": 3 }
             }
-          ],
-          "loc": "560;16;53;14455;14492"
+          ]
         },
         {
-          "name": { "value": "buzz", "loc": "561;9;15;14502;14508" },
-          "typeName": { "value": "number", "loc": "561;27;35;14520;14528" },
-          "isPrimitive": true,
-          "isArray": false,
-          "rules": [
-            {
-              "id": "number-multiple-of",
-              "value": { "value": 5, "loc": "561;51;52;14544;14545" },
-              "loc": "561;37;52;14530;14545"
-            }
-          ],
-          "loc": "561;17;54;14510;14547"
-        },
-        {
-          "name": { "value": "fizbuzz", "loc": "562;9;18;14557;14566" },
-          "typeName": { "value": "number", "loc": "562;30;38;14578;14586" },
+          "kind": "Property",
+          "name": { "value": "buzz" },
+          "typeName": { "value": "number" },
+          "default": { "value": 12345 },
           "isPrimitive": true,
           "isArray": false,
           "rules": [
             {
+              "kind": "ValidationRule",
               "id": "number-multiple-of",
-              "value": { "value": 15, "loc": "562;54;56;14602;14604" },
-              "loc": "562;40;56;14588;14604"
+              "value": { "value": 5 }
             }
-          ],
-          "loc": "562;20;58;14568;14606"
+          ]
         },
         {
-          "name": { "value": "foo", "loc": "563;9;14;14616;14621" },
+          "kind": "Property",
+          "name": { "value": "fizbuzz" },
+          "typeName": { "value": "number" },
+          "isPrimitive": true,
+          "isArray": false,
+          "rules": [
+            {
+              "kind": "ValidationRule",
+              "id": "number-multiple-of",
+              "value": { "value": 15 }
+            }
+          ]
+        },
+        {
+          "kind": "Property",
+          "name": { "value": "foo" },
           "typeName": { "value": "newWidgetFoo" },
           "isPrimitive": false,
           "isArray": false,
-          "rules": [],
-          "loc": "563;16;570;10;14623;14814"
+          "rules": []
         },
         {
-          "name": { "value": "size", "loc": "571;9;15;14824;14830" },
-          "typeName": { "value": "productSize", "loc": "533;5;18;13820;13833" },
+          "kind": "Property",
+          "name": { "value": "size" },
+          "typeName": { "value": "productSize" },
           "isPrimitive": false,
           "isArray": false,
           "rules": [
             {
+              "kind": "ValidationRule",
               "id": "string-enum",
               "values": [
-                { "value": "small", "loc": "535;16;23;13876;13883" },
-                { "value": "medium", "loc": "535;25;33;13885;13893" },
-                { "value": "large", "loc": "535;35;42;13895;13902" }
-              ],
-              "loc": "535;7;43;13867;13903"
+                { "value": "small" },
+                { "value": "medium" },
+                { "value": "large" }
+              ]
             }
-          ],
-          "loc": "533;20;536;6;13835;13909"
+          ]
         }
       ],
-      "rules": [],
-      "loc": "551;5;573;6;14232;14885"
+      "rules": []
     },
     {
+      "kind": "Type",
       "name": { "value": "gizmosResponse" },
       "properties": [
         {
-          "name": { "value": "data", "loc": "44;11;17;1131;1137" },
-          "typeName": { "value": "gizmo", "loc": "525;5;12;13604;13611" },
+          "kind": "Property",
+          "name": { "value": "data" },
+          "typeName": { "value": "gizmo" },
           "isPrimitive": false,
           "isArray": true,
-          "rules": [{ "id": "required" }],
-          "loc": "44;19;47;12;1139;1236"
+          "rules": [{ "kind": "ValidationRule", "id": "required" }]
         }
       ],
-      "rules": [],
-      "loc": "40;17;49;8;1039;1254"
+      "rules": []
     },
     {
+      "kind": "Type",
       "name": { "value": "createWidgetBody" },
       "properties": [
         {
-          "name": { "value": "name", "loc": "170;17;23;4223;4229" },
-          "typeName": { "value": "string", "loc": "170;35;43;4241;4249" },
+          "kind": "Property",
+          "name": { "value": "name" },
+          "typeName": { "value": "string" },
           "isPrimitive": true,
           "isArray": false,
-          "rules": [{ "id": "required" }],
-          "loc": "170;25;45;4231;4251"
+          "rules": [{ "kind": "ValidationRule", "id": "required" }]
         }
       ],
       "rules": [
         {
+          "kind": "ObjectValidationRule",
           "id": "object-additional-properties",
-          "forbidden": true,
-          "loc": "172;15;44;4283;4312"
+          "forbidden": true
         }
-      ],
-      "loc": "166;23;173;14;4107;4326"
+      ]
     },
     {
+      "kind": "Type",
       "name": { "value": "exhaustiveParamsBody" },
       "properties": [
         {
-          "name": { "value": "foo", "loc": "480;17;22;12505;12510" },
-          "typeName": { "value": "string", "loc": "480;34;42;12522;12530" },
+          "kind": "Property",
+          "name": { "value": "foo" },
+          "typeName": { "value": "string" },
           "isPrimitive": true,
           "isArray": false,
-          "rules": [],
-          "loc": "480;24;44;12512;12532"
+          "rules": []
         },
         {
-          "name": { "value": "bar", "loc": "481;17;22;12550;12555" },
-          "typeName": { "value": "string", "loc": "481;34;42;12567;12575" },
+          "kind": "Property",
+          "name": { "value": "bar" },
+          "typeName": { "value": "string" },
           "isPrimitive": true,
           "isArray": false,
-          "rules": [],
-          "loc": "481;24;44;12557;12577"
+          "rules": []
         }
       ],
-      "rules": [],
-      "loc": "477;23;483;14;12425;12607"
+      "rules": []
     },
     {
+      "kind": "Type",
       "name": { "value": "widgetFoo" },
       "properties": [
         {
-          "name": { "value": "fiz", "loc": "567;13;18;14723;14728" },
-          "typeName": { "value": "number", "loc": "567;30;38;14740;14748" },
+          "kind": "Property",
+          "name": { "value": "fiz" },
+          "typeName": { "value": "number" },
           "isPrimitive": true,
           "isArray": false,
-          "rules": [],
-          "loc": "567;20;40;14730;14750"
+          "rules": []
         },
         {
-          "name": { "value": "buzz", "loc": "568;13;19;14764;14770" },
-          "typeName": { "value": "number", "loc": "568;31;39;14782;14790" },
+          "kind": "Property",
+          "name": { "value": "buzz" },
+          "typeName": { "value": "number" },
           "isPrimitive": true,
           "isArray": false,
-          "rules": [{ "id": "required" }],
-          "loc": "568;21;41;14772;14792"
+          "rules": [{ "kind": "ValidationRule", "id": "required" }]
         }
       ],
-      "rules": [],
-      "loc": "563;16;570;10;14623;14814"
+      "rules": []
     },
     {
+      "kind": "Type",
       "name": { "value": "newWidgetFoo" },
       "properties": [
         {
-          "name": { "value": "fiz", "loc": "567;13;18;14723;14728" },
-          "typeName": { "value": "number", "loc": "567;30;38;14740;14748" },
+          "kind": "Property",
+          "name": { "value": "fiz" },
+          "typeName": { "value": "number" },
           "isPrimitive": true,
           "isArray": false,
-          "rules": [],
-          "loc": "567;20;40;14730;14750"
+          "rules": []
         },
         {
-          "name": { "value": "buzz", "loc": "568;13;19;14764;14770" },
-          "typeName": { "value": "number", "loc": "568;31;39;14782;14790" },
+          "kind": "Property",
+          "name": { "value": "buzz" },
+          "typeName": { "value": "number" },
           "isPrimitive": true,
           "isArray": false,
-          "rules": [{ "id": "required" }],
-          "loc": "568;21;41;14772;14792"
+          "rules": [{ "kind": "ValidationRule", "id": "required" }]
         }
       ],
-      "rules": [],
-      "loc": "563;16;570;10;14623;14814"
+      "rules": []
     }
   ],
   "enums": [
     {
+      "kind": "Enum",
       "name": { "value": "createGizmoSize" },
       "values": [
-        { "value": "small", "loc": "110;22;29;2698;2705" },
-        { "value": "medium", "loc": "110;31;39;2707;2715" },
-        { "value": "big", "loc": "110;41;46;2717;2722" },
-        { "value": "XL", "loc": "110;48;52;2724;2728" }
-      ],
-      "loc": "110;13;53;2689;2729"
+        { "kind": "EnumValue", "content": { "value": "small" } },
+        { "kind": "EnumValue", "content": { "value": "medium" } },
+        { "kind": "EnumValue", "content": { "value": "big" } },
+        { "kind": "EnumValue", "content": { "value": "XL" } }
+      ]
     },
     {
+      "kind": "Enum",
       "name": { "value": "exhaustiveParamsQueryEnum" },
       "values": [
-        { "value": "one", "loc": "297;22;27;7486;7491" },
-        { "value": "two", "loc": "297;29;34;7493;7498" },
-        { "value": "three", "loc": "297;36;43;7500;7507" }
-      ],
-      "loc": "297;13;44;7477;7508"
+        { "kind": "EnumValue", "content": { "value": "one" } },
+        { "kind": "EnumValue", "content": { "value": "two" } },
+        { "kind": "EnumValue", "content": { "value": "three" } }
+      ]
     },
     {
+      "kind": "Enum",
       "name": { "value": "exhaustiveParamsQueryEnumArray" },
       "values": [
-        { "value": "one", "loc": "324;51;56;8200;8205" },
-        { "value": "two", "loc": "324;58;63;8207;8212" },
-        { "value": "three", "loc": "324;65;72;8214;8221" }
-      ],
-      "loc": "324;42;73;8191;8222"
+        { "kind": "EnumValue", "content": { "value": "one" } },
+        { "kind": "EnumValue", "content": { "value": "two" } },
+        { "kind": "EnumValue", "content": { "value": "three" } }
+      ]
     },
     {
+      "kind": "Enum",
       "name": { "value": "exhaustiveParamsPathEnum" },
       "values": [
-        { "value": "one", "loc": "355;22;27;9034;9039" },
-        { "value": "two", "loc": "355;29;34;9041;9046" },
-        { "value": "three", "loc": "355;36;43;9048;9055" }
-      ],
-      "loc": "355;13;44;9025;9056"
+        { "kind": "EnumValue", "content": { "value": "one" } },
+        { "kind": "EnumValue", "content": { "value": "two" } },
+        { "kind": "EnumValue", "content": { "value": "three" } }
+      ]
     },
     {
+      "kind": "Enum",
       "name": { "value": "exhaustiveParamsPathEnumArray" },
       "values": [
-        { "value": "one", "loc": "388;51;56;9938;9943" },
-        { "value": "two", "loc": "388;58;63;9945;9950" },
-        { "value": "three", "loc": "388;65;72;9952;9959" }
-      ],
-      "loc": "388;42;73;9929;9960"
+        { "kind": "EnumValue", "content": { "value": "one" } },
+        { "kind": "EnumValue", "content": { "value": "two" } },
+        { "kind": "EnumValue", "content": { "value": "three" } }
+      ]
     },
     {
+      "kind": "Enum",
       "name": { "value": "exhaustiveParamsHeaderEnum" },
       "values": [
-        { "value": "one", "loc": "423;22;27;10912;10917" },
-        { "value": "two", "loc": "423;29;34;10919;10924" },
-        { "value": "three", "loc": "423;36;43;10926;10933" }
-      ],
-      "loc": "423;13;44;10903;10934"
+        { "kind": "EnumValue", "content": { "value": "one" } },
+        { "kind": "EnumValue", "content": { "value": "two" } },
+        { "kind": "EnumValue", "content": { "value": "three" } }
+      ]
     },
     {
+      "kind": "Enum",
       "name": { "value": "exhaustiveParamsHeaderEnumArray" },
       "values": [
-        { "value": "one", "loc": "451;51;56;11675;11680" },
-        { "value": "two", "loc": "451;58;63;11682;11687" },
-        { "value": "three", "loc": "451;65;72;11689;11696" }
-      ],
-      "loc": "451;42;73;11666;11697"
+        { "kind": "EnumValue", "content": { "value": "one" } },
+        { "kind": "EnumValue", "content": { "value": "two" } },
+        { "kind": "EnumValue", "content": { "value": "three" } }
+      ]
     },
     {
-      "name": { "value": "productSize", "loc": "533;5;18;13820;13833" },
+      "kind": "Enum",
+      "name": { "value": "productSize" },
       "values": [
-        { "value": "small", "loc": "535;16;23;13876;13883" },
-        { "value": "medium", "loc": "535;25;33;13885;13893" },
-        { "value": "large", "loc": "535;35;42;13895;13902" }
-      ],
-      "loc": "535;7;43;13867;13903"
+        { "kind": "EnumValue", "content": { "value": "small" } },
+        { "kind": "EnumValue", "content": { "value": "medium" } },
+        { "kind": "EnumValue", "content": { "value": "large" } }
+      ]
     }
   ],
   "unions": [],
-  "loc": "1;1;579;2;0;14956",
   "meta": [
+    { "key": { "value": "metaString" }, "value": { "value": "bar" } },
+    { "key": { "value": "metaNumber" }, "value": { "value": 1234 } },
+    { "key": { "value": "metaBoolean" }, "value": { "value": true } },
+    { "key": { "value": "metaNull" }, "value": { "value": null } },
     {
-      "key": { "value": "metaString", "loc": "3;3;17;24;38" },
-      "value": { "value": "bar", "loc": "3;19;24;40;45" }
+      "key": { "value": "metaObject" },
+      "value": { "value": { "foo": "bar" } }
     },
     {
-      "key": { "value": "metaNumber", "loc": "4;3;17;49;63" },
-      "value": { "value": 1234, "loc": "4;19;23;65;69" }
-    },
-    {
-      "key": { "value": "metaBoolean", "loc": "5;3;18;73;88" },
-      "value": { "value": true, "loc": "5;20;24;90;94" }
-    },
-    {
-      "key": { "value": "metaNull", "loc": "6;3;15;98;110" },
-      "value": { "value": null, "loc": "6;17;21;112;116" }
-    },
-    {
-      "key": { "value": "metaObject", "loc": "7;3;17;120;134" },
-      "value": { "value": { "foo": "bar" }, "loc": "7;19;35;136;152" }
-    },
-    {
-      "key": { "value": "metaArray", "loc": "8;3;16;156;169" },
-      "value": { "value": [{ "foo": "bar" }], "loc": "8;18;36;171;189" }
+      "key": { "value": "metaArray" },
+      "value": { "value": [{ "foo": "bar" }] }
     }
   ]
 }

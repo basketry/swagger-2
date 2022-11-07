@@ -22,6 +22,7 @@
       "name": "search",
       "in": "query",
       "type": "string",
+      "default": "QWERTY",
       "x-metaString": "bar",
       "x-metaNumber": 1234,
       "x-metaBoolean": true,
@@ -85,6 +86,7 @@
   "paths": {
     "/gizmos": {
       "get": {
+        "deprecated": true,
         "summary": "Only has a summary",
         "operationId": "getGizmos",
         "parameters": [{ "$ref": "#/parameters/search" }],
@@ -103,6 +105,7 @@
         "operationId": "createGizmo",
         "parameters": [
           {
+            "deprecated": true,
             "in": "query",
             "description": "Anonymous enum",
             "name": "size",
@@ -537,11 +540,13 @@
     "widget": {
       "type": "object",
       "required": ["id"],
+      "deprecated": true,
       "allOf": [
         {
           "type": "object",
           "properties": {
-            "id": { "$ref": "#/definitions/id" }
+            "id": { "$ref": "#/definitions/id" },
+            "kind": { "type": "string", "const": "Widget" }
           }
         },
         { "$ref": "#/definitions/newWidget" }
@@ -553,12 +558,13 @@
       "required": ["fiz"],
       "properties": {
         "name": {
+          "deprecated": true,
           "type": "string",
           "maxLength": 30,
           "pattern": "[0-9a-fA-F]+"
         },
         "fiz": { "type": "number", "multipleOf": 3 },
-        "buzz": { "type": "number", "multipleOf": 5 },
+        "buzz": { "type": "number", "multipleOf": 5, "default": 12345 },
         "fizbuzz": { "type": "number", "multipleOf": 15 },
         "foo": {
           "type": "object",

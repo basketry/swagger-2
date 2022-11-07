@@ -4,6 +4,7 @@ import * as https from 'https';
 
 import { ReturnType, Service, validate } from 'basketry';
 import parser from '.';
+import { stringify } from './snapshot/create-snapshot';
 
 function noSource(service: Service): Omit<Service, 'sourcePath'> {
   const { sourcePath, ...rest } = service;
@@ -23,7 +24,7 @@ describe('parser', () => {
 
     // ACT
     const result = JSON.parse(
-      JSON.stringify(parser(sourceContent, sourcePath).service),
+      stringify(parser(sourceContent, sourcePath).service),
     );
 
     // ASSERT
@@ -64,7 +65,7 @@ describe('parser', () => {
 
     // ACT
     const result = JSON.parse(
-      JSON.stringify(parser(sourceContent, sourcePath).service),
+      stringify(parser(sourceContent, sourcePath).service),
     );
 
     // ASSERT

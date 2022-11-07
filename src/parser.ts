@@ -6,25 +6,25 @@ import { AST, DocumentNode, parse } from '@basketry/ast';
 import * as OAS2 from './types';
 
 import {
+  encodeRange,
   Enum,
   HttpMethod,
   HttpPath,
   Interface,
+  Meta,
   Method,
   ObjectValidationRule,
   Parameter,
+  PrimitiveValue,
   Property,
   ReturnType,
-  Service,
+  Scalar,
   SecurityOption,
   SecurityScheme,
+  Service,
   Type,
-  ValidationRule,
-  Literal,
   TypedValue,
-  PrimitiveValue,
-  Meta,
-  encodeRange,
+  ValidationRule,
 } from 'basketry';
 import { relative } from 'path';
 
@@ -62,7 +62,8 @@ export class OAS2Parser {
     this.schema.info.title.loc;
 
     return {
-      basketry: '1',
+      kind: 'Service',
+      basketry: '1.1-rc',
       sourcePath: relative(process.cwd(), this.sourcePath),
       title: {
         value: pascal(this.schema.info.title.value),
@@ -102,8 +103,9 @@ export class OAS2Parser {
   }
 
   private parseInterfaces(): Interface[] {
-    return this.parserInterfaceNames().map((name) => ({
-      name: singular(name),
+    return this.parserInterfaceNames().map<Interface>((name) => ({
+      kind: 'Interface',
+      name: { value: singular(name) },
       methods: this.parseMethods(name),
       protocols: {
         http: this.parseHttpProtocol(name),
@@ -114,11 +116,11 @@ export class OAS2Parser {
   private parseResponseCode(
     verb: string,
     operation: OAS2.OperationNode,
-  ): Literal<number> {
+  ): Scalar<number> {
     const primary = this.parsePrimaryResponseKey(operation);
 
     if (typeof primary?.value === 'number') {
-      return primary as Literal<number>;
+      return primary as Scalar<number>;
     } else if (primary?.value === 'default') {
       const res = operation.responses.read(primary.value);
       if (res && this.resolve(res, OAS2.ResponseNode).schema) {
@@ -155,6 +157,7 @@ export class OAS2Parser {
       const commonParameters = pathItem.parameters || [];
 
       const httpPath: HttpPath = {
+        kind: 'HttpPath',
         path: { value: path, loc: keyLoc },
         methods: [],
         loc,
@@ -171,6 +174,7 @@ export class OAS2Parser {
         const methodLoc = pathItem.propRange(verb)!;
 
         const httpMethod: HttpMethod = {
+          kind: 'HttpMethod',
           name: {
             value: operation.operationId?.value || 'unknown',
             loc: operation.operationId
@@ -201,6 +205,7 @@ export class OAS2Parser {
             resolved.nodeType === 'ArrayParameter'
           ) {
             httpMethod.parameters.push({
+              kind: 'HttpParameter',
               name: { value: name.value, loc: range(name) },
               in: { value: location.value, loc: range(location) },
               array: {
@@ -213,6 +218,7 @@ export class OAS2Parser {
             });
           } else {
             httpMethod.parameters.push({
+              kind: 'HttpParameter',
               name: { value: name.value, loc: range(name) },
               in: { value: location.value, loc: range(location) },
               loc: range(resolved),
@@ -276,6 +282,7 @@ export class OAS2Parser {
         ? range(operation.operationId)
         : undefined;
       methods.push({
+        kind: 'Method',
         name: {
           value: operation.operationId?.value || 'UNNAMED',
           loc: nameLoc,
@@ -286,6 +293,7 @@ export class OAS2Parser {
           operation.summary,
           operation.description,
         ),
+        deprecated: dep(operation.deprecated),
         returnType: this.parseReturnType(operation),
         loc: this.schema.paths.read(path)!.propRange(verb)!,
         meta: this.parseMeta(operation),
@@ -297,7 +305,7 @@ export class OAS2Parser {
   private parseDescription(
     summary: OAS2.LiteralNode<string> | undefined,
     description: OAS2.LiteralNode<string> | undefined,
-  ): Literal<string> | Literal<string>[] | undefined {
+  ): Scalar<string> | Scalar<string>[] | undefined {
     if (summary && description)
       return [
         { value: summary.value, loc: range(summary) },
@@ -311,7 +319,7 @@ export class OAS2Parser {
 
   private parseDescriptionOnly(
     description: OAS2.LiteralNode<string> | undefined,
-  ): Literal<string> | undefined {
+  ): Scalar<string> | undefined {
     if (description)
       return { value: description.value, loc: range(description) };
     return;
@@ -338,18 +346,23 @@ export class OAS2Parser {
           switch (definition.nodeType) {
             case 'BasicSecurityScheme':
               return {
-                type: { value: 'basic', loc: range(definition.type) },
+                kind: 'BasicScheme',
+                type: {
+                  value: 'basic',
+                  loc: range(definition.type),
+                },
                 name,
                 loc,
                 meta: this.parseMeta(definition),
               };
             case 'ApiKeySecurityScheme':
               return {
+                kind: 'ApiKeyScheme',
                 type: { value: 'apiKey', loc: range(definition.type) },
                 name,
                 description: this.parseDescriptionOnly(definition.description),
-                parameter: literal(definition.name),
-                in: literal(definition.in),
+                parameter: scalar(definition.name),
+                in: scalar(definition.in),
                 loc,
                 meta: this.parseMeta(definition),
               };
@@ -357,6 +370,7 @@ export class OAS2Parser {
               switch (definition.flow.value) {
                 case 'implicit':
                   return {
+                    kind: 'OAuth2Scheme',
                     type: { value: 'oauth2', loc: range(definition.type) },
                     name,
                     description: this.parseDescriptionOnly(
@@ -364,14 +378,16 @@ export class OAS2Parser {
                     ),
                     flows: [
                       {
+                        kind: 'OAuth2ImplicitFlow',
                         type: {
                           value: 'implicit',
                           loc: range(definition.flow),
                         },
-                        authorizationUrl: literal(definition.authorizationUrl),
+                        authorizationUrl: scalar(definition.authorizationUrl),
                         // WARNING! This is different than the others
                         scopes: requirement.map((r) => ({
-                          name: literal(r),
+                          kind: 'OAuth2Scope',
+                          name: scalar(r),
                           description: this.parseDescriptionOnly(
                             definition.scopes.read(r.value),
                           )!,
@@ -385,6 +401,7 @@ export class OAS2Parser {
                   };
                 case 'password':
                   return {
+                    kind: 'OAuth2Scheme',
                     type: { value: 'oauth2', loc: range(definition.type) },
                     name,
                     description: this.parseDescriptionOnly(
@@ -392,13 +409,15 @@ export class OAS2Parser {
                     ),
                     flows: [
                       {
+                        kind: 'OAuth2PasswordFlow',
                         type: {
                           value: 'password',
                           loc: range(definition.flow),
                         },
-                        tokenUrl: literal(definition.tokenUrl),
+                        tokenUrl: scalar(definition.tokenUrl),
                         // WARNING! This is different than implicit
                         scopes: definition.scopes.keys.map((k) => ({
+                          kind: 'OAuth2Scope',
                           name: {
                             value: k,
                             loc: definition.scopes.keyRange(k),
@@ -416,6 +435,7 @@ export class OAS2Parser {
                   };
                 case 'application':
                   return {
+                    kind: 'OAuth2Scheme',
                     type: { value: 'oauth2', loc: range(definition.type) },
                     name,
                     description: this.parseDescriptionOnly(
@@ -423,13 +443,15 @@ export class OAS2Parser {
                     ),
                     flows: [
                       {
+                        kind: 'OAuth2ClientCredentialsFlow',
                         type: {
                           value: 'clientCredentials',
                           loc: range(definition.flow),
                         },
-                        tokenUrl: literal(definition.tokenUrl),
+                        tokenUrl: scalar(definition.tokenUrl),
                         // WARNING! This is different than implicit
                         scopes: definition.scopes.keys.map((k) => ({
+                          kind: 'OAuth2Scope',
                           name: {
                             value: k,
                             loc: definition.scopes.keyRange(k),
@@ -447,6 +469,7 @@ export class OAS2Parser {
                   };
                 case 'accessCode':
                   return {
+                    kind: 'OAuth2Scheme',
                     type: { value: 'oauth2', loc: range(definition.type) },
                     name,
                     description: this.parseDescriptionOnly(
@@ -454,14 +477,16 @@ export class OAS2Parser {
                     ),
                     flows: [
                       {
+                        kind: 'OAuth2AuthorizationCodeFlow',
                         type: {
                           value: 'authorizationCode',
                           loc: range(definition.flow),
                         },
-                        authorizationUrl: literal(definition.authorizationUrl),
-                        tokenUrl: literal(definition.tokenUrl),
+                        authorizationUrl: scalar(definition.authorizationUrl),
+                        tokenUrl: scalar(definition.tokenUrl),
                         // WARNING! This is different than implicit
                         scopes: definition.scopes.keys.map((k) => ({
+                          kind: 'OAuth2Scope',
                           name: {
                             value: k,
                             loc: definition.scopes.keyRange(k),
@@ -524,9 +549,13 @@ export class OAS2Parser {
 
     if (x.isPrimitive) {
       return {
+        kind: 'Parameter',
         name: { value: param.name.value, loc: range(param.name) },
         description: this.parseDescription(undefined, param.description),
         typeName: x.typeName,
+        deprecated: x.deprecated,
+        default: x.default,
+        constant: x.constant,
         isPrimitive: x.isPrimitive,
         isArray: x.isArray,
         rules: this.parseRules(resolved, param.required?.value),
@@ -535,9 +564,11 @@ export class OAS2Parser {
       };
     } else {
       return {
+        kind: 'Parameter',
         name: { value: param.name.value, loc: range(param.name) },
         description: this.parseDescription(undefined, param.description),
         typeName: x.typeName,
+        deprecated: x.deprecated,
         isPrimitive: x.isPrimitive,
         isArray: x.isArray,
         rules: this.parseRules(resolved, param.required?.value),
@@ -573,8 +604,10 @@ export class OAS2Parser {
     localName: string,
     parentName: string,
   ): {
-    enumValues?: Literal<string>[];
+    enumValues?: Scalar<string>[];
     rules: ValidationRule[];
+    deprecated: Scalar<true> | undefined;
+    constant: Scalar<string | number | boolean> | undefined;
     loc: string;
   } & TypedValue {
     if (OAS2.isRefNode(def)) {
@@ -592,6 +625,8 @@ export class OAS2Parser {
               value: def.$ref.value.substring(14),
               loc: OAS2.refRange(this.schema.node, def.$ref.value),
             },
+            deprecated: undefined,
+            constant: undefined,
             isPrimitive: false,
             isArray: false,
             rules: this.parseRules(res),
@@ -604,15 +639,19 @@ export class OAS2Parser {
           };
 
           this.enums.push({
+            kind: 'Enum',
             name: name,
             values: res.enum.map((n) => ({
-              value: n.value,
+              kind: 'EnumValue',
+              content: scalar(n),
               loc: range(n),
             })),
             loc: res.propRange('enum')!,
           });
           return {
             typeName: name,
+            deprecated: undefined,
+            constant: undefined,
             isPrimitive: false,
             isArray: false,
             rules: this.parseRules(res),
@@ -627,6 +666,8 @@ export class OAS2Parser {
             value: def.$ref.value,
             loc: OAS2.refRange(this.schema.node, def.$ref.value),
           },
+          deprecated: undefined,
+          constant: undefined,
           isPrimitive: false,
           isArray: false,
           rules: this.parseRules(res),
@@ -642,15 +683,19 @@ export class OAS2Parser {
         if (def.enum) {
           const enumName = camel(`${parentName}_${singular(localName)}`);
           this.enums.push({
+            kind: 'Enum',
             name: { value: enumName },
             values: def.enum.map((n) => ({
-              value: n.value,
+              kind: 'EnumValue',
+              content: scalar(n),
               loc: range(n),
             })),
             loc: def.propRange('enum')!,
           });
           return {
             typeName: { value: enumName },
+            deprecated: dep(def.deprecated),
+            constant: con(def.const),
             isPrimitive: false,
             isArray: false,
             rules,
@@ -659,6 +704,9 @@ export class OAS2Parser {
         } else {
           return {
             ...this.parseStringName(def),
+            deprecated: dep(def.deprecated),
+            default: scalar(def.default),
+            constant: con(def.const),
             isArray: false,
             rules,
             loc: range(def),
@@ -668,18 +716,37 @@ export class OAS2Parser {
       case 'NumberSchema':
         return {
           ...this.parseNumberName(def),
+          deprecated: dep(def.deprecated),
+          default: scalar(def.default),
+          constant: con(def.const),
           isArray: false,
           rules,
           loc: range(def),
         };
       case 'BooleanParameter':
       case 'BooleanSchema':
+        return {
+          typeName: {
+            value: def.type.value,
+            loc: range(def.type),
+          },
+          deprecated: dep(def.deprecated),
+          default: scalar(def.default),
+          constant: con(def.const),
+          isPrimitive: true,
+          isArray: false,
+          rules,
+          loc: range(def),
+        };
       case 'NullSchema':
         return {
           typeName: {
             value: def.type.value,
             loc: range(def.type),
           },
+          deprecated: dep(def.deprecated),
+          default: scalar(def.default),
+          constant: undefined,
           isPrimitive: true,
           isArray: false,
           rules,
@@ -692,6 +759,8 @@ export class OAS2Parser {
         if (items.isPrimitive) {
           return {
             typeName: items.typeName,
+            deprecated: dep(def.deprecated),
+            constant: undefined,
             isPrimitive: items.isPrimitive,
             isArray: true,
             rules,
@@ -700,6 +769,8 @@ export class OAS2Parser {
         } else {
           return {
             typeName: items.typeName,
+            deprecated: dep(def.deprecated),
+            constant: undefined,
             isPrimitive: items.isPrimitive,
             isArray: true,
             rules,
@@ -710,6 +781,7 @@ export class OAS2Parser {
       case 'ObjectSchema':
         const typeName = { value: camel(`${parentName}_${localName}`) };
         this.anonymousTypes.push({
+          kind: 'Type',
           name: typeName,
           properties: this.parseProperties(
             def.properties,
@@ -723,12 +795,15 @@ export class OAS2Parser {
                 loc: range(def.description),
               }
             : undefined,
+          deprecated: dep(def.deprecated),
           rules: this.parseObjectRules(def),
           loc: range(def),
         });
 
         return {
           typeName,
+          deprecated: dep(def.deprecated),
+          constant: undefined,
           isPrimitive: false,
           isArray: false,
           rules,
@@ -737,6 +812,8 @@ export class OAS2Parser {
       default:
         return {
           typeName: { value: 'untyped' },
+          deprecated: undefined,
+          constant: undefined,
           isPrimitive: true,
           isArray: false,
           rules,
@@ -831,7 +908,7 @@ export class OAS2Parser {
 
   private parsePrimaryResponseKey(
     operation: OAS2.OperationNode,
-  ): Literal<number> | Literal<'default'> | undefined {
+  ): Scalar<number> | Scalar<'default'> | undefined {
     const hasDefault =
       typeof operation.responses.read('default') !== 'undefined';
     const code = operation.responses.keys.filter((c) => c.startsWith('2'))[0]; // TODO: sort
@@ -862,11 +939,14 @@ export class OAS2Parser {
 
     if (!response.schema) return;
 
-    return this.parseType(
-      response.schema,
-      'response',
-      name || operation.operationId?.value || '',
-    );
+    return {
+      kind: 'ReturnType',
+      ...this.parseType(
+        response.schema,
+        'response',
+        name || operation.operationId?.value || '',
+      ),
+    };
   }
 
   private parseDefinitions(): Type[] {
@@ -886,6 +966,7 @@ export class OAS2Parser {
 
     return definitions.map(([name, node, nameLoc, defLoc]) => {
       return {
+        kind: 'Type',
         name: { value: name, loc: nameLoc },
         description: node.description
           ? {
@@ -893,6 +974,7 @@ export class OAS2Parser {
               loc: range(node.description),
             }
           : undefined,
+        deprecated: dep(node.deprecated),
         properties:
           node.nodeType === 'ObjectSchema'
             ? this.parseProperties(
@@ -938,9 +1020,13 @@ export class OAS2Parser {
         const x = this.parseType(prop, name, parentName || '');
         if (x.isPrimitive) {
           props.push({
+            kind: 'Property',
             name: { value: name, loc: properties?.keyRange(name) },
             description: this.parseDescriptionOnly(resolvedProp.description),
+            deprecated: x.deprecated,
             typeName: x.typeName,
+            default: x.default,
+            constant: x.constant,
             isPrimitive: x.isPrimitive,
             isArray: x.isArray,
             rules: this.parseRules(resolvedProp, requiredSet.has(name)),
@@ -949,8 +1035,10 @@ export class OAS2Parser {
           });
         } else {
           props.push({
+            kind: 'Property',
             name: { value: name, loc: properties?.keyRange(name) },
             description: this.parseDescriptionOnly(resolvedProp.description),
+            deprecated: x.deprecated,
             typeName: x.typeName,
             isPrimitive: x.isPrimitive,
             isArray: x.isArray,
@@ -990,7 +1078,9 @@ export class OAS2Parser {
 
     const rules = [...localRules, ...itemRules];
 
-    return required ? [{ id: 'required' }, ...rules] : rules;
+    return required
+      ? [{ kind: 'ValidationRule', id: 'required' }, ...rules]
+      : rules;
   }
 
   private parseObjectRules(
@@ -1023,6 +1113,7 @@ export interface ObjectValidationRuleFactory {
 const stringMaxLengthFactory: ValidationRuleFactory = (def) => {
   if (OAS2.isString(def) && typeof def.maxLength?.value === 'number') {
     return {
+      kind: 'ValidationRule',
       id: 'string-max-length',
       length: { value: def.maxLength.value, loc: range(def.maxLength) },
       loc: def.propRange('maxLength')!,
@@ -1035,6 +1126,7 @@ const stringMaxLengthFactory: ValidationRuleFactory = (def) => {
 const stringMinLengthFactory: ValidationRuleFactory = (def) => {
   if (OAS2.isString(def) && typeof def.minLength?.value === 'number') {
     return {
+      kind: 'ValidationRule',
       id: 'string-min-length',
       length: { value: def.minLength.value, loc: range(def.minLength) },
       loc: def.propRange('minLength')!,
@@ -1047,6 +1139,7 @@ const stringMinLengthFactory: ValidationRuleFactory = (def) => {
 const stringPatternFactory: ValidationRuleFactory = (def) => {
   if (OAS2.isString(def) && typeof def.pattern?.value === 'string') {
     return {
+      kind: 'ValidationRule',
       id: 'string-pattern',
       pattern: { value: def.pattern.value, loc: range(def.pattern) },
       loc: def.propRange('pattern')!,
@@ -1059,6 +1152,7 @@ const stringPatternFactory: ValidationRuleFactory = (def) => {
 const stringFormatFactory: ValidationRuleFactory = (def) => {
   if (OAS2.isString(def) && typeof def.format?.value === 'string') {
     return {
+      kind: 'ValidationRule',
       id: 'string-format',
       format: { value: def.format.value, loc: range(def.format) },
       loc: def.propRange('format')!,
@@ -1071,6 +1165,7 @@ const stringFormatFactory: ValidationRuleFactory = (def) => {
 const stringEnumFactory: ValidationRuleFactory = (def) => {
   if (OAS2.isString(def) && Array.isArray(def.enum)) {
     return {
+      kind: 'ValidationRule',
       id: 'string-enum',
       values: def.enum.map((n) => ({ value: n.value, loc: range(n) })),
       loc: def.propRange('enum')!,
@@ -1083,6 +1178,7 @@ const stringEnumFactory: ValidationRuleFactory = (def) => {
 const numberMultipleOfFactory: ValidationRuleFactory = (def) => {
   if (OAS2.isNumber(def) && typeof def.multipleOf?.value === 'number') {
     return {
+      kind: 'ValidationRule',
       id: 'number-multiple-of',
       value: { value: def.multipleOf.value, loc: range(def.multipleOf) },
       loc: def.propRange('multipleOf')!,
@@ -1095,6 +1191,7 @@ const numberMultipleOfFactory: ValidationRuleFactory = (def) => {
 const numberGreaterThanFactory: ValidationRuleFactory = (def) => {
   if (OAS2.isNumber(def) && typeof def.minimum?.value === 'number') {
     return {
+      kind: 'ValidationRule',
       id: def.exclusiveMinimum?.value ? 'number-gt' : 'number-gte',
       value: { value: def.minimum.value, loc: range(def.minimum) },
       loc: def.propRange('minimum')!,
@@ -1107,6 +1204,7 @@ const numberGreaterThanFactory: ValidationRuleFactory = (def) => {
 const numberLessThanFactory: ValidationRuleFactory = (def) => {
   if (OAS2.isNumber(def) && typeof def.maximum?.value === 'number') {
     return {
+      kind: 'ValidationRule',
       id: def.exclusiveMinimum?.value ? 'number-lt' : 'number-lte',
       value: { value: def.maximum.value, loc: range(def.maximum) },
       loc: def.propRange('maximum')!,
@@ -1119,6 +1217,7 @@ const numberLessThanFactory: ValidationRuleFactory = (def) => {
 const arrayMinItemsFactory: ValidationRuleFactory = (def) => {
   if (OAS2.isArray(def) && typeof def.minItems?.value === 'number') {
     return {
+      kind: 'ValidationRule',
       id: 'array-min-items',
       min: { value: def.minItems.value, loc: range(def.minItems) },
       loc: def.propRange('minItems')!,
@@ -1131,6 +1230,7 @@ const arrayMinItemsFactory: ValidationRuleFactory = (def) => {
 const arrayMaxItemsFactory: ValidationRuleFactory = (def) => {
   if (OAS2.isArray(def) && typeof def.maxItems?.value === 'number') {
     return {
+      kind: 'ValidationRule',
       id: 'array-max-items',
       max: { value: def.maxItems.value, loc: range(def.maxItems) },
       loc: def.propRange('maxItems')!,
@@ -1143,6 +1243,7 @@ const arrayMaxItemsFactory: ValidationRuleFactory = (def) => {
 const arrayUniqueItemsFactory: ValidationRuleFactory = (def) => {
   if (OAS2.isArray(def) && def.uniqueItems) {
     return {
+      kind: 'ValidationRule',
       id: 'array-unique-items',
       required: true,
       loc: def.propRange('uniqueItems')!,
@@ -1155,6 +1256,7 @@ const arrayUniqueItemsFactory: ValidationRuleFactory = (def) => {
 const objectMinPropertiesFactory: ObjectValidationRuleFactory = (def) => {
   if (OAS2.isObject(def) && typeof def.minProperties?.value === 'number') {
     return {
+      kind: 'ObjectValidationRule',
       id: 'object-min-properties',
       min: {
         value: def.minProperties.value,
@@ -1170,6 +1272,7 @@ const objectMinPropertiesFactory: ObjectValidationRuleFactory = (def) => {
 const objectMaxPropertiesFactory: ObjectValidationRuleFactory = (def) => {
   if (OAS2.isObject(def) && typeof def.maxProperties?.value === 'number') {
     return {
+      kind: 'ObjectValidationRule',
       id: 'object-max-properties',
       max: {
         value: def.maxProperties.value,
@@ -1191,6 +1294,7 @@ const objectAdditionalPropertiesFactory: ObjectValidationRuleFactory = (
     def.additionalProperties.value === false
   ) {
     return {
+      kind: 'ObjectValidationRule',
       id: 'object-additional-properties',
       forbidden: true,
       loc: def.propRange('additionalProperties')!,
@@ -1243,11 +1347,30 @@ function safeConcat<T>(
   }
 }
 
-function literal<T extends string | number | boolean | null>(
-  node: OAS2.LiteralNode<T>,
-): Literal<T> {
+export function scalar<
+  T extends string | number | boolean | null,
+  N extends OAS2.LiteralNode<T> | undefined,
+>(node: N): typeof node extends undefined ? undefined : Scalar<T> {
+  if (node === undefined) return undefined as any;
+
   return {
     value: node.value,
     loc: range(node),
-  };
+  } as any;
+}
+
+export function dep(
+  node: OAS2.LiteralNode<boolean> | undefined,
+): Scalar<true> | undefined {
+  const x = scalar(node);
+
+  return x?.value === true ? (x as any) : undefined;
+}
+
+export function con(
+  node: OAS2.LiteralNode<string | number | boolean> | undefined,
+): Scalar<string | number | boolean> | undefined {
+  const x = scalar(node);
+
+  return x?.value !== null ? (x as any) : undefined;
 }
