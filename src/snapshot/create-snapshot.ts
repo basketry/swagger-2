@@ -21,22 +21,22 @@ const prettierOptions = JSON.parse(
 const example = parser(exampleSchema, examplePath).service;
 const petstore = parser(petstoreSchema, petstorePath).service;
 
-const exampleSnapshot = format(JSON.stringify(example), {
-  ...prettierOptions,
-  parser: 'json',
-});
-
-const petstoreSnapshot = format(JSON.stringify(petstore), {
-  ...prettierOptions,
-  parser: 'json',
-});
-
 writeFileSync(
   join(process.cwd(), 'src', 'snapshot', 'snapshot.json'),
-  exampleSnapshot,
+  stringify(example),
 );
 
 writeFileSync(
   join(process.cwd(), 'src', 'snapshot', 'petstore.json'),
-  petstoreSnapshot,
+  stringify(petstore),
 );
+
+function stringify(obj: any): string {
+  return format(
+    JSON.stringify(obj, (key, value) => (key === 'loc' ? undefined : value)),
+    {
+      ...prettierOptions,
+      parser: 'json',
+    },
+  );
+}
