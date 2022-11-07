@@ -552,6 +552,7 @@ export class OAS2Parser {
         name: { value: param.name.value, loc: range(param.name) },
         description: this.parseDescription(undefined, param.description),
         typeName: x.typeName,
+        default: x.default,
         isPrimitive: x.isPrimitive,
         isArray: x.isArray,
         rules: this.parseRules(resolved, param.required?.value),
@@ -689,6 +690,7 @@ export class OAS2Parser {
         } else {
           return {
             ...this.parseStringName(def),
+            default: scalar(def.default),
             isArray: false,
             rules,
             loc: range(def),
@@ -698,6 +700,7 @@ export class OAS2Parser {
       case 'NumberSchema':
         return {
           ...this.parseNumberName(def),
+          default: scalar(def.default),
           isArray: false,
           rules,
           loc: range(def),
@@ -710,6 +713,7 @@ export class OAS2Parser {
             value: def.type.value,
             loc: range(def.type),
           },
+          default: scalar(def.default),
           isPrimitive: true,
           isArray: false,
           rules,
@@ -977,6 +981,7 @@ export class OAS2Parser {
             name: { value: name, loc: properties?.keyRange(name) },
             description: this.parseDescriptionOnly(resolvedProp.description),
             typeName: x.typeName,
+            default: x.default,
             isPrimitive: x.isPrimitive,
             isArray: x.isArray,
             rules: this.parseRules(resolvedProp, requiredSet.has(name)),
@@ -1296,11 +1301,14 @@ function safeConcat<T>(
   }
 }
 
-function scalar<T extends string | number | boolean | null>(
-  node: OAS2.LiteralNode<T>,
-): Scalar<T> {
+export function scalar<
+  T extends string | number | boolean | null,
+  N extends OAS2.LiteralNode<T> | undefined,
+>(node: N): typeof node extends undefined ? undefined : Scalar<T> {
+  if (node === undefined) return undefined as any;
+
   return {
     value: node.value,
     loc: range(node),
-  };
+  } as any;
 }

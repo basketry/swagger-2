@@ -40,6 +40,7 @@
               "kind": "Parameter",
               "name": { "value": "search" },
               "typeName": { "value": "string" },
+              "default": { "value": "QWERTY" },
               "isPrimitive": true,
               "isArray": false,
               "rules": [],
@@ -1379,6 +1380,7 @@
           "kind": "Property",
           "name": { "value": "buzz" },
           "typeName": { "value": "number" },
+          "default": { "value": 12345 },
           "isPrimitive": true,
           "isArray": false,
           "rules": [
@@ -1480,6 +1482,7 @@
           "kind": "Property",
           "name": { "value": "buzz" },
           "typeName": { "value": "number" },
+          "default": { "value": 12345 },
           "isPrimitive": true,
           "isArray": false,
           "rules": [

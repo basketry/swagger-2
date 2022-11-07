@@ -22,6 +22,7 @@
       "name": "search",
       "in": "query",
       "type": "string",
+      "default": "QWERTY",
       "x-metaString": "bar",
       "x-metaNumber": 1234,
       "x-metaBoolean": true,
@@ -558,7 +559,7 @@
           "pattern": "[0-9a-fA-F]+"
         },
         "fiz": { "type": "number", "multipleOf": 3 },
-        "buzz": { "type": "number", "multipleOf": 5 },
+        "buzz": { "type": "number", "multipleOf": 5, "default": 12345 },
         "fizbuzz": { "type": "number", "multipleOf": 15 },
         "foo": {
           "type": "object",

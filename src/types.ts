@@ -847,6 +847,10 @@ export class StringParameterNode extends NonBodyParameterNode {
     return this.getLiteral<'string'>('type')!;
   }
 
+  get default() {
+    return this.getLiteral<string>('default');
+  }
+
   get minLength() {
     return this.getLiteral<number>('minLength');
   }
@@ -882,6 +886,10 @@ export class StringSchemaNode extends DocumentNode {
     return this.getLiteral<string>('description');
   }
 
+  get default() {
+    return this.getLiteral<string>('default');
+  }
+
   get minLength() {
     return this.getLiteral<number>('minLength');
   }
@@ -911,6 +919,10 @@ export class NumberParameterNode extends NonBodyParameterNode {
 
   get type() {
     return this.getLiteral<'integer' | 'number'>('type')!;
+  }
+
+  get default() {
+    return this.getLiteral<number>('default');
   }
 
   get multipleOf() {
@@ -952,6 +964,10 @@ export class NumberSchemaNode extends DocumentNode {
     return this.getLiteral<string>('description');
   }
 
+  get default() {
+    return this.getLiteral<number>('default');
+  }
+
   get multipleOf() {
     return this.getLiteral<number>('multipleOf');
   }
@@ -986,6 +1002,10 @@ export class BooleanParameterNode extends NonBodyParameterNode {
   get type() {
     return this.getLiteral<'boolean'>('type')!;
   }
+
+  get default() {
+    return this.getLiteral<boolean>('default');
+  }
 }
 
 export class BooleanSchemaNode extends DocumentNode {
@@ -1001,6 +1021,10 @@ export class BooleanSchemaNode extends DocumentNode {
   get description() {
     return this.getLiteral<string>('description');
   }
+
+  get default() {
+    return this.getLiteral<boolean>('default');
+  }
 }
 
 export class NullSchemaNode extends DocumentNode {
@@ -1015,6 +1039,10 @@ export class NullSchemaNode extends DocumentNode {
 
   get description() {
     return this.getLiteral<string>('description');
+  }
+
+  get default() {
+    return this.getLiteral<null>('default');
   }
 }
 
