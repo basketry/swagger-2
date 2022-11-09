@@ -10,6 +10,7 @@ function noSource(service: Service): Omit<Service, 'sourcePath'> {
   return rest;
 }
 import { dump as yamlStringify } from 'yaml-ast-parser';
+import { stringify } from './snapshot/create-snapshot';
 
 describe('parser', () => {
   it('recreates a valid exhaustive snapshot', () => {
@@ -23,7 +24,7 @@ describe('parser', () => {
 
     // ACT
     const result = JSON.parse(
-      JSON.stringify(parser(sourceContent, sourcePath).service),
+      stringify(parser(sourceContent, sourcePath).service),
     );
 
     // ASSERT
@@ -36,17 +37,13 @@ describe('parser', () => {
     const jsonContent = readFileSync(jsonPath).toString();
     const yamlContent = yamlStringify(JSON.parse(jsonContent), {});
 
-    const replacer = (key: string, value: any) => {
-      return key === 'loc' ? 'REDACTED' : value;
-    };
-
     // ACT
     const jsonResult = JSON.parse(
-      JSON.stringify(parser(jsonContent, jsonPath).service, replacer),
+      stringify(parser(jsonContent, jsonPath).service),
     );
 
     const yamlResult = JSON.parse(
-      JSON.stringify(parser(yamlContent, jsonPath).service, replacer),
+      stringify(parser(yamlContent, jsonPath).service),
     );
 
     // ASSERT
@@ -64,7 +61,7 @@ describe('parser', () => {
 
     // ACT
     const result = JSON.parse(
-      JSON.stringify(parser(sourceContent, sourcePath).service),
+      stringify(parser(sourceContent, sourcePath).service),
     );
 
     // ASSERT
