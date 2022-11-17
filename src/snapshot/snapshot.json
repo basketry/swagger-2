@@ -62,7 +62,7 @@
             },
             {
               "name": { "value": "state" },
-              "typeName": { "value": "getGizmosState" },
+              "typeName": { "value": "stateOfMatter" },
               "isPrimitive": false,
               "isArray": false,
               "rules": [
@@ -130,7 +130,7 @@
             },
             {
               "name": { "value": "state" },
-              "typeName": { "value": "createGizmoState" },
+              "typeName": { "value": "stateOfMatter" },
               "isPrimitive": false,
               "isArray": false,
               "rules": [
@@ -1360,7 +1360,7 @@
   ],
   "enums": [
     {
-      "name": { "value": "getGizmosState" },
+      "name": { "value": "stateOfMatter" },
       "values": [
         { "value": "solid" },
         { "value": "liquid" },
@@ -1376,16 +1376,6 @@
         { "value": "medium" },
         { "value": "big" },
         { "value": "XL" }
-      ]
-    },
-    {
-      "name": { "value": "createGizmoState" },
-      "values": [
-        { "value": "solid" },
-        { "value": "liquid" },
-        { "value": "gas" },
-        { "value": "plasma" },
-        { "value": "bose-einstein-condensate" }
       ]
     },
     {

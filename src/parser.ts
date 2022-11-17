@@ -502,17 +502,15 @@ export class OAS2Parser {
     if (!allParameters.length) return [];
 
     return allParameters.map((p) =>
-      this.parseParameter(
-        OAS2.resolveParam(this.schema.node, p)!,
-        operation.operationId?.value || '',
-      ),
+      this.parseParameter(p, operation.operationId?.value || ''),
     );
   }
 
   private parseParameter(
-    param: OAS2.ParameterNode,
+    paramOrRef: OAS2.ParameterNode | OAS2.RefNode,
     methodName: string,
   ): Parameter {
+    const param = OAS2.resolveParam(this.schema.node, paramOrRef)!;
     const unresolved = isBodyParameter(param) ? param.schema : param;
     const resolved = OAS2.resolveParamOrSchema(this.schema.node, unresolved);
     if (!resolved) throw new Error('Cannot resolve reference');
@@ -520,7 +518,19 @@ export class OAS2Parser {
       throw new Error('Unexpected body parameter');
     }
 
-    const x = this.parseType(unresolved, param.name.value, methodName);
+    const isSharedParameterEnum =
+      OAS2.isRefNode(paramOrRef) &&
+      param.nodeType === 'StringParameter' &&
+      param.enum;
+
+    const localName = isSharedParameterEnum
+      ? paramOrRef.$ref.value.substring(
+          paramOrRef.$ref.value.lastIndexOf('/') + 1,
+        )
+      : param.name.value;
+    const parentName = isSharedParameterEnum ? '' : methodName;
+
+    const x = this.parseType(unresolved, localName, parentName);
 
     if (x.isPrimitive) {
       return {
