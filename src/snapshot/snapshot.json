@@ -59,6 +59,24 @@
                   "value": { "value": [{ "foo": "bar" }] }
                 }
               ]
+            },
+            {
+              "name": { "value": "state" },
+              "typeName": { "value": "getGizmosState" },
+              "isPrimitive": false,
+              "isArray": false,
+              "rules": [
+                {
+                  "id": "string-enum",
+                  "values": [
+                    { "value": "solid" },
+                    { "value": "liquid" },
+                    { "value": "gas" },
+                    { "value": "plasma" },
+                    { "value": "bose-einstein-condensate" }
+                  ]
+                }
+              ]
             }
           ],
           "description": { "value": "Only has a summary" },
@@ -106,6 +124,24 @@
                     { "value": "medium" },
                     { "value": "big" },
                     { "value": "XL" }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": { "value": "state" },
+              "typeName": { "value": "createGizmoState" },
+              "isPrimitive": false,
+              "isArray": false,
+              "rules": [
+                {
+                  "id": "string-enum",
+                  "values": [
+                    { "value": "solid" },
+                    { "value": "liquid" },
+                    { "value": "gas" },
+                    { "value": "plasma" },
+                    { "value": "bose-einstein-condensate" }
                   ]
                 }
               ]
@@ -182,7 +218,8 @@
                 "name": { "value": "getGizmos" },
                 "verb": { "value": "get" },
                 "parameters": [
-                  { "name": { "value": "search" }, "in": { "value": "query" } }
+                  { "name": { "value": "search" }, "in": { "value": "query" } },
+                  { "name": { "value": "state" }, "in": { "value": "query" } }
                 ],
                 "successCode": { "value": 200 }
               },
@@ -190,7 +227,8 @@
                 "name": { "value": "createGizmo" },
                 "verb": { "value": "post" },
                 "parameters": [
-                  { "name": { "value": "size" }, "in": { "value": "query" } }
+                  { "name": { "value": "size" }, "in": { "value": "query" } },
+                  { "name": { "value": "state" }, "in": { "value": "query" } }
                 ],
                 "successCode": { "value": 201 }
               },
@@ -1322,12 +1360,32 @@
   ],
   "enums": [
     {
+      "name": { "value": "getGizmosState" },
+      "values": [
+        { "value": "solid" },
+        { "value": "liquid" },
+        { "value": "gas" },
+        { "value": "plasma" },
+        { "value": "bose-einstein-condensate" }
+      ]
+    },
+    {
       "name": { "value": "createGizmoSize" },
       "values": [
         { "value": "small" },
         { "value": "medium" },
         { "value": "big" },
         { "value": "XL" }
+      ]
+    },
+    {
+      "name": { "value": "createGizmoState" },
+      "values": [
+        { "value": "solid" },
+        { "value": "liquid" },
+        { "value": "gas" },
+        { "value": "plasma" },
+        { "value": "bose-einstein-condensate" }
       ]
     },
     {
