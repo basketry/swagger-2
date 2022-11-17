@@ -28,6 +28,12 @@
       "x-metaNull": null,
       "x-metaObject": { "foo": "bar" },
       "x-metaArray": [{ "foo": "bar" }]
+    },
+    "stateOfMatter": {
+      "name": "state",
+      "in": "query",
+      "type": "string",
+      "enum": ["solid", "liquid", "gas", "plasma", "bose-einstein-condensate"]
     }
   },
   "responses": {
@@ -87,7 +93,10 @@
       "get": {
         "summary": "Only has a summary",
         "operationId": "getGizmos",
-        "parameters": [{ "$ref": "#/parameters/search" }],
+        "parameters": [
+          { "$ref": "#/parameters/search" },
+          { "$ref": "#/parameters/stateOfMatter" }
+        ],
         "responses": {
           "default": { "$ref": "#/responses/gizmos" }
         },
@@ -108,7 +117,8 @@
             "name": "size",
             "type": "string",
             "enum": ["small", "medium", "big", "XL"]
-          }
+          },
+          { "$ref": "#/parameters/stateOfMatter" }
         ],
         "responses": {
           "default": { "$ref": "#/responses/gizmo" }
