@@ -1187,7 +1187,7 @@
           "meta": [
             {
               "key": { "value": "codegen-enum-description" },
-              "value": { "value": "One of the many states of matter" }
+              "value": { "value": "The size of a product" }
             },
             {
               "key": { "value": "codegen-enum-value-descriptions" },
@@ -1276,7 +1276,7 @@
           "meta": [
             {
               "key": { "value": "codegen-enum-description" },
-              "value": { "value": "One of the many states of matter" }
+              "value": { "value": "The size of a product" }
             },
             {
               "key": { "value": "codegen-enum-value-descriptions" },
@@ -1355,7 +1355,7 @@
           "meta": [
             {
               "key": { "value": "codegen-enum-description" },
-              "value": { "value": "One of the many states of matter" }
+              "value": { "value": "The size of a product" }
             },
             {
               "key": { "value": "codegen-enum-value-descriptions" },
@@ -1548,7 +1548,7 @@
       "meta": [
         {
           "key": { "value": "codegen-enum-description" },
-          "value": { "value": "One of the many states of matter" }
+          "value": { "value": "The size of a product" }
         },
         {
           "key": { "value": "codegen-enum-value-descriptions" },
