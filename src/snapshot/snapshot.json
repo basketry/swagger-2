@@ -76,6 +76,24 @@
                     { "value": "bose-einstein-condensate" }
                   ]
                 }
+              ],
+              "meta": [
+                {
+                  "key": { "value": "codegen-enum-description" },
+                  "value": { "value": "One of the many states of matter" }
+                },
+                {
+                  "key": { "value": "codegen-enum-value-descriptions" },
+                  "value": {
+                    "value": {
+                      "solid": "Substance holds its own shape",
+                      "liquid": "Takes the shape of its container",
+                      "gas": "Molecules are far apart and don't really interact with each other",
+                      "plasma": "Mixture of separated electons and nuclei at high temperature",
+                      "bose-einstein-condensate": "Gas of bosons at their lowest quantum state"
+                    }
+                  }
+                }
               ]
             }
           ],
@@ -126,6 +144,23 @@
                     { "value": "XL" }
                   ]
                 }
+              ],
+              "meta": [
+                {
+                  "key": { "value": "codegen-enum-description" },
+                  "value": { "value": "Anonymous enum" }
+                },
+                {
+                  "key": { "value": "codegen-enum-value-descriptions" },
+                  "value": {
+                    "value": {
+                      "small": "The small size",
+                      "medium": "Between the small and large sizes",
+                      "big": "The big size",
+                      "XL": "Bigger than big"
+                    }
+                  }
+                }
               ]
             },
             {
@@ -143,6 +178,24 @@
                     { "value": "plasma" },
                     { "value": "bose-einstein-condensate" }
                   ]
+                }
+              ],
+              "meta": [
+                {
+                  "key": { "value": "codegen-enum-description" },
+                  "value": { "value": "One of the many states of matter" }
+                },
+                {
+                  "key": { "value": "codegen-enum-value-descriptions" },
+                  "value": {
+                    "value": {
+                      "solid": "Substance holds its own shape",
+                      "liquid": "Takes the shape of its container",
+                      "gas": "Molecules are far apart and don't really interact with each other",
+                      "plasma": "Mixture of separated electons and nuclei at high temperature",
+                      "bose-einstein-condensate": "Gas of bosons at their lowest quantum state"
+                    }
+                  }
                 }
               ]
             }
@@ -1130,6 +1183,22 @@
                 { "value": "large" }
               ]
             }
+          ],
+          "meta": [
+            {
+              "key": { "value": "codegen-enum-description" },
+              "value": { "value": "One of the many states of matter" }
+            },
+            {
+              "key": { "value": "codegen-enum-value-descriptions" },
+              "value": {
+                "value": {
+                  "small": "The small size",
+                  "medium": "Between the small and large sizes",
+                  "large": "The larger size"
+                }
+              }
+            }
           ]
         }
       ],
@@ -1203,6 +1272,22 @@
                 { "value": "large" }
               ]
             }
+          ],
+          "meta": [
+            {
+              "key": { "value": "codegen-enum-description" },
+              "value": { "value": "One of the many states of matter" }
+            },
+            {
+              "key": { "value": "codegen-enum-value-descriptions" },
+              "value": {
+                "value": {
+                  "small": "The small size",
+                  "medium": "Between the small and large sizes",
+                  "large": "The larger size"
+                }
+              }
+            }
           ]
         }
       ],
@@ -1265,6 +1350,22 @@
                 { "value": "medium" },
                 { "value": "large" }
               ]
+            }
+          ],
+          "meta": [
+            {
+              "key": { "value": "codegen-enum-description" },
+              "value": { "value": "One of the many states of matter" }
+            },
+            {
+              "key": { "value": "codegen-enum-value-descriptions" },
+              "value": {
+                "value": {
+                  "small": "The small size",
+                  "medium": "Between the small and large sizes",
+                  "large": "The larger size"
+                }
+              }
             }
           ]
         }
@@ -1367,6 +1468,24 @@
         { "value": "gas" },
         { "value": "plasma" },
         { "value": "bose-einstein-condensate" }
+      ],
+      "meta": [
+        {
+          "key": { "value": "codegen-enum-description" },
+          "value": { "value": "One of the many states of matter" }
+        },
+        {
+          "key": { "value": "codegen-enum-value-descriptions" },
+          "value": {
+            "value": {
+              "solid": "Substance holds its own shape",
+              "liquid": "Takes the shape of its container",
+              "gas": "Molecules are far apart and don't really interact with each other",
+              "plasma": "Mixture of separated electons and nuclei at high temperature",
+              "bose-einstein-condensate": "Gas of bosons at their lowest quantum state"
+            }
+          }
+        }
       ]
     },
     {
@@ -1376,6 +1495,23 @@
         { "value": "medium" },
         { "value": "big" },
         { "value": "XL" }
+      ],
+      "meta": [
+        {
+          "key": { "value": "codegen-enum-description" },
+          "value": { "value": "Anonymous enum" }
+        },
+        {
+          "key": { "value": "codegen-enum-value-descriptions" },
+          "value": {
+            "value": {
+              "small": "The small size",
+              "medium": "Between the small and large sizes",
+              "big": "The big size",
+              "XL": "Bigger than big"
+            }
+          }
+        }
       ]
     },
     {
@@ -1408,6 +1544,22 @@
         { "value": "small" },
         { "value": "medium" },
         { "value": "large" }
+      ],
+      "meta": [
+        {
+          "key": { "value": "codegen-enum-description" },
+          "value": { "value": "One of the many states of matter" }
+        },
+        {
+          "key": { "value": "codegen-enum-value-descriptions" },
+          "value": {
+            "value": {
+              "small": "The small size",
+              "medium": "Between the small and large sizes",
+              "large": "The larger size"
+            }
+          }
+        }
       ]
     }
   ],

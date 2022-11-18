@@ -25,6 +25,8 @@ import {
   PrimitiveValue,
   Meta,
   encodeRange,
+  Violation,
+  decodeRange,
 } from 'basketry';
 import { relative } from 'path';
 
@@ -38,12 +40,13 @@ export class OAS2Parser {
   }
 
   private readonly schema: OAS2.SchemaNode;
+  private readonly violations = new Set<Violation>();
 
   private readonly ruleFactories: ValidationRuleFactory[] = factories;
   private enums: Enum[];
   private anonymousTypes: Type[];
 
-  parse(): Service {
+  parse() {
     this.enums = [];
     this.anonymousTypes = [];
     const interfaces = this.parseInterfaces();
@@ -61,7 +64,7 @@ export class OAS2Parser {
 
     this.schema.info.title.loc;
 
-    return {
+    const service: Service = {
       basketry: '1',
       sourcePath: relative(process.cwd(), this.sourcePath),
       title: {
@@ -79,6 +82,8 @@ export class OAS2Parser {
       loc: range(this.schema),
       meta: this.parseMeta(this.schema),
     };
+
+    return { service, violations: Array.from(this.violations) };
   }
 
   private parseMeta(node: DocumentNode): Meta | undefined {
@@ -574,6 +579,54 @@ export class OAS2Parser {
 
     return resolved.name;
   }
+  private validateEnumDescriptions(
+    values: Literal<string>[],
+    meta: Meta | undefined,
+  ): void {
+    const description = meta?.find(
+      (m) => m.key.value === 'codegen-enum-description',
+    );
+    if (description && typeof description.value.value !== 'string') {
+      this.violations.add({
+        code: 'swagger-2/codegen-enum-description',
+        message: 'codegen-enum-description must be a string if provided.',
+        severity: 'warning',
+        range: decodeRange(description.value.loc),
+        sourcePath: this.sourcePath,
+      });
+    }
+
+    const valueDescriptions = meta?.find(
+      (m) => m.key.value === 'codegen-enum-value-descriptions',
+    );
+
+    if (valueDescriptions) {
+      if (typeof valueDescriptions.value.value !== 'object') {
+        this.violations.add({
+          code: 'swagger-2/codegen-enum-value-descriptions',
+          message:
+            'codegen-enum-value-descriptions must be an object if provided.',
+          severity: 'warning',
+          range: decodeRange(valueDescriptions.value.loc),
+          sourcePath: this.sourcePath,
+        });
+      } else {
+        const allowedValues = new Set(values.map((v) => v.value));
+
+        for (const key of Object.keys(valueDescriptions.value.value)) {
+          if (!allowedValues.has(key)) {
+            this.violations.add({
+              code: 'swagger-2/codegen-enum-value-descriptions',
+              message: `Each key of codegen-enum-value-descriptions must be defined as an Enum value. '${key}' has a description, but is not defined as an Enum value.`,
+              severity: 'warning',
+              range: decodeRange(valueDescriptions.value.loc),
+              sourcePath: this.sourcePath,
+            });
+          }
+        }
+      }
+    }
+  }
 
   private parseType(
     def:
@@ -612,13 +665,17 @@ export class OAS2Parser {
             value: def.$ref.value.substring(14),
             loc: OAS2.refRange(this.schema.node, def.$ref.value),
           };
+          const meta = this.parseMeta(res);
+          const values: Literal<string>[] = res.enum.map((n) => ({
+            value: n.value,
+            loc: range(n),
+          }));
+          this.validateEnumDescriptions(values, meta);
 
           this.enums.push({
             name: name,
-            values: res.enum.map((n) => ({
-              value: n.value,
-              loc: range(n),
-            })),
+            values,
+            meta,
             loc: res.propRange('enum')!,
           });
           return {
@@ -651,12 +708,16 @@ export class OAS2Parser {
       case 'StringSchema':
         if (def.enum) {
           const enumName = camel(`${parentName}_${singular(localName)}`);
+          const meta = this.parseMeta(def);
+          const values: Literal<string>[] = def.enum.map((n) => ({
+            value: n.value,
+            loc: range(n),
+          }));
+          this.validateEnumDescriptions(values, meta);
           this.enums.push({
             name: { value: enumName },
-            values: def.enum.map((n) => ({
-              value: n.value,
-              loc: range(n),
-            })),
+            values,
+            meta,
             loc: def.propRange('enum')!,
           });
           return {

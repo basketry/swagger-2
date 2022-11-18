@@ -15,6 +15,27 @@ The following example converts a "Swagger" doc into Typescript types:
 
 When the last step is run, basketry will parse the source file (`petstore.json`) using the specified parser (`@basketry/swagger-2`) and then run each specified generator (in this case only `@basketry/typescript`) writing the output folder (`src`).
 
+### Enum descriptions
+
+Out of the box, OpenAPI does not support adding descriptions to enum values; however, vendor extensions can be added. The `x-codegen-enum-description` and `x-codegen-enum-value-descriptions` can be defined on enums and enum-valued parameters to add this documentation.
+
+Example:
+
+```json
+"productSize": {
+  "type": "string",
+  "x-codegen-enum-description": "The size of a product",
+  "x-codegen-enum-value-descriptions": {
+    "small": "The small size",
+    "medium": "Between the small and large sizes",
+    "large": "The larger size"
+  },
+  "enum": ["small", "medium", "large"]
+},
+```
+
+The description must be a string and the value descriptions must be an object. Note that not all values must have a description, but all keys in the value descriptions object must also be defined as enum values.
+
 ---
 
 ## For contributors:

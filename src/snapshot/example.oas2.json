@@ -33,6 +33,14 @@
       "name": "state",
       "in": "query",
       "type": "string",
+      "x-codegen-enum-description": "One of the many states of matter",
+      "x-codegen-enum-value-descriptions": {
+        "solid": "Substance holds its own shape",
+        "liquid": "Takes the shape of its container",
+        "gas": "Molecules are far apart and don't really interact with each other",
+        "plasma": "Mixture of separated electons and nuclei at high temperature",
+        "bose-einstein-condensate": "Gas of bosons at their lowest quantum state"
+      },
       "enum": ["solid", "liquid", "gas", "plasma", "bose-einstein-condensate"]
     }
   },
@@ -116,7 +124,14 @@
             "description": "Anonymous enum",
             "name": "size",
             "type": "string",
-            "enum": ["small", "medium", "big", "XL"]
+            "enum": ["small", "medium", "big", "XL"],
+            "x-codegen-enum-description": "Anonymous enum",
+            "x-codegen-enum-value-descriptions": {
+              "small": "The small size",
+              "medium": "Between the small and large sizes",
+              "big": "The big size",
+              "XL": "Bigger than big"
+            }
           },
           { "$ref": "#/parameters/stateOfMatter" }
         ],
@@ -542,6 +557,12 @@
     },
     "productSize": {
       "type": "string",
+      "x-codegen-enum-description": "The size of a product",
+      "x-codegen-enum-value-descriptions": {
+        "small": "The small size",
+        "medium": "Between the small and large sizes",
+        "large": "The larger size"
+      },
       "enum": ["small", "medium", "large"]
     },
     "widget": {
